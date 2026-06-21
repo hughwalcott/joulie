@@ -9,4 +9,31 @@ The intent is that Joulie becomes a battery-powered, standalone AI Advisory Agen
 
 By leveraging an Apple Mac Mini M4, open-source large language models, and Retrieval Augmented Generation (RAG) technology, the project will build a curated knowledge base of verified New Zealand information and make it available through a conversational voice-and-text interface. The system is designed to operate fully offline, making it ideal for community expos, market stalls, and public events — as well as being embedded in a publicly accessible website.
 
+# Installation
+Joulie has been developed to be deloyablable and runnable as a phyton container, first clone the repository 
+````
+git clone https://github.com/hughwalcott/joulie.git
+cd joulie 
+```` 
+Creat the virtual environment: 
+```` 
+python -m venv .venv
+```` 
+Activate the VM and Intall Dependencies: 
+```` 
+source .venv/bin/activate
+pip install -r requirements.txt
+```` 
+Configure and run: 
+```` 
+python main.py
+````
 
+## Dev kiosk controls
+The local dev kiosk stands in for the production handset using your keyboard:
+- **SPACE** (first press) — pick up the handset; Joulie greets you.
+- **SPACE** (press and hold) — record an utterance; release to send.
+- **ESC** — hang up and clear the conversation context.
+- **Q** — quit.
+
+You need a running [Ollama](https://ollama.com) instance with a model pulled. Defaults to `llama3.1:8b-instruct-q4_K_M`; override with the `JOULIE_OLLAMA_MODEL` environment variable.

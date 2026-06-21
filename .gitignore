@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Claude Code local workspace
+.claude/
+
+# macOS
+.DS_Store
+
+# Generated audio (prototype scripts wrote ./output.wav; safety net even after deletion)
+output.wav
+*.wav
+
+# Editor/IDE
+.vscode/
+.idea/
