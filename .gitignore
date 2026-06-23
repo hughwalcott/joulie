@@ -17,3 +17,7 @@ output.wav
 # Editor/IDE
 .vscode/
 .idea/
+
+# RAG vector store + ingest manifest
+chroma_db/
+ingest_manifest.json

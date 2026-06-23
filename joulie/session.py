@@ -6,6 +6,7 @@ from pynput import keyboard
 from joulie import config
 from joulie.audio import Recorder, Speaker, Transcriber
 from joulie.llm import Agent
+from joulie.rag import Retriever
 
 
 class Kiosk:
@@ -23,7 +24,13 @@ class Kiosk:
         self.recorder = Recorder()
         self.transcriber = Transcriber()
         self.speaker = Speaker()
-        self.agent = Agent()
+
+        retriever = None
+        if config.RAG_ENABLED and Retriever.available():
+            retriever = Retriever()
+        else:
+            print("[rag] disabled or chroma_db not populated — running without RAG")
+        self.agent = Agent(retriever=retriever)
 
         self._recording = False
         self._in_session = False

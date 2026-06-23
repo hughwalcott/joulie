@@ -1,4 +1,7 @@
 import os
+from pathlib import Path
+
+_repo_root = Path(__file__).parent.parent
 
 OLLAMA_URL = os.environ.get("JOULIE_OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("JOULIE_OLLAMA_MODEL", "llama3.2:3b-instruct-q4_K_M")
@@ -7,9 +10,16 @@ WHISPER_MODEL = os.environ.get("JOULIE_WHISPER_MODEL", "base")
 
 TTS_MODEL = os.environ.get("JOULIE_TTS_MODEL", "tts_models/en/vctk/vits")
 TTS_VOICE = os.environ.get("JOULIE_TTS_VOICE", "p306")
-TTS_SPEED = float(os.environ.get("JOULIE_TTS_SPEED", "1.15"))
+TTS_SPEED = float(os.environ.get("JOULIE_TTS_SPEED", "1.05"))
 
 SAMPLE_RATE = 16000
+
+CHROMA_PATH = os.environ.get("JOULIE_CHROMA_PATH", str(_repo_root / "chroma_db"))
+CHROMA_COLLECTION = os.environ.get("JOULIE_CHROMA_COLLECTION", "joulie_kb")
+EMBED_MODEL = os.environ.get("JOULIE_EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+RAG_TOP_K = int(os.environ.get("JOULIE_RAG_TOP_K", "5"))
+RAG_DISTANCE_THRESHOLD = float(os.environ.get("JOULIE_RAG_DISTANCE_THRESHOLD", "0.7"))
+RAG_ENABLED = os.environ.get("JOULIE_RAG_ENABLED", "1") not in ("0", "false", "no")
 
 GREETING = (
     "Hello, I'm Joulie. I share information about electrifying homes and "

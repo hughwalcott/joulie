@@ -11,10 +11,12 @@ class Agent:
         model: str = config.OLLAMA_MODEL,
         url: str = config.OLLAMA_URL,
         system_prompt: str = config.SYSTEM_PROMPT,
+        retriever=None,
     ):
         self.model = model
         self.url = url.rstrip("/")
         self.system_prompt = system_prompt
+        self.retriever = retriever
         self.history: list[dict] = []
 
     def reset(self):
@@ -37,8 +39,29 @@ class Agent:
         return time.monotonic() - start
 
     def reply(self, user_text: str) -> str:
+        context_msg = None
+        if self.retriever is not None:
+            chunks = self.retriever.retrieve(user_text)
+            if chunks:
+                context_block = self.retriever.format_context(chunks)
+                sources = ", ".join(sorted({c["source"] for c in chunks}))
+                print(f"[rag] injected {len(chunks)} chunks from: {sources}")
+                context_msg = {
+                    "role": "system",
+                    "content": (
+                        "Relevant reference material from the New Zealand electrification "
+                        "knowledge base:\n\n"
+                        f"{context_block}\n\n"
+                        "Use this material to inform your answer when relevant. "
+                        "Cite the source document and page number where you draw on it."
+                    ),
+                }
+
         self.history.append({"role": "user", "content": user_text})
-        messages = [{"role": "system", "content": self.system_prompt}, *self.history]
+        messages = [{"role": "system", "content": self.system_prompt}]
+        if context_msg is not None:
+            messages.append(context_msg)
+        messages.extend(self.history)
         resp = requests.post(
             f"{self.url}/api/chat",
             json={"model": self.model, "messages": messages, "stream": False},

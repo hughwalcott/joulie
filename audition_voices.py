@@ -33,8 +33,8 @@ SHORTLIST = [
 ]
 
 DEFAULT_TEXT = (
-    "Kee a ora, I'm Joulie. Let's chat about electrifying your home — "
-    "heat pumps, EVs, solar, the lot. Ask me anything."
+    "Kia ora, I'm Joulie. Let's chat about electrifying your home — "
+    "heat pumps, electric vehicles, solar, the lot. Ask me anything."
 )
 
 
