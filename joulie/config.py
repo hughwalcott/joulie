@@ -12,6 +12,13 @@ TTS_MODEL = os.environ.get("JOULIE_TTS_MODEL", "tts_models/en/vctk/vits")
 TTS_VOICE = os.environ.get("JOULIE_TTS_VOICE", "p306")
 TTS_SPEED = float(os.environ.get("JOULIE_TTS_SPEED", "1.05"))
 
+XTTS_MODEL = os.environ.get("JOULIE_XTTS_MODEL", "tts_models/multilingual/multi-dataset/xtts_v2")
+XTTS_REF_WAV = os.environ.get("JOULIE_XTTS_REF_WAV", str(_repo_root / "specs" / "kiwi voice-15s.wav"))
+XTTS_LANGUAGE = os.environ.get("JOULIE_XTTS_LANGUAGE", "en")
+XTTS_SAMPLE_RATE = 24000
+
+GREETING_WAV = os.environ.get("JOULIE_GREETING_WAV", str(_repo_root / "resources" / "greeting.wav"))
+
 SAMPLE_RATE = 16000
 
 CHROMA_PATH = os.environ.get("JOULIE_CHROMA_PATH", str(_repo_root / "chroma_db"))

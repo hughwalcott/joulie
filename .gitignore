@@ -10,9 +10,11 @@ __pycache__/
 # macOS
 .DS_Store
 
-# Generated audio (prototype scripts wrote ./output.wav; safety net even after deletion)
+# Generated audio (prototype scripts wrote ./output.wav; safety net after deletion)
 output.wav
 *.wav
+# Keep the kiwi voice reference WAV — required for XTTS-v2 voice cloning
+!specs/kiwi voice-15s.wav
 
 # Editor/IDE
 .vscode/
@@ -21,3 +23,6 @@ output.wav
 # RAG vector store + ingest manifest
 chroma_db/
 ingest_manifest.json
+
+# Pre-rendered greeting (regenerated at startup from voice model)
+resources/greeting.wav

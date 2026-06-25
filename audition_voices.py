@@ -24,7 +24,7 @@ from TTS.api import TTS
 # accent, so these are stand-ins until we move to XTTS-v2 voice cloning.
 SHORTLIST = [
     "p273",  # warm female, brighter delivery
-    "p236",  # mid female, energetic
+    #"p236",  # mid female, energetic
     "p267",  # female, lower & steady
     "p306",  # female, expressive
     "p287",  # male, warm
@@ -33,8 +33,9 @@ SHORTLIST = [
 ]
 
 DEFAULT_TEXT = (
-    "Kia ora, I'm Joulie. Let's chat about electrifying your home — "
-    "heat pumps, electric vehicles, solar, the lot. Ask me anything."
+    "Kee a ora, I'm Joulie. I share information about electrifying homes and "
+    "businesses in ah-oh-teh-ah-roh-ah New Zealand."
+    "Heat pumps, E-Vs, solar, ... you name it. How can I help?"
 )
 
 

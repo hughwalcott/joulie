@@ -1,5 +1,6 @@
 import threading
 import time
+from pathlib import Path
 
 from pynput import keyboard
 
@@ -32,8 +33,15 @@ class Kiosk:
             print("[rag] disabled or chroma_db not populated — running without RAG")
         self.agent = Agent(retriever=retriever)
 
+        if not Path(config.GREETING_WAV).exists():
+            try:
+                self.speaker.prerender_greeting(config.GREETING, config.GREETING_WAV)
+            except Exception as exc:
+                print(f"[tts] greeting pre-render failed: {exc} — will synthesise live")
+
         self._recording = False
         self._in_session = False
+        self._processing = False  # True while STT/LLM/TTS pipeline is running
         self._quit = False
         self._space_down = False
         self._lock = threading.Lock()
@@ -44,7 +52,10 @@ class Kiosk:
         self._in_session = True
         self.agent.reset()
         print("\n[session] off-hook — starting conversation")
-        self.speaker.say(config.GREETING)
+        if Path(config.GREETING_WAV).exists():
+            self.speaker.play_wav(config.GREETING_WAV)
+        else:
+            self.speaker.say(config.GREETING)
 
     def _end_session(self):
         if not self._in_session:
@@ -63,25 +74,38 @@ class Kiosk:
     def _finish_recording(self):
         if not self._recording:
             return
+        if self._processing:
+            print("[kiosk] still processing last turn, ignoring")
+            self.recorder.stop()
+            self._recording = False
+            return
         audio = self.recorder.stop()
         self._recording = False
         if audio.size < config.SAMPLE_RATE * 0.3:
             print("[mic] too short, ignoring")
             return
-        print("[stt] transcribing...")
-        text, lang = self.transcriber.transcribe(audio)
-        if not text:
-            print("[stt] no speech detected")
-            return
-        print(f"[visitor] ({lang}) {text}")
+        self._processing = True
+        threading.Thread(target=self._run_turn, args=(audio,), daemon=True).start()
+
+    def _run_turn(self, audio):
         try:
-            reply = self.agent.reply(text)
+            print("[stt] transcribing...")
+            text, lang = self.transcriber.transcribe(audio)
+            if not text:
+                print("[stt] no speech detected")
+                return
+            print(f"[visitor] ({lang}) {text}")
+            print("[llm] sending to Ollama...")
+            self.speaker.say_stream(self.agent.stream(text))
+            print(f"[joulie] {self.agent.history[-1]['content']}")
         except Exception as exc:
             print(f"[agent] error: {exc}")
-            self.speaker.say("Sorry, I had trouble thinking just then. Please try again.")
-            return
-        print(f"[joulie] {reply}")
-        self.speaker.say(reply)
+            try:
+                self.speaker.say("Sorry, I had trouble thinking just then. Please try again.")
+            except Exception:
+                pass
+        finally:
+            self._processing = False
 
     def _on_press(self, key):
         with self._lock:
@@ -113,12 +137,16 @@ class Kiosk:
         print("  ESC                   = hang up, clear context")
         print("  Q                     = quit")
         print("=" * 60)
-        print(f"[llm] warming up '{self.agent.model}' (first load can take 30–90s)...")
+
+        # Warm up Ollama after all model loading is done — by this point XTTS-v2
+        # and the greeting WAV are already loaded, so the warmup reflects real
+        # first-turn conditions and keeps the model hot just before the listener opens.
+        print(f"[llm] warming up '{self.agent.model}'...")
         try:
             elapsed = self.agent.warmup()
             print(f"[llm] ready in {elapsed:.1f}s")
         except Exception as exc:
-            print(f"[llm] warmup failed: {exc} — first turn may hang or error")
+            print(f"[llm] warmup failed: {exc} — first turn may be slow")
 
         listener = keyboard.Listener(on_press=self._on_press, on_release=self._on_release)
         listener.start()
