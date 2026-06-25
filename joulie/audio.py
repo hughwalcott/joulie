@@ -10,6 +10,7 @@ from faster_whisper import WhisperModel
 from TTS.api import TTS
 
 from joulie import config
+from joulie.quiet import silenced_stdout
 from joulie.sentences import split_sentences
 
 _DEVICE_RATE = int(sd.query_devices(kind="output")["default_samplerate"])
@@ -54,10 +55,23 @@ class Recorder:
     def stop(self) -> np.ndarray:
         self._running = False
         if self._stream is not None:
-            self._stream.stop()
-            self._stream.close()
+            # Use abort() instead of stop(). Pa_StopStream waits for the audio
+            # callback to drain and on macOS CoreAudio can hang indefinitely
+            # if the device was previously used for output. Pa_AbortStream
+            # returns immediately.
+            try:
+                print("[mic] aborting stream...")
+                self._stream.abort()
+            except Exception as exc:
+                print(f"[mic] abort error (ignored): {exc}")
+            try:
+                print("[mic] closing stream...")
+                self._stream.close()
+            except Exception as exc:
+                print(f"[mic] close error (ignored): {exc}")
             self._stream = None
         if self._worker is not None:
+            print("[mic] joining drain worker...")
             self._worker.join(timeout=1.0)
         if not self._frames:
             return np.zeros(0, dtype=np.float32)
@@ -98,7 +112,8 @@ class Speaker:
             _mps = torch.backends.mps.is_available()
             _device = "mps" if _mps else "cpu"
             print(f"[tts] loading XTTS-v2 (device: {_device})...")
-            self.tts = TTS(config.XTTS_MODEL)
+            with silenced_stdout():
+                self.tts = TTS(config.XTTS_MODEL)
             self._mode = "xtts"
             self._xtts_model = self.tts.synthesizer.tts_model
             if _mps:
@@ -121,7 +136,8 @@ class Speaker:
             print(f"[tts] XTTS-v2 ready (device: {_device}, output: {_DEVICE_RATE}Hz)")
         else:
             print(f"[tts] reference WAV not found — falling back to VITS '{model_name}'")
-            self.tts = TTS(model_name)
+            with silenced_stdout():
+                self.tts = TTS(model_name)
             self._voice = voice
             self._mode = "vits"
             synth = getattr(self.tts, "synthesizer", None)
@@ -159,41 +175,75 @@ class Speaker:
         audio = self._synth_sentence(text)
         sd.play(audio, samplerate=_DEVICE_RATE)
         sd.wait()
+        sd.stop()
 
     def say_stream(self, token_iter: Iterator[str]) -> None:
+        print("[tts] streaming pipeline starting")
         sentence_q: queue.Queue = queue.Queue(maxsize=4)
         audio_q: queue.Queue = queue.Queue(maxsize=2)
 
         def accumulate():
             remainder = ""
+            count = 0
             for token in token_iter:
                 remainder += token
                 sentences, remainder = split_sentences(remainder)
                 for s in sentences:
+                    count += 1
+                    print(f"[tts] sentence {count}: {s[:60]}{'...' if len(s) > 60 else ''}")
                     sentence_q.put(s)
             if remainder.strip():
+                count += 1
+                print(f"[tts] sentence {count} (trailing): {remainder.strip()[:60]}")
                 sentence_q.put(remainder.strip())
+            print(f"[tts] accumulate done ({count} sentences)")
             sentence_q.put(_SENT_DONE)
 
         def synthesise():
+            n = 0
             while True:
                 item = sentence_q.get()
                 if item is _SENT_DONE:
                     break
+                n += 1
                 try:
                     audio = self._synth_sentence(item)
+                    print(f"[tts] synth {n} ready ({audio.size} samples)")
                     audio_q.put(audio)
                 except Exception as exc:
                     print(f"[tts] synthesis error: {exc}")
             audio_q.put(_AUDIO_DONE)
 
         def play():
-            while True:
-                item = audio_q.get()
-                if item is _AUDIO_DONE:
-                    break
-                sd.play(item, samplerate=_DEVICE_RATE)
-                sd.wait()
+            print("[tts] opening output stream...")
+            try:
+                stream = sd.OutputStream(
+                    samplerate=_DEVICE_RATE,
+                    channels=1,
+                    dtype="float32",
+                )
+                stream.start()
+                print("[tts] output stream open and started")
+            except Exception as exc:
+                print(f"[tts] output stream open failed: {exc}")
+                # Drain the queue so the upstream threads aren't blocked.
+                while audio_q.get() is not _AUDIO_DONE:
+                    pass
+                return
+            n = 0
+            try:
+                while True:
+                    item = audio_q.get()
+                    if item is _AUDIO_DONE:
+                        break
+                    n += 1
+                    print(f"[tts] playing chunk {n} ({item.size} samples)")
+                    stream.write(np.ascontiguousarray(item, dtype=np.float32))
+                    print(f"[tts] chunk {n} done")
+            finally:
+                stream.stop()
+                stream.close()
+                print("[tts] output stream closed")
 
         t_acc = threading.Thread(target=accumulate, daemon=True)
         t_syn = threading.Thread(target=synthesise, daemon=True)
@@ -219,3 +269,6 @@ class Speaker:
         data = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32767.0
         sd.play(data, samplerate=rate)
         sd.wait()
+        # Tear down sd's internal _last_callback OutputStream so it doesn't
+        # linger and conflict with a subsequent InputStream open on macOS.
+        sd.stop()

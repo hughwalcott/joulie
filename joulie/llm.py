@@ -68,6 +68,8 @@ class Agent:
     def stream(self, user_text: str) -> Iterator[str]:
         """Yield text tokens from Ollama as they arrive. Updates history when exhausted."""
         messages = self._build_messages(user_text)
+        prompt_chars = sum(len(m["content"]) for m in messages)
+        print(f"[llm] POST /api/chat (prompt: {prompt_chars} chars)")
         resp = requests.post(
             f"{self.url}/api/chat",
             json={"model": self.model, "messages": messages, "stream": True},
@@ -75,7 +77,9 @@ class Agent:
             stream=True,
         )
         resp.raise_for_status()
+        print("[llm] connection established, waiting for first token...")
         accumulated: list[str] = []
+        first = True
         try:
             for raw_line in resp.iter_lines():
                 if not raw_line:
@@ -83,9 +87,13 @@ class Agent:
                 data = json.loads(raw_line)
                 token = data.get("message", {}).get("content", "")
                 if token:
+                    if first:
+                        print("[llm] first token received")
+                        first = False
                     accumulated.append(token)
                     yield token
                 if data.get("done"):
+                    print(f"[llm] stream done ({len(accumulated)} tokens)")
                     break
         finally:
             full_text = "".join(accumulated).strip()

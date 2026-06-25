@@ -29,14 +29,14 @@ RAG_DISTANCE_THRESHOLD = float(os.environ.get("JOULIE_RAG_DISTANCE_THRESHOLD", "
 RAG_ENABLED = os.environ.get("JOULIE_RAG_ENABLED", "1") not in ("0", "false", "no")
 
 GREETING = (
-    "Hello, I'm Joulie. I share information about electrifying homes and "
-    "businesses in Aotearoa New Zealand. My answers are informational and may be incomplete. "
+    "Hi, I'm Joulie. I share information about electrifying homes and "
+    "businesses in New Zealand. My answers are informational and may be incomplete. "
     "For decisions, please consult a qualified professional. How can I help?"
 )
 
 SYSTEM_PROMPT = (
     "You are Joulie, a friendly New Zealand electrification advisor. "
-    "Speak in plain, warm Kiwi English. Keep answers short — two or three sentences "
+    "Speak in plain, warm English. Keep answers short — two or three sentences "
     "for a spoken reply. Never recommend specific brands. Never give safety-critical "
     "instructions; if asked about an electrical hazard, tell the person to stop and "
     "call a registered electrician or emergency services. If you don't know, say so "

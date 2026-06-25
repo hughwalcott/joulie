@@ -1,8 +1,13 @@
+import sys
 import threading
 import time
 from pathlib import Path
 
 from pynput import keyboard
+
+# Line-buffered stdout: keyboard-driven prints land immediately so we can see
+# the pipeline progress in real time rather than waiting for a block flush.
+sys.stdout.reconfigure(line_buffering=True)
 
 from joulie import config
 from joulie.audio import Recorder, Speaker, Transcriber
@@ -51,11 +56,21 @@ class Kiosk:
             return
         self._in_session = True
         self.agent.reset()
+        # Play greeting on a background thread so the keyboard callback returns
+        # immediately and the listener can process subsequent press/release events.
+        # Without this, the pynput listener thread blocks for the ~10s greeting
+        # playback and drops user keystrokes during that window.
+        threading.Thread(target=self._play_greeting, daemon=True).start()
+
+    def _play_greeting(self):
         print("\n[session] off-hook — starting conversation")
-        if Path(config.GREETING_WAV).exists():
-            self.speaker.play_wav(config.GREETING_WAV)
-        else:
-            self.speaker.say(config.GREETING)
+        try:
+            if Path(config.GREETING_WAV).exists():
+                self.speaker.play_wav(config.GREETING_WAV)
+            else:
+                self.speaker.say(config.GREETING)
+        except Exception as exc:
+            print(f"[session] greeting playback failed: {exc}")
 
     def _end_session(self):
         if not self._in_session:
@@ -63,6 +78,13 @@ class Kiosk:
         print("[session] on-hook — clearing context")
         self.agent.reset()
         self._in_session = False
+        # Force-clear processing so the kiosk recovers if a turn is stuck
+        # (e.g. swap-thrash on low-memory hardware). The orphaned worker thread
+        # will finish in the background and its output will be discarded.
+        if self._processing:
+            print("[session] forcibly clearing stuck turn state")
+            self._processing = False
+            self._recording = False
 
     def _begin_recording(self):
         if self._recording:
@@ -76,16 +98,30 @@ class Kiosk:
             return
         if self._processing:
             print("[kiosk] still processing last turn, ignoring")
-            self.recorder.stop()
+            # Even cleanup of the recorder must not block the keyboard thread —
+            # Pa_StopStream on macOS CoreAudio can hang indefinitely.
+            threading.Thread(target=self.recorder.stop, daemon=True).start()
             self._recording = False
             return
-        audio = self.recorder.stop()
         self._recording = False
-        if audio.size < config.SAMPLE_RATE * 0.3:
-            print("[mic] too short, ignoring")
-            return
         self._processing = True
-        threading.Thread(target=self._run_turn, args=(audio,), daemon=True).start()
+        # Move recorder.stop() off the keyboard thread. If PortAudio hangs in
+        # stop(), only this worker hangs — the kiosk stays responsive.
+        threading.Thread(target=self._stop_and_run, daemon=True).start()
+
+    def _stop_and_run(self):
+        try:
+            print("[mic] stopping...")
+            audio = self.recorder.stop()
+            print(f"[mic] captured {audio.size / config.SAMPLE_RATE:.1f}s of audio")
+            if audio.size < config.SAMPLE_RATE * 0.3:
+                print("[mic] too short, ignoring")
+                return
+            self._run_turn(audio)
+        except Exception as exc:
+            print(f"[kiosk] stop_and_run error: {exc}")
+        finally:
+            self._processing = False
 
     def _run_turn(self, audio):
         try:
@@ -104,8 +140,6 @@ class Kiosk:
                 self.speaker.say("Sorry, I had trouble thinking just then. Please try again.")
             except Exception:
                 pass
-        finally:
-            self._processing = False
 
     def _on_press(self, key):
         with self._lock:
@@ -122,11 +156,15 @@ class Kiosk:
                 return False
 
     def _on_release(self, key):
+        if key == keyboard.Key.space:
+            print("[kiosk] SPACE released")
         with self._lock:
             if key == keyboard.Key.space:
                 self._space_down = False
                 if self._recording:
                     self._finish_recording()
+                else:
+                    print("[kiosk] release ignored (no active recording)")
 
     def run(self):
         print("=" * 60)
