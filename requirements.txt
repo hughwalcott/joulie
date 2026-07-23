@@ -8,3 +8,9 @@ sentence-transformers>=3.0.0
 transformers>=4.41,<4.46
 torchcodec>=0.14.0
 pdfplumber>=0.11.0
+gradio>=4.44.0,<5.0.0
+# Gradio 4.44 uses the pre-1.0 Starlette TemplateResponse(name, ctx) calling
+# convention; Starlette 1.x moved to TemplateResponse(request, name, ...) and
+# crashes with "unhashable type: dict" when Gradio serves index.html.
+starlette>=0.38,<0.42
+fastapi>=0.110,<0.116

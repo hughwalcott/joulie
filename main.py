@@ -15,18 +15,22 @@ silence_warnings()
 
 def _apply_lite_defaults():
     """Low-memory dev profile. Each setting is set only if not already overridden,
-    so the user can still pin individual env vars on top of --lite."""
+    so the user can still pin individual env vars on top of --lite. XTTS-v2 is
+    kept so the Kiwi voice still works — pair with --no-xtts for the tightest
+    memory budget at the cost of voice cloning."""
     lite_defaults = {
         "JOULIE_OLLAMA_MODEL": "llama3.2:1b-instruct-q4_K_M",
         "JOULIE_RAG_TOP_K": "2",
         "JOULIE_WHISPER_MODEL": "tiny",
-        # Point XTTS reference at a non-existent path so Speaker falls back to VITS
-        # (~1.8GB saved vs XTTS-v2). Kiwi accent is lost in lite mode — acceptable
-        # for development on memory-constrained hardware.
-        "JOULIE_XTTS_REF_WAV": "/__lite_mode_no_xtts__",
     }
     for key, value in lite_defaults.items():
         os.environ.setdefault(key, value)
+
+
+def _apply_no_xtts():
+    """Force the VITS fallback by pointing the reference WAV at a bogus path.
+    Saves ~1.8GB vs XTTS-v2 but loses the Kiwi voice cloning."""
+    os.environ.setdefault("JOULIE_XTTS_REF_WAV", "/__no_xtts__")
 
 
 def _render_greeting(speed: float):
@@ -90,7 +94,17 @@ def main():
     parser.add_argument(
         "--lite",
         action="store_true",
-        help="Low-memory dev profile: smaller LLM, fewer RAG chunks, VITS fallback TTS",
+        help="Low-memory dev profile: 1B LLM, RAG top_k=2, tiny Whisper (keeps XTTS Kiwi voice)",
+    )
+    parser.add_argument(
+        "--no-xtts",
+        action="store_true",
+        help="Force VITS fallback voice — saves ~1.8GB but drops the Kiwi voice cloning",
+    )
+    parser.add_argument(
+        "--ui",
+        action="store_true",
+        help="Launch the Gradio web UI instead of the pynput terminal kiosk",
     )
     parser.add_argument(
         "--render-greeting",
@@ -112,11 +126,18 @@ def main():
 
     if args.lite:
         _apply_lite_defaults()
-        print("[main] --lite mode: 1B LLM, RAG top_k=2, tiny Whisper, VITS fallback TTS")
+        print("[main] --lite mode: 1B LLM, RAG top_k=2, tiny Whisper")
+    if args.no_xtts:
+        _apply_no_xtts()
+        print("[main] --no-xtts: forcing VITS fallback voice")
 
-    # Import Kiosk AFTER env vars are set — joulie.config reads them at import time.
-    from joulie.session import Kiosk
-    Kiosk().run()
+    # Import driver modules AFTER env vars are set — joulie.config reads them at import time.
+    if args.ui:
+        from joulie.ui import launch
+        launch()
+    else:
+        from joulie.session import Kiosk
+        Kiosk().run()
 
 
 if __name__ == "__main__":

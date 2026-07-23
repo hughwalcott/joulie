@@ -1,4 +1,5 @@
 import queue
+import re
 import threading
 import wave
 from collections.abc import Iterator
@@ -13,37 +14,48 @@ from joulie import config
 from joulie.quiet import silenced_stdout
 from joulie.sentences import split_sentences
 
+
+# URL and markdown noise the LLM sometimes emits — we scrub these before TTS
+# so Joulie doesn't read out "https colon slash slash …" or "asterisk asterisk".
+_URL_RE = re.compile(
+    r"https?://\S+"                                              # http:// https://
+    r"|(?:www\.)[\w./-]+"                                        # www.foo.bar/baz
+    r"|\b[\w-]+\.(?:govt\.nz|co\.nz|org\.nz|nz|com|org|net)(?:/\S*)?",  # foo.govt.nz/…
+    re.IGNORECASE,
+)
+_MARKDOWN_CHARS = str.maketrans("", "", "*_`~#[]<>")
+_WS_RE = re.compile(r"\s+")
+
+
+def sanitize_for_speech(text: str) -> str:
+    """Strip URLs and markdown decoration from a sentence before it reaches TTS.
+    UI display keeps the original text; only the spoken stream is scrubbed."""
+    text = _URL_RE.sub("", text)
+    text = text.translate(_MARKDOWN_CHARS)
+    text = _WS_RE.sub(" ", text).strip()
+    return text
+
 _DEVICE_RATE = int(sd.query_devices(kind="output")["default_samplerate"])
 
 
 class Recorder:
+    """Long-lived microphone recorder.
+
+    Opens ONE sd.InputStream at construction and keeps it running for the whole
+    process lifetime. Recording is toggled via the _capturing flag inside the
+    PortAudio callback — when True, frames are collected; when False, they're
+    dropped. This entirely sidesteps macOS CoreAudio's tendency to hang on
+    Pa_OpenStream / Pa_StopStream / Pa_AbortStream when a handle is opened or
+    closed repeatedly. The mic indicator stays lit for the whole session, which
+    is the expected kiosk behaviour anyway.
+    """
+
     def __init__(self, sample_rate: int = config.SAMPLE_RATE):
         self.sample_rate = sample_rate
+        self._capturing = False
         self._frames: list[np.ndarray] = []
-        self._queue: queue.Queue = queue.Queue()
-        self._stream: sd.InputStream | None = None
-        self._running = False
-        self._worker: threading.Thread | None = None
-
-    def _callback(self, indata, frames, time, status):
-        if status:
-            print(f"[mic] {status}")
-        self._queue.put(indata.copy())
-
-    def _drain(self):
-        while self._running:
-            try:
-                chunk = self._queue.get(timeout=0.1)
-            except queue.Empty:
-                continue
-            self._frames.append(chunk)
-
-    def start(self):
-        self._frames = []
-        self._queue = queue.Queue()
-        self._running = True
-        self._worker = threading.Thread(target=self._drain, daemon=True)
-        self._worker.start()
+        self._lock = threading.Lock()
+        print(f"[mic] opening persistent InputStream @ {sample_rate}Hz")
         self._stream = sd.InputStream(
             samplerate=self.sample_rate,
             channels=1,
@@ -51,31 +63,31 @@ class Recorder:
             callback=self._callback,
         )
         self._stream.start()
+        print("[mic] InputStream ready (stays open for the process lifetime)")
+
+    def _callback(self, indata, frames, time, status):
+        if status:
+            print(f"[mic] {status}")
+        if not self._capturing:
+            return
+        # Copy — the buffer sd hands us is reused after the callback returns.
+        chunk = indata.copy()
+        with self._lock:
+            self._frames.append(chunk)
+
+    def start(self):
+        with self._lock:
+            self._frames = []
+            self._capturing = True
 
     def stop(self) -> np.ndarray:
-        self._running = False
-        if self._stream is not None:
-            # Use abort() instead of stop(). Pa_StopStream waits for the audio
-            # callback to drain and on macOS CoreAudio can hang indefinitely
-            # if the device was previously used for output. Pa_AbortStream
-            # returns immediately.
-            try:
-                print("[mic] aborting stream...")
-                self._stream.abort()
-            except Exception as exc:
-                print(f"[mic] abort error (ignored): {exc}")
-            try:
-                print("[mic] closing stream...")
-                self._stream.close()
-            except Exception as exc:
-                print(f"[mic] close error (ignored): {exc}")
-            self._stream = None
-        if self._worker is not None:
-            print("[mic] joining drain worker...")
-            self._worker.join(timeout=1.0)
-        if not self._frames:
+        with self._lock:
+            self._capturing = False
+            frames = self._frames
+            self._frames = []
+        if not frames:
             return np.zeros(0, dtype=np.float32)
-        return np.concatenate(self._frames, axis=0).flatten()
+        return np.concatenate(frames, axis=0).flatten()
 
 
 class Transcriber:
@@ -189,13 +201,17 @@ class Speaker:
                 remainder += token
                 sentences, remainder = split_sentences(remainder)
                 for s in sentences:
+                    scrubbed = sanitize_for_speech(s)
+                    if not scrubbed:
+                        continue
                     count += 1
-                    print(f"[tts] sentence {count}: {s[:60]}{'...' if len(s) > 60 else ''}")
-                    sentence_q.put(s)
-            if remainder.strip():
+                    print(f"[tts] sentence {count}: {scrubbed[:60]}{'...' if len(scrubbed) > 60 else ''}")
+                    sentence_q.put(scrubbed)
+            tail = sanitize_for_speech(remainder)
+            if tail:
                 count += 1
-                print(f"[tts] sentence {count} (trailing): {remainder.strip()[:60]}")
-                sentence_q.put(remainder.strip())
+                print(f"[tts] sentence {count} (trailing): {tail[:60]}")
+                sentence_q.put(tail)
             print(f"[tts] accumulate done ({count} sentences)")
             sentence_q.put(_SENT_DONE)
 

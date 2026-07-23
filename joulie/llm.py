@@ -46,16 +46,23 @@ class Agent:
             chunks = self.retriever.retrieve(user_text)
             if chunks:
                 context_block = self.retriever.format_context(chunks)
-                sources = ", ".join(sorted({c["source"] for c in chunks}))
-                print(f"[rag] injected {len(chunks)} chunks from: {sources}")
+                # Log which publishers/documents were surfaced — useful for
+                # tuning retrieval and verifying the stance mix.
+                pub_counts: dict[str, int] = {}
+                for c in chunks:
+                    pub_counts[c.get("publisher_short", "?")] = pub_counts.get(c.get("publisher_short", "?"), 0) + 1
+                summary = ", ".join(f"{p}×{n}" for p, n in sorted(pub_counts.items()))
+                print(f"[rag] injected {len(chunks)} chunks ({summary})")
                 context_msg = {
                     "role": "system",
                     "content": (
                         "Relevant reference material from the New Zealand electrification "
-                        "knowledge base:\n\n"
+                        "knowledge base. Sources are grouped by stance — remember: "
+                        "authoritative facts can be stated plainly; Rewiring's claims "
+                        "must be attributed.\n\n"
                         f"{context_block}\n\n"
-                        "Use this material to inform your answer when relevant. "
-                        "Cite the source document and page number where you draw on it."
+                        "Use this material to inform your answer. Do not invent numbers. "
+                        "If the material doesn't answer the question, say so."
                     ),
                 }
         self.history.append({"role": "user", "content": user_text})

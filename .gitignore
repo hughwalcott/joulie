@@ -25,4 +25,8 @@ chroma_db/
 ingest_manifest.json
 
 # Pre-rendered greeting (regenerated at startup from voice model)
-resources/greeting.wav
+assets/greeting.wav
+
+# Gradio
+flagged/
+.gradio/
