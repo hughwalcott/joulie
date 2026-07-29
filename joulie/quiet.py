@@ -22,6 +22,25 @@ def silence_warnings():
     logging.getLogger("transformers").setLevel(logging.ERROR)
 
 
+def allow_xtts_checkpoint_unpickling():
+    """Allowlist the config classes bundled inside Coqui's XTTS-v2 checkpoint.
+
+    PyTorch 2.6 flipped torch.load's default to weights_only=True; Coqui TTS
+    (unmaintained since 2023) never adopted the new safe-loading API, so the
+    checkpoint's embedded config objects get rejected as unpickling-unsafe.
+    The checkpoint is Coqui's own official release, downloaded via the TTS
+    package itself — safe to trust. Call before the first Speaker() load.
+    """
+    import torch
+    from TTS.config.shared_configs import BaseDatasetConfig
+    from TTS.tts.configs.xtts_config import XttsConfig
+    from TTS.tts.models.xtts import XttsArgs, XttsAudioConfig
+
+    torch.serialization.add_safe_globals(
+        [XttsConfig, XttsAudioConfig, XttsArgs, BaseDatasetConfig]
+    )
+
+
 @contextlib.contextmanager
 def silenced_stdout():
     """Redirect stdout at the fd level for the duration of the block.
