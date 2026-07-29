@@ -1,5 +1,6 @@
 import queue
 import threading
+import time
 from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
@@ -88,7 +89,20 @@ class SessionCore:
         except Exception as exc:
             print(f"[session] greeting playback failed: {exc}")
 
+    def interrupt(self) -> bool:
+        """Barge-in — cut playback so the visitor doesn't have to sit through the
+        rest of an answer. The turn's LLM stream unwinds on its own once the TTS
+        threads see the flag. Returns True if there was something to stop."""
+        if not self._processing:
+            return False
+        print("[session] barge-in — stopping playback")
+        self.speaker.stop()
+        return True
+
     def end_session(self):
+        # Hanging up must silence Joulie immediately, before the state flip below
+        # makes the in-flight turn unreachable.
+        self.speaker.stop()
         with self._lock:
             if not self._in_session:
                 return
@@ -133,6 +147,9 @@ class SessionCore:
         try:
             print("[mic] stopping...")
             audio = self.recorder.stop()
+            # End of utterance — the zero point for the latency budget in
+            # specs/design.md (median end-of-utterance -> start-of-speech <= 3s).
+            turn_start = time.monotonic()
             print(f"[mic] captured {audio.size / config.SAMPLE_RATE:.1f}s of audio")
             if audio.size < config.SAMPLE_RATE * 0.3:
                 print("[mic] too short, ignoring")
@@ -142,6 +159,7 @@ class SessionCore:
             yield TurnEvent(status="transcribing")
             print("[stt] transcribing...")
             text, lang = self.transcriber.transcribe(audio)
+            print(f"[stt] +{time.monotonic() - turn_start:.2f}s transcribe done")
             if not text:
                 print("[stt] no speech detected")
                 yield TurnEvent(status="listening", error="no speech")
@@ -155,8 +173,12 @@ class SessionCore:
             tts_q: queue.Queue = queue.Queue()
 
             def tee():
+                first = True
                 try:
                     for token in self.agent.stream(text):
+                        if first:
+                            print(f"[llm] +{time.monotonic() - turn_start:.2f}s first token")
+                            first = False
                         ui_q.put(token)
                         tts_q.put(token)
                 except Exception as exc:
@@ -193,6 +215,7 @@ class SessionCore:
 
             # Block until audio playback completes so we don't cut off the tail.
             tts_thread.join()
+            print(f"[turn] +{time.monotonic() - turn_start:.2f}s turn complete")
             print(f"[joulie] {reply}")
             detected = detect_tool(reply)
             if detected is not None:

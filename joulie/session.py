@@ -39,6 +39,11 @@ class Kiosk:
                 if not self.core.in_session:
                     self.core.start_session()
                     return
+                # Pressing SPACE while Joulie is talking is a barge-in, not a
+                # record — begin_recording() would refuse anyway while processing.
+                if self.core.processing:
+                    self.core.interrupt()
+                    return
                 self.core.begin_recording()
             elif key == keyboard.Key.esc:
                 self.core.end_session()
@@ -63,6 +68,7 @@ class Kiosk:
         print("  SPACE (first press)   = pick up handset, hear greeting")
         print("  SPACE (hold)          = record an utterance")
         print("  SPACE (release)       = send it")
+        print("  SPACE (while talking) = interrupt Joulie")
         print("  ESC                   = hang up, clear context")
         print("  Q                     = quit")
         print("=" * 60)

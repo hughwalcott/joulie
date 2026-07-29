@@ -109,19 +109,21 @@ def main():
     parser.add_argument(
         "--render-greeting",
         action="store_true",
-        help="Re-render resources/greeting.wav from config.GREETING with XTTS-v2 and exit",
+        help="Re-render the greeting WAV from config.GREETING with XTTS-v2 and exit",
     )
     parser.add_argument(
         "--speed",
         type=float,
-        default=1.0,
-        help="Speech speed for --render-greeting (default 1.0; try 1.25 for snappier)",
+        default=None,
+        help="Speech speed for --render-greeting (defaults to JOULIE_XTTS_SPEED so the "
+             "greeting matches Joulie's live pace)",
     )
     args = parser.parse_args()
 
     if args.render_greeting:
         # Ignore --lite for rendering — the greeting should always use the cloned voice.
-        _render_greeting(args.speed)
+        from joulie import config
+        _render_greeting(config.XTTS_SPEED if args.speed is None else args.speed)
         return
 
     if args.lite:

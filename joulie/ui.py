@@ -302,6 +302,11 @@ def build_app() -> gr.Blocks:
                 elem_classes=["joulie-session-btn"],
                 interactive=True,
             )
+            stop_btn = gr.Button(
+                "Stop Talking",
+                elem_classes=["joulie-session-btn"],
+                interactive=True,
+            )
             end_btn = gr.Button(
                 "End Session",
                 elem_classes=["joulie-session-btn"],
@@ -350,6 +355,9 @@ def build_app() -> gr.Blocks:
                 hide_cap,
             )
 
+        def do_stop():
+            core.interrupt()
+
         def do_record_toggle():
             """Single toggle. Yields optimistic UI updates BEFORE calling into
             SessionCore so the button colour flips within a browser frame — the
@@ -396,6 +404,14 @@ def build_app() -> gr.Blocks:
         start_btn.click(
             do_start_session,
             outputs=_session_outputs,
+            queue=False,
+        )
+        # queue=False is load-bearing: the turn generator occupies the queue for
+        # the whole answer, so a queued barge-in would only run once the answer
+        # it was meant to cut short had already finished.
+        stop_btn.click(
+            do_stop,
+            outputs=None,
             queue=False,
         )
         end_btn.click(
