@@ -1,6 +1,8 @@
 import queue
 import threading
+import time
 from collections.abc import Iterator
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -54,6 +56,13 @@ class SessionCore:
         self._processing = False
         self._lock = threading.Lock()
 
+        # Set by the handset driver: it must not start recording until the
+        # greeting has finished playing, or the greeting lands in the recording.
+        self.on_greeting_finished: Optional[Callable[[], None]] = None
+        # Latest event of the current turn, regardless of which driver started
+        # it. The Gradio UI polls this so handset-driven turns still render.
+        self.last_event: Optional[TurnEvent] = None
+
     @property
     def in_session(self) -> bool:
         return self._in_session
@@ -87,8 +96,28 @@ class SessionCore:
                 self.speaker.say(config.GREETING)
         except Exception as exc:
             print(f"[session] greeting playback failed: {exc}")
+        finally:
+            # Fires even on playback failure — the driver still needs to move on.
+            if self.on_greeting_finished is not None:
+                try:
+                    self.on_greeting_finished()
+                except Exception as exc:
+                    print(f"[session] greeting callback failed: {exc}")
+
+    def interrupt(self) -> bool:
+        """Barge-in — cut playback so the visitor doesn't have to sit through the
+        rest of an answer. The turn's LLM stream unwinds on its own once the TTS
+        threads see the flag. Returns True if there was something to stop."""
+        if not self._processing:
+            return False
+        print("[session] barge-in — stopping playback")
+        self.speaker.stop()
+        return True
 
     def end_session(self):
+        # Hanging up must silence Joulie immediately, before the state flip below
+        # makes the in-flight turn unreachable.
+        self.speaker.stop()
         with self._lock:
             if not self._in_session:
                 return
@@ -100,6 +129,10 @@ class SessionCore:
                 self._recording = False
         print("[session] on-hook — clearing context")
         self.agent.reset()
+        # The UI polls last_event and only blanks the screen while out of session,
+        # so a surviving event would reappear the moment the next visitor starts
+        # one — showing them the previous visitor's question and answer.
+        self.last_event = None
 
     def begin_recording(self) -> bool:
         with self._lock:
@@ -117,6 +150,14 @@ class SessionCore:
         return True
 
     def stream_finish_and_reply(self) -> Iterator[TurnEvent]:
+        """Run a turn, recording each event on last_event as it goes so drivers
+        that don't consume the iterator directly (the Gradio poller) can follow
+        a turn the handset started."""
+        for event in self._run_turn():
+            self.last_event = event
+            yield event
+
+    def _run_turn(self) -> Iterator[TurnEvent]:
         """Stop the recorder and run STT → LLM → TTS, yielding TurnEvents at each
         stage. Blocks for the whole turn duration (STT + LLM + full audio playback).
         Callers must invoke from a non-UI thread — the pynput kiosk dispatches to
@@ -133,6 +174,9 @@ class SessionCore:
         try:
             print("[mic] stopping...")
             audio = self.recorder.stop()
+            # End of utterance — the zero point for the latency budget in
+            # specs/design.md (median end-of-utterance -> start-of-speech <= 3s).
+            turn_start = time.monotonic()
             print(f"[mic] captured {audio.size / config.SAMPLE_RATE:.1f}s of audio")
             if audio.size < config.SAMPLE_RATE * 0.3:
                 print("[mic] too short, ignoring")
@@ -142,6 +186,7 @@ class SessionCore:
             yield TurnEvent(status="transcribing")
             print("[stt] transcribing...")
             text, lang = self.transcriber.transcribe(audio)
+            print(f"[stt] +{time.monotonic() - turn_start:.2f}s transcribe done")
             if not text:
                 print("[stt] no speech detected")
                 yield TurnEvent(status="listening", error="no speech")
@@ -155,8 +200,12 @@ class SessionCore:
             tts_q: queue.Queue = queue.Queue()
 
             def tee():
+                first = True
                 try:
                     for token in self.agent.stream(text):
+                        if first:
+                            print(f"[llm] +{time.monotonic() - turn_start:.2f}s first token")
+                            first = False
                         ui_q.put(token)
                         tts_q.put(token)
                 except Exception as exc:
@@ -193,6 +242,7 @@ class SessionCore:
 
             # Block until audio playback completes so we don't cut off the tail.
             tts_thread.join()
+            print(f"[turn] +{time.monotonic() - turn_start:.2f}s turn complete")
             print(f"[joulie] {reply}")
             detected = detect_tool(reply)
             if detected is not None:

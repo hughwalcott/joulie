@@ -28,6 +28,23 @@ Configure and run:
 ```` 
 python main.py
 ````
+# Options: 
+To run in kiosk mode: 
+```` 
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --kiosk http://127.0.0.1:7860
+````
+Rerender the greeting / welcome message with defined speed.
+````
+ --render-greeting --speed 1.2 
+ ````
+ Test the generated greeting message:
+ ````
+ afplay assets/greeting.wav 
+ ````
+ Manually rebuild the knowledge base, specify chunk sizes?
+ ````
+ ingest.py --rebuild
+ ````
 
 ## Dev kiosk controls
 The local dev kiosk stands in for the production handset using your keyboard:
