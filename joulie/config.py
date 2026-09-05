@@ -4,7 +4,10 @@ from pathlib import Path
 _repo_root = Path(__file__).parent.parent
 
 OLLAMA_URL = os.environ.get("JOULIE_OLLAMA_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("JOULIE_OLLAMA_MODEL", "llama3.2:3b-instruct-q4_K_M")
+# 14B scores 58% on the question bank against the 3B's 38% (evals/report.html), and
+# roughly halves the fabricated-answer rate. 9GB leaves room for XTTS, Whisper and
+# Chroma on a 24GB machine; an 18GB model does not. First token takes ~7s, not ~2s.
+OLLAMA_MODEL = os.environ.get("JOULIE_OLLAMA_MODEL", "qwen2.5:14b-instruct-q4_K_M")
 
 WHISPER_MODEL = os.environ.get("JOULIE_WHISPER_MODEL", "base")
 

@@ -36,4 +36,10 @@ The local dev kiosk stands in for the production handset using your keyboard:
 - **ESC** — hang up and clear the conversation context.
 - **Q** — quit.
 
-You need a running [Ollama](https://ollama.com) instance with a model pulled. Defaults to `llama3.1:8b-instruct-q4_K_M`; override with the `JOULIE_OLLAMA_MODEL` environment variable.
+You need a running [Ollama](https://ollama.com) instance with a model pulled. Defaults to `qwen2.5:14b-instruct-q4_K_M`; override with the `JOULIE_OLLAMA_MODEL` environment variable.
+
+```
+ollama pull qwen2.5:14b-instruct-q4_K_M
+```
+
+The model choice is measured, not assumed — see `evals/` for the question-bank harness and `evals/report.html` for the comparison against `llama3.2:3b` and `qwen3:14b`.

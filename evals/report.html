@@ -1,0 +1,703 @@
+<title>Joulie Accuracy Report</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page:        #F4F6F5;
+    --surface:     #FFFFFF;
+    --surface-2:   #EDF1EF;
+    --ink:         #111A1C;
+    --ink-2:       #576466;
+    --ink-3:       #7E8C8E;
+    --rule:        #DDE4E2;
+    --rule-strong: #C3CECB;
+    --accent:      #0F5F63;
+    --accent-soft: #E3EFEE;
+    --good:     #0ca30c;
+    --warning:  #fab219;
+    --critical: #d03b3b;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page:        #0E1516;
+      --surface:     #151E1F;
+      --surface-2:   #1C2727;
+      --ink:         #E9EFEE;
+      --ink-2:       #A2B0B1;
+      --ink-3:       #7C8B8C;
+      --rule:        #263130;
+      --rule-strong: #35423F;
+      --accent:      #5CBEC2;
+      --accent-soft: #16302F;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page:        #0E1516;
+    --surface:     #151E1F;
+    --surface-2:   #1C2727;
+    --ink:         #E9EFEE;
+    --ink-2:       #A2B0B1;
+    --ink-3:       #7C8B8C;
+    --rule:        #263130;
+    --rule-strong: #35423F;
+    --accent:      #5CBEC2;
+    --accent-soft: #16302F;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4.5rem) clamp(1.1rem, 4vw, 2.5rem) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+  .prose { max-width: 40rem; }
+  p { margin: 0 0 0.9rem; }
+  p:last-child { margin-bottom: 0; }
+
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.1rem, 5.5vw, 3.1rem); line-height: 1.08; letter-spacing: -0.015em; }
+  h2 { font-size: clamp(1.4rem, 3vw, 1.75rem); line-height: 1.2; }
+  h3 { font-size: 1.08rem; line-height: 1.3; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 0.7rem;
+  }
+  .lede { font-size: 1.1rem; color: var(--ink-2); max-width: 42rem; }
+
+  header { border-bottom: 1px solid var(--rule-strong); padding-bottom: 2.25rem; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 0 1.6rem;
+    font-family: var(--mono); font-size: 0.76rem; color: var(--ink-3);
+    margin-top: 1.6rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
+  }
+  .meta b { color: var(--ink-2); font-weight: 500; }
+
+  section { display: flex; flex-direction: column; gap: 1.15rem; }
+
+  /* ---- hero: two runs side by side ---- */
+  .hero {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 3px;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 2rem;
+  }
+  .run { display: flex; flex-direction: column; gap: 0.9rem; }
+  .run-name {
+    font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.07em;
+    color: var(--ink-3); text-transform: uppercase;
+  }
+  .score {
+    font-family: var(--serif); font-size: clamp(3rem, 8vw, 4.4rem);
+    line-height: 0.85; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+    display: flex; align-items: baseline; gap: 0.7rem;
+  }
+  .delta {
+    font-family: var(--mono); font-size: 0.9rem; letter-spacing: 0;
+    color: var(--good); font-weight: 600;
+  }
+
+  .bar { display: flex; gap: 2px; height: 15px; width: 100%; }
+  .bar span { display: block; height: 100%; }
+  .bar span:first-child { border-radius: 3px 0 0 3px; }
+  .bar span:last-child { border-radius: 0 3px 3px 0; }
+  .bar .s-pass { background: var(--good); }
+  .bar .s-part { background: var(--warning); }
+  .bar .s-fail { background: var(--critical); }
+  .bar-hero { height: 22px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; font-size: 0.82rem; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 0.42rem; }
+  .dot { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+  .d-pass { background: var(--good); }
+  .d-part { background: var(--warning); }
+  .d-fail { background: var(--critical); }
+  .legend b { font-family: var(--mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* ---- tables ---- */
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+  caption { text-align: left; color: var(--ink-3); font-size: 0.82rem; padding-bottom: 0.6rem; }
+  th, td { text-align: left; padding: 0.58rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  th {
+    font-family: var(--mono); font-size: 0.66rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+    border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
+  }
+  th.grp { color: var(--accent); border-bottom: none; padding-bottom: 0.15rem; }
+  td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.topic { min-width: 12rem; }
+  td.barcell { width: 17%; min-width: 5.5rem; }
+  .sep { border-left: 1px solid var(--rule); }
+  tbody tr:last-child td { border-bottom: none; }
+  .rowscore { font-weight: 600; }
+  .up { color: var(--good); font-weight: 600; }
+  .down { color: var(--critical); font-weight: 600; }
+
+  .tbl-card {
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 3px; padding: 0.35rem clamp(0.4rem, 2vw, 1rem);
+  }
+
+  /* ---- findings ---- */
+  .finding {
+    display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1rem;
+    padding: 1.15rem 0; border-top: 1px solid var(--rule);
+  }
+  .finding:first-of-type { border-top: 1px solid var(--rule-strong); }
+  .fnum {
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+    padding-top: 0.22rem; font-variant-numeric: tabular-nums;
+  }
+  .finding p { grid-column: 2; color: var(--ink-2); max-width: 40rem; }
+  .evidence {
+    grid-column: 2; margin-top: 0.35rem;
+    font-family: var(--mono); font-size: 0.77rem; color: var(--ink);
+    background: var(--surface-2); border-left: 2px solid var(--accent);
+    padding: 0.6rem 0.85rem; border-radius: 0 3px 3px 0;
+  }
+
+  blockquote { margin: 0; font-family: var(--serif); font-size: 0.94rem; color: var(--ink); line-height: 1.45; }
+  blockquote cite {
+    display: block; font-family: var(--mono); font-style: normal;
+    font-size: 0.69rem; color: var(--ink-3); margin-top: 0.35rem; letter-spacing: 0.05em;
+  }
+  .verdict { color: var(--ink-2); font-size: 0.86rem; }
+
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 0.66rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.14rem 0.42rem; border-radius: 2px; white-space: nowrap;
+  }
+  .chip-fixed { background: rgba(12,163,12,0.14); color: var(--good); }
+  .chip-open  { background: rgba(208,59,59,0.13); color: var(--critical); }
+
+  ol.recs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; counter-reset: r; }
+  ol.recs li {
+    counter-increment: r;
+    display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 1rem;
+    padding: 1.15rem 0; border-top: 1px solid var(--rule);
+  }
+  ol.recs li:first-child { border-top: 1px solid var(--rule-strong); }
+  ol.recs li::before {
+    content: counter(r); grid-row: span 2;
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent); padding-top: 0.22rem;
+  }
+  ol.recs p { color: var(--ink-2); max-width: 40rem; }
+
+  .note {
+    background: var(--accent-soft); border-radius: 3px;
+    padding: 1rem 1.15rem; font-size: 0.9rem; color: var(--ink-2); max-width: 44rem;
+  }
+  .note b { color: var(--ink); }
+
+  footer { border-top: 1px solid var(--rule-strong); padding-top: 1.6rem; color: var(--ink-3); font-size: 0.85rem; }
+  footer code { font-family: var(--mono); font-size: 0.82em; color: var(--ink-2); }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Evaluation · 5 September 2026</p>
+    <h1>A bigger model fixes most of it — but not the newest one</h1>
+    <p class="lede">
+      All 107 questions in <em>Joulie Test Question Suite 1</em> were run through the
+      live RAG&nbsp;+&nbsp;LLM pipeline three times: on the configured 3B, and on two
+      14B models that fit the same Mac mini. Nothing else changed — same corpus, same
+      prompt, same retrieval. <strong>qwen2.5:14b is the recommendation at 58%.</strong>
+      The newer qwen3:14b scores lower, runs 2.5&times; slower, and declines to answer
+      more than a quarter of the bank.
+    </p>
+    <div class="meta">
+      <span><b>Hardware</b> M4 Pro · 24GB</span>
+      <span><b>Corpus</b> 1,006 chunks · top-k 4</span>
+      <span><b>Runs</b> 3 models &times; 117 questions</span>
+      <span><b>Prompt &amp; retrieval</b> unchanged</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="hero">
+      <div class="run">
+        <div class="run-name">llama3.2:3b — current default</div>
+        <div class="score">38%</div>
+        <div class="bar bar-hero" role="img" aria-label="3B: 27 pass, 28 partial, 52 fail">
+          <span class="s-pass" style="flex: 27"></span>
+          <span class="s-part" style="flex: 28"></span>
+          <span class="s-fail" style="flex: 52"></span>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-pass"></i>Pass <b>27</b></span>
+          <span><i class="dot d-part"></i>Partial <b>28</b></span>
+          <span><i class="dot d-fail"></i>Fail <b>52</b></span>
+        </div>
+      </div>
+      <div class="run">
+        <div class="run-name">qwen2.5:14b — 9.0GB · recommended</div>
+        <div class="score">58% <span class="delta">+20 pts</span></div>
+        <div class="bar bar-hero" role="img" aria-label="14B: 43 pass, 39 partial, 25 fail">
+          <span class="s-pass" style="flex: 43"></span>
+          <span class="s-part" style="flex: 39"></span>
+          <span class="s-fail" style="flex: 25"></span>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-pass"></i>Pass <b>43</b></span>
+          <span><i class="dot d-part"></i>Partial <b>39</b></span>
+          <span><i class="dot d-fail"></i>Fail <b>25</b></span>
+        </div>
+      </div>
+      <div class="run">
+        <div class="run-name">qwen3:14b — 9.3GB · newer, worse</div>
+        <div class="score">52% <span class="delta">+14 pts</span></div>
+        <div class="bar bar-hero" role="img" aria-label="qwen3 14B: 40 pass, 32 partial, 35 fail">
+          <span class="s-pass" style="flex: 40"></span>
+          <span class="s-part" style="flex: 32"></span>
+          <span class="s-fail" style="flex: 35"></span>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-pass"></i>Pass <b>40</b></span>
+          <span><i class="dot d-part"></i>Partial <b>32</b></span>
+          <span><i class="dot d-fail"></i>Fail <b>35</b></span>
+        </div>
+      </div>
+    </div>
+    <p class="prose">
+      On qwen2.5:14b outright failures halve, from 52 to 25 — 37 answers improved,
+      4 regressed, 66 held. The cost is latency: 1.8 to 6.9 seconds median, worst case
+      10.2, still inside conversational range for a kiosk. qwen3:14b is the same size
+      and a newer generation, and is worse on every axis that matters here.
+    </p>
+  </section>
+
+  <section>
+    <h2>Where the gain lands</h2>
+    <p class="prose">
+      The bank splits naturally: topics 1–5 are policy, cost and programme facts;
+      topics 6–12 are how the technology works. Joulie's corpus — EECA, the
+      Electricity Authority, MBIE, the Commerce Commission and Rewiring Aotearoa —
+      covers the second group well and the first only in part, and every model
+      inherits that shape.
+    </p>
+    <div class="tbl-card scroll">
+      <table>
+        <caption>Weighted score per topic. The bar shows the recommended model's pass / partial / fail split; the best score in each row is emphasised.</caption>
+        <thead>
+          <tr>
+            <th>Topic</th><th class="num">n</th>
+            <th class="num">3B</th>
+            <th class="grp sep" colspan="2">qwen2.5:14b</th>
+            <th class="grp sep" colspan="2">qwen3:14b</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="topic">1. Household electrification</td><td class="num">14</td><td class="num">36%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:3"></span><span class="s-part" style="flex:6"></span><span class="s-fail" style="flex:5"></span></div></td><td class="num">43%</td><td class="sep"></td><td class="num rowscore">50%</td></tr>
+          <tr><td class="topic">2. Removing gas</td><td class="num">10</td><td class="num">35%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:1"></span><span class="s-part" style="flex:8"></span><span class="s-fail" style="flex:1"></span></div></td><td class="num">50%</td><td class="sep"></td><td class="num rowscore">55%</td></tr>
+          <tr><td class="topic">3. EVs &amp; transport</td><td class="num">15</td><td class="num">7%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:3"></span><span class="s-part" style="flex:5"></span><span class="s-fail" style="flex:7"></span></div></td><td class="num rowscore">37%</td><td class="sep"></td><td class="num">30%</td></tr>
+          <tr><td class="topic">4. Grid &amp; generation</td><td class="num">16</td><td class="num">34%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:6"></span><span class="s-part" style="flex:7"></span><span class="s-fail" style="flex:3"></span></div></td><td class="num rowscore">59%</td><td class="sep"></td><td class="num">44%</td></tr>
+          <tr><td class="topic">5. Policy, targets &amp; business</td><td class="num">15</td><td class="num">27%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:1"></span><span class="s-part" style="flex:7"></span><span class="s-fail" style="flex:7"></span></div></td><td class="num rowscore">30%</td><td class="sep"></td><td class="num">27%</td></tr>
+          <tr><td class="topic">6. Solar technology</td><td class="num">9</td><td class="num">67%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:8"></span><span class="s-part" style="flex:1"></span></div></td><td class="num rowscore">94%</td><td class="sep"></td><td class="num">78%</td></tr>
+          <tr><td class="topic">7. Hot water heat pump tech</td><td class="num">4</td><td class="num">25%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:2"></span><span class="s-part" style="flex:1"></span><span class="s-fail" style="flex:1"></span></div></td><td class="num rowscore">62%</td><td class="sep"></td><td class="num">50%</td></tr>
+          <tr><td class="topic">8. Space heating heat pump tech</td><td class="num">6</td><td class="num">83%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:5"></span><span class="s-part" style="flex:1"></span></div></td><td class="num rowscore">92%</td><td class="sep"></td><td class="num">92%</td></tr>
+          <tr><td class="topic">9. Induction cooktop tech</td><td class="num">4</td><td class="num">62%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:4"></span></div></td><td class="num rowscore">100%</td><td class="sep"></td><td class="num">100%</td></tr>
+          <tr><td class="topic">10. Home battery tech</td><td class="num">5</td><td class="num">50%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:4"></span><span class="s-part" style="flex:1"></span></div></td><td class="num rowscore">90%</td><td class="sep"></td><td class="num">60%</td></tr>
+          <tr><td class="topic">11. EV charging tech</td><td class="num">7</td><td class="num">43%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:4"></span><span class="s-part" style="flex:2"></span><span class="s-fail" style="flex:1"></span></div></td><td class="num rowscore">71%</td><td class="sep"></td><td class="num">64%</td></tr>
+          <tr><td class="topic">12. Smart meters</td><td class="num">2</td><td class="num rowscore">100%</td><td class="barcell sep"><div class="bar"><span class="s-pass" style="flex:2"></span></div></td><td class="num">100%</td><td class="sep"></td><td class="num">100%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend" style="padding-left:0.35rem">
+      <span><i class="dot d-pass"></i>Pass</span>
+      <span><i class="dot d-part"></i>Partial</span>
+      <span><i class="dot d-fail"></i>Fail</span>
+    </div>
+
+    <div class="tbl-card scroll" style="margin-top:0.4rem">
+      <table>
+        <caption>The same answers, cut by material type and by the bank's own risk flag.</caption>
+        <thead>
+          <tr><th>Slice</th><th class="num">n</th><th class="num">3B</th><th class="num">qwen2.5:14b</th><th class="num">qwen3:14b</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Topics 6–12 — how the technology works</td><td class="num">37</td><td class="num">59%</td><td class="num rowscore">86%</td><td class="num">76%</td></tr>
+          <tr><td>Topics 1–5 — policy, cost, programmes</td><td class="num">70</td><td class="num">27%</td><td class="num rowscore">44%</td><td class="num">40%</td></tr>
+          <tr><td>Questions the bank flagged ⚠ for re-verification</td><td class="num">18</td><td class="num">25%</td><td class="num">44%</td><td class="num rowscore">47%</td></tr>
+          <tr><td>Rephrasings answered consistently</td><td class="num">10</td><td class="num">5</td><td class="num rowscore">9</td><td class="num">8</td></tr>
+          <tr><td>All 107 questions</td><td class="num">107</td><td class="num">38%</td><td class="num rowscore">58%</td><td class="num">52%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">
+      qwen2.5:14b leads on nine of twelve topics and on both material types. The
+      technology half is close to solved at 86% — induction and smart meters perfect,
+      solar 94%. The policy half stays weak at 44%, which is where the corpus gaps
+      live rather than the model.
+    </p>
+  </section>
+
+  <section>
+    <h2>The behaviour change matters more than the score</h2>
+    <p class="prose">
+      The headline number understates what actually changed. The 3B's characteristic
+      failure was inventing a confident answer and crediting it to a regulator. The
+      14B's characteristic failure is declining to answer, or answering vaguely and
+      pointing at the right source. For a trusted community advisor those are not
+      remotely the same failure.
+    </p>
+
+    <div class="finding">
+      <div class="fnum">01</div>
+      <h3>It now says when it doesn't know</h3>
+      <p>
+        qwen2.5:14b explicitly states the material isn't in the corpus six times —
+        <em>"The GIDI Fund isn't mentioned in the provided references"</em>, <em>"Electrify
+        NZ isn't a specific programme or organisation mentioned in my reference
+        materials"</em> — and redirects to NZTA, MBIE or Tenancy Services sixteen times
+        more. The 3B managed three in total, and neither of its two hedges was a
+        refusal; both were caveats buried inside an otherwise invented answer.
+        qwen3:14b goes much further and declines on 29 questions, which is where its
+        lower score comes from.
+      </p>
+      <div class="evidence">
+        explicit refusals — 3B: 2 · qwen2.5:14b: 6 · qwen3:14b: 29 &nbsp;|&nbsp; defers to a named source — 1 / 16 / 18
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="fnum">02</div>
+      <h3>The kiosk formatting rules are now obeyed</h3>
+      <p>
+        The system prompt forbids bullets and asterisks, caps answers at four
+        sentences, and forbids speaking URLs — all of which matter because the output
+        is spoken aloud. The 3B broke those rules in roughly a quarter of answers.
+        qwen2.5:14b breaks them once. qwen3:14b relapses almost to 3B levels, emitting
+        markdown bullets or bold in 16 answers and reading out a URL.
+      </p>
+      <div class="evidence">
+        bullets — 3B: 18 · qwen2.5:14b: 1 · qwen3:14b: 16 &nbsp;|&nbsp; over four sentences 7 / 1 / 3 &nbsp;|&nbsp; spoken URLs 1 / 0 / 1
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="fnum">03</div>
+      <h3>Attribution is far less promiscuous</h3>
+      <p>
+        The 3B invoked the Electricity Authority in 26 answers, frequently as the
+        source of something it had made up, and twice glossed EECA as "(Electricity
+        Authority)". qwen2.5:14b names the Authority in 8, correctly credits MBIE for
+        the renewable-generation figure, and labels Rewiring as advocacy in 28.
+        qwen3:14b leans on Rewiring in 47 of 107 answers — nearly half — which is a
+        concern given the project's rule that an advocacy charity must never be
+        presented as neutral fact. All three under-cite years, and both 14Bs are worse
+        at it than the 3B, so the prompt's currency requirement is being followed less
+        often, not more.
+      </p>
+      <div class="evidence">
+        names Electricity Authority — 26 / 8 / 25 &nbsp;|&nbsp; attributes Rewiring — 25 / 28 / 47 &nbsp;|&nbsp; cites a year — 31 / 19 / 17
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="fnum">04</div>
+      <h3>Consistency under rephrasing nearly doubles</h3>
+      <p>
+        Nine of ten reworded questions get a consistent answer from qwen2.5:14b,
+        against five of ten from the 3B. The 3B contradicted itself on gas connections,
+        invented a "Gas Supply Certificate" regime, and failed to name a single
+        generator when asked a second time; qwen2.5 holds all of those. qwen3:14b is
+        close behind at eight, but contradicts itself <em>within</em> the main run —
+        it says EVs pay road user charges, then two questions later says they are
+        exempt.
+      </p>
+      <div class="evidence">
+        consistent rephrasings — 3B: 5/10 · qwen2.5:14b: 9/10 · qwen3:14b: 8/10
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What the swap fixed, and what it didn't</h2>
+    <p class="prose">
+      These are the answers flagged in the first review as ones a visitor would act on.
+    </p>
+    <div class="tbl-card scroll">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>3B</th><th>14B</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="verdict">Do EVs pay road user charges?</td>
+            <td class="verdict">"They are exempt from paying RUC."</td>
+            <td class="verdict">"Yes, electric vehicles do incur Road User Charges", plus a pointer to NZTA.</td>
+            <td><span class="chip chip-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">Where does piped gas come from?</td>
+            <td class="verdict">"the Whittaker Field … South Island, near Mount Cook."</td>
+            <td class="verdict">Taranaki, distributed across North Island regions. Still omits that the South Island has no network.</td>
+            <td><span class="chip chip-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">What is Electrify NZ?</td>
+            <td class="verdict">Confused it with Electrify the Hutt, the project's own sponsor.</td>
+            <td class="verdict">"isn't a specific programme or organisation mentioned in my reference materials."</td>
+            <td><span class="chip chip-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">Lake Onslow / NZ Battery</td>
+            <td class="verdict">"battery storage facility … near Masterton … cancelled by the Electricity Authority in 2017."</td>
+            <td class="verdict">Pumped hydro in Central Otago — correct. But credits the cancellation to Meridian in 2018; it was the government in December 2023.</td>
+            <td><span class="chip chip-fixed">Part-fixed</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">Can solar households sell excess back?</td>
+            <td class="verdict">"households … typically do not sell their excess electricity."</td>
+            <td class="verdict">"Yes … the buy-back rate varies significantly between retailers."</td>
+            <td><span class="chip chip-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">Are landlords required to insulate?</td>
+            <td class="verdict">"not specifically required … by the start of 2029."</td>
+            <td class="verdict">"Yes, landlords are legally required", pointing to Tenancy Services.</td>
+            <td><span class="chip chip-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">What is EVRoam?</td>
+            <td class="verdict">"charge anywhere in Europe with just one card."</td>
+            <td class="verdict">"find, charge at, and pay for EV chargers through one app." Still wrong — it is NZTA's operator database.</td>
+            <td><span class="chip chip-open">Still wrong</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">What is the GIDI Fund?</td>
+            <td class="verdict">"Government Initiative for Decentralised Electrification."</td>
+            <td class="verdict">Declines on the direct question — then invents "Government Initiative for Domestic Innovation" on the follow-up.</td>
+            <td><span class="chip chip-open">Still wrong</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">Climate target beyond 2030?</td>
+            <td class="verdict">"There is no specific national climate target set beyond 2030."</td>
+            <td class="verdict">Answers with net zero 2050 rather than the 2035 NDC of 51–55%. No longer denies one exists.</td>
+            <td><span class="chip chip-open">Still wrong</span></td>
+          </tr>
+          <tr>
+            <td class="verdict">2030 NDC target</td>
+            <td class="verdict">"at least 50% below 2005 levels by 2030" — correct.</td>
+            <td class="verdict">"36% below 2005 levels by 2030" — wrong.</td>
+            <td><span class="chip chip-open">Regressed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">
+      Only four answers regressed in total: the 2030 NDC figure (T5Q3), a muddled gas
+      running-cost comparison (T1Q2), a vaguer answer on gas connections that sends
+      people to their council for a national policy question (T2Q5), and a narrower
+      description of EECA's role (T5Q11).
+    </p>
+  </section>
+
+  <section>
+    <h2>Why the newer model loses</h2>
+    <p class="prose">
+      qwen3:14b is a generation newer than qwen2.5:14b and the same size on disk. It
+      is nonetheless the wrong choice here, for three reasons that only show up when
+      you measure against this bank on this hardware.
+    </p>
+    <div class="finding">
+      <div class="fnum">01</div>
+      <h3>It declines too readily to be useful</h3>
+      <p>
+        Refusing beats fabricating, but 29 declines out of 107 is a quarter of the
+        bank returned as "I don't have that information" — including questions the
+        corpus does answer. It declines on solar panel types, on battery chemistry and
+        on the 2030 climate target; qwen2.5:14b answers the first two correctly, and
+        the 3B answered the third correctly. A visitor at an expo who gets a shrug to
+        one question in four will stop asking.
+      </p>
+    </div>
+    <div class="finding">
+      <div class="fnum">02</div>
+      <h3>It is too slow for a conversational kiosk</h3>
+      <p>
+        17.0 seconds median and 42.5 seconds worst case, against 6.9 and 10.2 for
+        qwen2.5:14b. That is before speech synthesis. A visitor standing at a handset
+        will assume it has broken.
+      </p>
+    </div>
+    <div class="finding">
+      <div class="fnum">03</div>
+      <h3>It reverts to markdown the kiosk cannot speak</h3>
+      <p>
+        16 answers with bullets or bold, against one from qwen2.5:14b, plus a spoken
+        URL. This is the 3B's problem returning, and it matters more here than in a
+        text interface because the output goes to text-to-speech.
+      </p>
+    </div>
+    <div class="note" style="margin-top:0.5rem">
+      <p>
+        <b>The 30B model does not fit this machine.</b> qwen3:30b-a3b was downloaded
+        and attempted, and Metal failed it with
+        <code>kIOGPUCommandBufferCallbackErrorOutOfMemory</code>. At 18.6GB it exceeds
+        the default GPU wired limit on a 24GB Mac mini once the retrieval stack is
+        also resident — and even with that limit raised it could not be deployed,
+        because Joulie's production kiosk must simultaneously hold XTTS v2 (1.7GB on
+        disk, more in memory), faster-whisper, ChromaDB, the embedding model and a
+        Chrome kiosk window. Realistically that leaves 13–15GB for the language model.
+        <b>9GB is the size that fits with room to speak.</b>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What a bigger model cannot fix</h2>
+    <p class="prose">
+      Two limits are structural. Neither was removed by a bigger model; both were
+      confirmed by all three runs.
+    </p>
+    <div class="note">
+      <p>
+        <b>Seven questions are unanswerable from this corpus.</b> Their expected
+        figures — 109 TJ/day, 100 PJ, 53.5%, 150,000 km, 51–55%, 56%, $230m, 18–22% —
+        appear nowhere in the knowledge base. No model at any size can produce them.
+        Both 14Bs mostly handle these correctly now by declining; the 3B invented
+        numbers instead.
+      </p>
+      <p>
+        <b>The topical gaps are larger than the numeric ones.</b> NZTA, Beehive and
+        the Ministry of Transport, the Climate Change Commission, MfE and Tenancy
+        Services are absent from the corpus entirely. That is why topics 3 and 5
+        remain the weakest at every model size, and why they improve least: the model
+        stops fabricating, but there is still nothing for it to retrieve.
+      </p>
+    </div>
+    <p class="prose">
+      There is also a corpus conflict worth resolving. Asked how long a hot water heat
+      pump lasts, all three models answer "10–12 years" — which is genuinely in the
+      corpus, from Rewiring Aotearoa. EECA's 15-year working life, which the bank
+      treats as the right answer, is not in the corpus at all. The 3B misattributed the
+      figure to EECA; both 14Bs correctly credit Rewiring. The model behaved properly
+      and still scored badly, because the corpus only holds one side.
+    </p>
+  </section>
+
+  <section>
+    <h2>What to do about it</h2>
+    <p class="prose">
+      Revised in light of the comparison. The first item has changed: it is now a
+      configuration change, not a research question.
+    </p>
+    <ol class="recs">
+      <li>
+        <h3>Switch the default model to qwen2.5:14b</h3>
+        <p>
+          A one-line change to <code>config.py</code> buys 20 points, halves outright
+          failures, near-doubles consistency, and brings the spoken-output formatting
+          into line — with no prompt, corpus or retrieval changes. It fits the 24GB
+          Mac mini at 9.0GB with room for the speech stack. Budget for the latency:
+          1.8s to 6.9s median, which changes the feel of the kiosk and may want a
+          "thinking" cue in the UI. Do <em>not</em> take qwen3:14b on the assumption
+          that newer is better — it scores 6 points lower, runs 2.5&times; slower, and
+          breaks the spoken-output rules 16 times.
+        </p>
+      </li>
+      <li>
+        <h3>Fill the four corpus gaps</h3>
+        <p>
+          NZTA (RUC rates, charger counts, EVRoam), Beehive and Ministry of Transport
+          releases, the Climate Change Commission and MfE emissions plans, and Tenancy
+          Services' healthy homes standards. This is now the top accuracy lever: the
+          14B has stopped inventing on these topics, so the only way its answers
+          improve is if the material exists to retrieve. Topics 3 and 5 are 37% and 30%.
+        </p>
+      </li>
+      <li>
+        <h3>Still add an explicit scope statement and refusal path</h3>
+        <p>
+          Both 14Bs decline more readily than the 3B, but they are doing it on instinct
+          rather than instruction, and the two land in different places — qwen2.5
+          under-declines on 25 wrong answers, qwen3 over-declines on 29 answerable
+          ones. The distance threshold remains inert in all three runs, rejecting none
+          of the 428 retrieved chunks. Naming the corpus's scope in the system prompt
+          is what makes the behaviour reliable rather than a property of whichever
+          model is loaded.
+        </p>
+      </li>
+      <li>
+        <h3>Restore the year-citation habit</h3>
+        <p>
+          The prompt requires a year whenever a statistic is quoted. Both 14Bs do this
+          less than the 3B — 19 and 17 answers against 31 — a genuine regression on the
+          bank's currency criterion that the model upgrade makes worse, not better.
+          Worth an explicit instruction, since energy figures date quickly and the
+          kiosk speaks them as fact.
+        </p>
+      </li>
+      <li>
+        <h3>Constrain attribution to the retrieved set</h3>
+        <p>
+          Much improved but not solved: qwen2.5:14b still credits the gas connection
+          charge to the Electricity Authority when it comes from EECA, and qwen3 leans
+          on Rewiring in nearly half its answers. A post-check comparing named
+          publishers against retrieved chunk metadata would catch the remainder.
+        </p>
+      </li>
+      <li>
+        <h3>Fix the contradiction inside the test bank</h3>
+        <p>
+          Topic 3 Q4 gives the light PHEV road user charge as "$38 per 10,000
+          kilometres"; Q15 gives "$38/1,000 km" for the same vehicle class. Resolve it
+          before the bank is used as ground truth again.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>
+      <b>Method.</b> Each question went to a fresh <code>Agent</code> with no
+      conversation history, against the live <code>Retriever</code> over the existing
+      1,006-chunk store — the same path the kiosk uses. Only the model identifier
+      differed across the three runs; qwen3 emitted no reasoning blocks, so no
+      thinking-mode switch was applied. Grading is manual against the bank's expected
+      answers:
+      <em>pass</em> where the substance is present, <em>partial</em> where the
+      direction is right but a key figure or element is wrong or missing,
+      <em>fail</em> where the answer contradicts the expected answer or its substance
+      is fabricated. All three runs were graded against the same rubric, with the 3B
+      verdict visible while grading the others to keep the standard fixed.
+    </p>
+    <p>
+      <b>Caveats.</b> The bank is dated 25 August 2026 and flags 18 answers for
+      re-verification; it is treated here as ground truth as written. One run per model
+      captures no sampling variance. A 20-point gap is well clear of run-to-run noise;
+      the 6-point gap between the two 14Bs is narrower, though it points the same way
+      as the latency, formatting and decline-rate measurements, which are not close.
+      A correctly-declined answer is still graded <em>fail</em> on accuracy — it does
+      not match the expected answer — so both 14B scores understate how much their harm
+      profile improved.
+    </p>
+    <p>
+      <b>Reproduce.</b> <code>python3 evals/run_qbank.py --model &lt;name&gt;</code>,
+      then <code>evals/compare.py</code> and <code>evals/metrics.py</code>. Questions in
+      <code>evals/questions_*.json</code>; per-model answers and retrieval traces in
+      <code>evals/results-&lt;model&gt;.json</code>; verdicts and notes in
+      <code>evals/grades-&lt;model&gt;.json</code>.
+    </p>
+  </footer>
+
+</div>

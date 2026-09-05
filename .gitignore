@@ -30,3 +30,6 @@ assets/greeting.wav
 # Gradio
 flagged/
 .gradio/
+
+# Eval harness run logs (raw stdout; results/grades JSON are the record)
+evals/*.log
