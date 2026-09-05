@@ -5,6 +5,8 @@ import time
 import wave
 from collections.abc import Iterator
 from pathlib import Path
+# Bound directly because the PortAudio callback signature shadows `time`.
+from time import monotonic
 
 import numpy as np
 import sounddevice as sd
@@ -104,10 +106,16 @@ class Recorder:
     is the expected kiosk behaviour anyway.
     """
 
+    # A hardware-muted mic sends exact zeros, so the absence of any non-zero
+    # sample over this window means the mute button is engaged. Used only to
+    # establish state at startup, before the handset has seen its first report.
+    _MUTE_WINDOW_S = 0.5
+
     def __init__(self, sample_rate: int = config.SAMPLE_RATE):
         self.sample_rate = sample_rate
         self._capturing = False
         self._frames: list[np.ndarray] = []
+        self._last_signal = 0.0
         self._lock = threading.Lock()
         print(f"[mic] opening persistent InputStream @ {sample_rate}Hz")
         self._stream = sd.InputStream(
@@ -122,12 +130,19 @@ class Recorder:
     def _callback(self, indata, frames, time, status):
         if status:
             print(f"[mic] {status}")
+        if np.any(indata):
+            self._last_signal = monotonic()
         if not self._capturing:
             return
         # Copy — the buffer sd hands us is reused after the callback returns.
         chunk = indata.copy()
         with self._lock:
             self._frames.append(chunk)
+
+    @property
+    def mic_live(self) -> bool:
+        """Whether the mic is passing audio, i.e. not hardware-muted."""
+        return (monotonic() - self._last_signal) < self._MUTE_WINDOW_S
 
     def start(self):
         with self._lock:

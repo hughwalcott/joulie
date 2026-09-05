@@ -1,9 +1,12 @@
 import threading
+from dataclasses import dataclass, fields
 from pathlib import Path
+from typing import Optional
 
 import gradio as gr
 
 from joulie import config
+from joulie.handset import attach
 from joulie.session_core import SessionCore
 from joulie.tools import qr_path
 
@@ -176,6 +179,15 @@ label span, .gr-checkbox-group label {
   display: flex !important;
   align-items: center !important;
 }
+/* While an event is in flight Gradio adds `pending`/`min` to a component's
+ * children, and that styling carries a 96px min-height — which made this block
+ * jump 40px -> 98px on every poll tick. The pill inside is a fixed 34px, so
+ * nothing in here should ever reserve height. */
+#status-wrapper,
+#status-wrapper > div,
+#status-wrapper .prose {
+  min-height: 0 !important;
+}
 #joulie-status {
   display: inline-flex;
   align-items: center;
@@ -271,6 +283,45 @@ def _tool_panel_html(tool) -> str:
     )
 
 
+# Distinguishes "never painted" from a legitimately empty value on the first tick.
+_MISSING = object()
+
+
+@dataclass(frozen=True)
+class UiState:
+    """What the screen should show right now, as plain values. Derived from
+    SessionCore so a handset-driven turn — which runs outside any request
+    handler — can be polled and diffed rather than pushed."""
+    status: str
+    visitor: str
+    joulie: str
+    button: str
+    tool_id: Optional[str]
+
+
+def ui_state(core) -> UiState:
+    if not core.in_session:
+        return UiState("idle", "", "", "disabled", None)
+
+    event = core.last_event
+    if core.recording:
+        status, button = "recording", "recording"
+    elif core.processing:
+        status = event.status if event and event.status else "thinking"
+        button = "working"
+    else:
+        status, button = "listening", "idle"
+
+    tool = event.tool if event and not core.processing else None
+    return UiState(
+        status=status,
+        visitor=event.visitor if event and event.visitor else "",
+        joulie=event.joulie if event and event.joulie else "",
+        button=button,
+        tool_id=tool.id if tool is not None else None,
+    )
+
+
 def _tool_panel_show(tool):
     return (gr.update(value=_tool_panel_html(tool), visible=True),)
 
@@ -283,6 +334,9 @@ def build_app() -> gr.Blocks:
     core = SessionCore()
     # Warm up the LLM in the background so the first turn isn't cold-starting.
     threading.Thread(target=core.warmup_llm, daemon=True).start()
+    # The mic's mute button can drive a whole session on its own; None if the
+    # mic isn't plugged in, in which case the on-screen controls are unchanged.
+    handset = attach(core)
 
     # Prepend @font-face rules so Montserrat is available before the rest of the CSS applies.
     full_css = _font_face_css() + "\n" + _CSS
@@ -423,6 +477,66 @@ def build_app() -> gr.Blocks:
             do_record_toggle,
             outputs=_turn_outputs,
         )
+
+        if handset is not None and config.HANDSET_UI_POLL_SECONDS > 0:
+            # A handset-driven turn runs entirely outside any request handler, so
+            # nothing would repaint the browser. Poll the turn state the core
+            # records instead of trying to push from a background thread.
+            #
+            # Only ever emit components that actually changed. Returning a fresh
+            # value for all five on every tick makes Gradio re-render them
+            # several times a second, which the status pill shows as a visible
+            # height flicker.
+            _painted: dict[str, object] = {}
+            _buttons = {
+                "disabled": _record_disabled,
+                "idle": _record_idle,
+                "recording": _record_recording,
+                "working": _record_working,
+            }
+            _render = {
+                "status": _status_html,
+                "visitor": lambda v: v,
+                "joulie": lambda v: v,
+                "button": lambda b: _buttons[b](),
+                "tool_id": lambda t: _tool_panel_show(_last_tool[0])[0]
+                if t is not None else _tool_panel_hide()[0],
+            }
+            _last_tool = [None]
+
+            def poll_handset():
+                state = ui_state(core)
+                event = core.last_event
+                _last_tool[0] = event.tool if event is not None else None
+                out = []
+                for f in fields(UiState):
+                    value = getattr(state, f.name)
+                    if _painted.get(f.name, _MISSING) == value:
+                        out.append(gr.update())
+                    else:
+                        _painted[f.name] = value
+                        out.append(_render[f.name](value))
+                return tuple(out)
+
+            # The click handlers write these components too, so drop the cache
+            # when they do or the poller will think a stale value is still on screen.
+            def invalidate_cache():
+                _painted.clear()
+
+            for btn in (start_btn, end_btn, record_btn):
+                btn.click(invalidate_cache, outputs=None, queue=False)
+
+            # queue=False is load-bearing, not an optimisation. A queued event
+            # makes Gradio mark its output components `pending`, and .pending
+            # carries a min-height — so a queued poll visibly grew the status
+            # pill from 40px to 98px on every tick. show_progress only hides the
+            # progress text; it does not stop the pending class.
+            gr.Timer(config.HANDSET_UI_POLL_SECONDS).tick(
+                poll_handset,
+                outputs=_turn_outputs,
+                queue=False,
+                show_progress="hidden",
+            )
 
     return app
 

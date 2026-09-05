@@ -2,6 +2,9 @@ TTS>=0.22.0
 faster-whisper>=1.0.0
 sounddevice>=0.4.6
 pynput>=1.7.6
+# Reads the USB mic's mute button, which drives the kiosk. Optional at runtime —
+# joulie.handset degrades to keyboard/UI control if it or the mic is missing.
+hidapi>=0.14
 requests>=2.31
 chromadb>=0.5.0
 sentence-transformers>=3.0.0

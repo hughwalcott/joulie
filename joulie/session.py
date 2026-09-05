@@ -5,6 +5,7 @@ import time
 from pynput import keyboard
 
 from joulie import config
+from joulie.handset import attach
 from joulie.session_core import SessionCore
 
 # Line-buffered stdout so kiosk-mode prints flush immediately.
@@ -24,6 +25,8 @@ class Kiosk:
 
     def __init__(self):
         self.core = SessionCore()
+        # Optional — returns None if the mic isn't present, leaving SPACE in charge.
+        self.handset = attach(self.core)
         self._space_down = False
         self._quit = False
         self._lock = threading.Lock()
@@ -65,6 +68,13 @@ class Kiosk:
         print("Joulie dev kiosk")
         print(f"  {config.DISCLAIMER}")
         print("-" * 60)
+        if self.handset is not None:
+            print("  MIC MUTE BUTTON       = the whole conversation:")
+            print("      unmute            -> start session / start talking")
+            print("      mute              -> send your question")
+            print("      unmute mid-answer -> interrupt and ask the next thing")
+            print("      leave muted       -> session clears itself")
+            print("-" * 60)
         print("  SPACE (first press)   = pick up handset, hear greeting")
         print("  SPACE (hold)          = record an utterance")
         print("  SPACE (release)       = send it")

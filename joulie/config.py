@@ -4,7 +4,10 @@ from pathlib import Path
 _repo_root = Path(__file__).parent.parent
 
 OLLAMA_URL = os.environ.get("JOULIE_OLLAMA_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("JOULIE_OLLAMA_MODEL", "llama3.2:3b-instruct-q4_K_M")
+# 14B scores 58% on the question bank against the 3B's 38% (evals/report.html), and
+# roughly halves the fabricated-answer rate. 9GB leaves room for XTTS, Whisper and
+# Chroma on a 24GB machine; an 18GB model does not. First token takes ~7s, not ~2s.
+OLLAMA_MODEL = os.environ.get("JOULIE_OLLAMA_MODEL", "qwen2.5:14b-instruct-q4_K_M")
 
 WHISPER_MODEL = os.environ.get("JOULIE_WHISPER_MODEL", "base")
 
@@ -24,6 +27,22 @@ XTTS_SPEED = float(os.environ.get("JOULIE_XTTS_SPEED", "1.2"))
 GREETING_WAV = os.environ.get("JOULIE_GREETING_WAV", str(_repo_root / "assets" / "greeting.wav"))
 
 SAMPLE_RATE = 16000
+
+# The JBL Quantum Stream Talk's mute button drives the whole kiosk: unmuted means
+# Joulie is listening. It reports state (not edges) as report 0x06 with a single
+# payload byte — 0x01 live, 0x00 muted — measured against the audio stream, which
+# the firmware gates to exact zeros when muted.
+HANDSET_ENABLED = os.environ.get("JOULIE_HANDSET_ENABLED", "1") not in ("0", "false", "no")
+HANDSET_VID = int(os.environ.get("JOULIE_HANDSET_VID", "0x0ECB"), 0)
+HANDSET_PID = int(os.environ.get("JOULIE_HANDSET_PID", "0x20AF"), 0)
+HANDSET_REPORT_ID = int(os.environ.get("JOULIE_HANDSET_REPORT_ID", "0x06"), 0)
+# Seconds muted, with Joulie silent, before the session clears itself for the next
+# visitor. The timer never runs while she is speaking — see TalkController.tick.
+HANDSET_IDLE_TIMEOUT = float(os.environ.get("JOULIE_HANDSET_IDLE_TIMEOUT", "45"))
+HANDSET_SILENT_TURNS_TO_END = int(os.environ.get("JOULIE_HANDSET_SILENT_TURNS_TO_END", "2"))
+# How often the Gradio UI polls for handset-driven turns. Set to 0 to disable the
+# poller entirely — useful for isolating it when diagnosing UI repaint problems.
+HANDSET_UI_POLL_SECONDS = float(os.environ.get("JOULIE_HANDSET_UI_POLL_SECONDS", "0.4"))
 
 KNOWLEDGE_BASE_PATH = os.environ.get("JOULIE_KB_PATH", str(_repo_root / "knowledge_base"))
 CHROMA_PATH = os.environ.get("JOULIE_CHROMA_PATH", str(_repo_root / "chroma_db"))
