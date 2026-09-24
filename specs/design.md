@@ -8,7 +8,7 @@ See also: [scope.md](scope.md), [scenarios.md](scenarios.md), [../ai/project-bri
 
 ## 1. Design Principles
 
-1. **Voice-only interaction.** No keyboards, no on-screen menus. Every user action is either picking up the handset, speaking, or hanging up.
+1. **Voice-only interaction.** No keyboards, no on-screen menus. Every user action is either picking up the handset, speaking, or hanging up. The display invites and reassures — it names the one physical action, shows what Joulie is doing, and carries what can't be spoken (citations, QR codes) — but it never becomes a control surface, and nothing shown on it is required to hold a conversation.
 2. **Offline and sovereign.** All inference, retrieval, storage, and analytics run on the Mac Mini. No network dependency at runtime.
 3. **Grounded, not generative-from-thin-air.** Every factual answer must be backed by a retrieved citation, or Joulie must say it doesn't know.
 4. **Stateless per visitor.** Conversation context is held in memory and discarded on hang-up. No personal data is persisted.
@@ -129,7 +129,7 @@ Re-indexing is incremental: existing chunks are not re-embedded unless the docum
 | Power | Portable LiFePO4 battery sized for ≥6 hours of expo runtime, with a wall-power fallback |
 | Input | Handset-style microphone with integrated hook switch; USB-C to the Mac Mini |
 | Output | Handset earpiece + a small loudspeaker for ambient confirmation tones |
-| Display | LCD attached to the Mac Mini, used **only** for the disclaimer, status, and the operator-visible fault banner — never required for interaction |
+| Display | LCD attached to the Mac Mini. An ambient affordance surface, not a control surface: the disclaimer, the invitation to pick up the handset (A7), pipeline status, the transcript, the sources consulted, QR codes for the tools Joulie names, and the operator-visible fault banner. Every one of those is confirmation or a hand-off to the visitor's own phone — **nothing on screen is required for interaction**, and the kiosk stays usable by someone who never looks at it |
 | Network | None at runtime. Optional Wi-Fi at base for ingestion and analytics export only |
 
 Two deployment surfaces:
