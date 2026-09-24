@@ -1,4 +1,7 @@
 TTS>=0.22.0
+# Pulls in av (PyAV) >=11. Its prebuilt wheel bundles its own FFmpeg, which
+# duplicate-loads against the system FFmpeg torchcodec (below) links to —
+# see README for the from-source install that avoids it.
 faster-whisper>=1.0.0
 sounddevice>=0.4.6
 pynput>=1.7.6
@@ -6,6 +9,8 @@ pynput>=1.7.6
 # joulie.handset degrades to keyboard/UI control if it or the mic is missing.
 hidapi>=0.14
 requests>=2.31
+# Memory/swap pressure sampling in joulie/power.py.
+psutil>=5.9
 chromadb>=0.5.0
 sentence-transformers>=3.0.0
 transformers>=4.41,<4.46

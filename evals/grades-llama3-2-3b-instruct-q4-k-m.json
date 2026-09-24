@@ -1,0 +1,432 @@
+{
+ "_scale": "pass/partial/fail",
+ "_graded": "manual, 5 Sep 2026",
+ "T1Q1": [
+  "partial",
+  "Right magnitude (~62% cheaper) but quotes EECA's $480-vs-$180 compare-options scenario instead of the $284/yr product-page figure. Both are in the KB, which flags the discrepancy itself. No date cited."
+ ],
+ "T1Q2": [
+  "partial",
+  "Leads with the electric-cylinder comparison, not the gas/LPG one asked about. Neither the 60% (gas) nor 75% (LPG) figure appears."
+ ],
+ "T1Q3": [
+  "partial",
+  "$7,000 correct. Lifespan given as '10-12 years, according to EECA's data' - invented and misattributed; EECA's basis is 15 years."
+ ],
+ "T1Q4": [
+  "partial",
+  "Programme and 50-90% range broadly right. Omits the $3,450 cap and the $400-700 household contribution; overstates insulation grant as 'up to 90%' generally."
+ ],
+ "T1Q5": [
+  "fail",
+  "Eligibility criteria fabricated ('low income', 'not receiving heating or cooling grants', 'health requirements'). Misses pre-2008 build, CSC/SuperGold, area eligibility. Also reads a full URL aloud, which the system prompt forbids."
+ ],
+ "T1Q6": [
+  "partial",
+  "Answers with boil speed (20-40%) rather than efficiency. Directionally correct but omits gas ~30% vs induction 80-90% and 'half the energy'."
+ ],
+ "T1Q7": [
+  "partial",
+  "$2,980 and $17/yr both correct. Omits the gas connection charge (>$580/yr) - the larger saving and the point of the question."
+ ],
+ "T1Q8": [
+  "pass",
+  "Cooler surface, no open flame, reduced burn risk all correct. Omits combustion by-products."
+ ],
+ "T1Q9": [
+  "fail",
+  "Invents '55-65%' attributed to Rewiring. The KB holds EECA's 7,000kg and 2,000kg over 15 years; neither used."
+ ],
+ "T1Q10": [
+  "fail",
+  "Uses Rewiring advocacy figures ($1,000/yr, 3x, $183/yr) in place of EECA's $122 (gas) and $352 (LPG). The $122 figure is in the KB."
+ ],
+ "T1Q11": [
+  "pass",
+  "Heat pump correctly identified as lowest-cost, lowest-emissions. Omits the wood/pellet and gas/LPG ranking."
+ ],
+ "T1Q12": [
+  "fail",
+  "Says insulation must be met 'by the start of 2029' and landlords are 'not specifically required to install insulation'. Compulsory since 1 July 2019. Understates a legal obligation."
+ ],
+ "T1Q13": [
+  "fail",
+  "Invents 'a heater at least 90% efficient'. The standard is a fixed heater for the main living room meeting a minimum capacity."
+ ],
+ "T1Q14": [
+  "fail",
+  "Conflates rooftop install share with generation share; gives 3.7% of connections and 'potentially 70%'. Expected ~1% of consumption (2021), up to ~6% by 2035."
+ ],
+ "T2Q1": [
+  "partial",
+  "22% production drop approximated as 20%. Asserts 'increasing need for gas imports' - NZ does not import natural gas. Omits the 27% reserves fall / 1,300 to 948 PJ."
+ ],
+ "T2Q2": [
+  "fail",
+  "Invents a 'Maui-Tonga Tui (MTT)' field. Omits Mangahewa, Kupe, 109 TJ/day, and the 100 PJ-by-2026 forecast."
+ ],
+ "T2Q3": [
+  "fail",
+  "Wholly fabricated and geographically inverted: 'Whittaker Field, South Island, near Mount Cook', piped to the North Island. NZ gas is Taranaki; the South Island has no reticulated network. Highest-harm answer in the run."
+ ],
+ "T2Q4": [
+  "partial",
+  "Cost ordering right. Omits that LPG is bottled/trucked and available nationwide while piped gas is North Island only - the practical distinction."
+ ],
+ "T2Q5": [
+  "pass",
+  "'No blanket ban' is correct, and Rewiring's position is explicitly attributed as advocacy. Attributed to the Electricity Authority (wrong body); omits the 2021 Commission recommendation."
+ ],
+ "T2Q6": [
+  "fail",
+  "Invents a 2035 phase-out and a '75% by 2030' target attributed to the Electricity Authority. The Gas Transition Plan is MBIE-led with no such targets."
+ ],
+ "T2Q7": [
+  "partial",
+  "$550-750/yr overstates the $365-580 range that is in the KB verbatim ($1-1.60/day). Misattributed to the Electricity Authority."
+ ],
+ "T2Q8": [
+  "fail",
+  "Gives '$4,000 over 15 years' and says no cooktop saving is available. Misses the daily gas connection charge, which is the answer."
+ ],
+ "T2Q9": [
+  "partial",
+  "Price pressure and shortage risk are right, but attributed to Rewiring when MBIE chunks were retrieved and MBIE is the authoritative source. Omits the advice to plan for alternatives."
+ ],
+ "T2Q10": [
+  "partial",
+  "Correct that constrained gas contributed. Attributed to Rewiring; omits $800/MWh, low hydro and wind."
+ ],
+ "T3Q1": [
+  "fail",
+  "Dates wrong (2020-2022 vs 1 Jul 2021 - 31 Dec 2023). Omits the fee side of the scheme entirely."
+ ],
+ "T3Q2": [
+  "fail",
+  "Wrong end date and a fabricated cause ('changes in the ETS that removed the discount from electricity costs'). Correctly notes no current subsidy."
+ ],
+ "T3Q3": [
+  "fail",
+  "States EVs are exempt from RUC, attributed to EECA and the Commerce Commission. EVs have paid RUC since 1 April 2024. Directly costs a visitor money."
+ ],
+ "T3Q4": [
+  "fail",
+  "Answers with a petrol-equivalent c/L figure instead of the RUC rate. $76/1,000km absent."
+ ],
+ "T3Q5": [
+  "fail",
+  "Invents a charge 'levied on the sale of alternative fuelled vehicles'. Misses electronic RUC and the petrol excise phase-out."
+ ],
+ "T3Q6": [
+  "fail",
+  "Invents '430 public EV chargers' attributed to the Electricity Authority, plus operators 'ChargePoint and Veloce'."
+ ],
+ "T3Q7": [
+  "fail",
+  "Invents a 150,000-charge-point 2030 target (actual: 10,000) with garbled double attribution."
+ ],
+ "T3Q8": [
+  "fail",
+  "'Approximately 15,000 EVs in 2021' against >100,000 by end-2023."
+ ],
+ "T3Q9": [
+  "fail",
+  "EVRoam described as a European roaming card. It is NZTA's national charger database."
+ ],
+ "T3Q10": [
+  "fail",
+  "Asserts NZTA is 'not typically involved' in public EV charging. NZTA publishes the national guidance the question asks about."
+ ],
+ "T3Q11": [
+  "partial",
+  "Correct that EVs are cheaper to run, but the supporting figures are fabricated and the petrol comparison uses nonsensical units ($/kWh for a petrol car). No RUC offset."
+ ],
+ "T3Q12": [
+  "partial",
+  "Core claim correct. '90% less CO2' is invented precision; renewable-grid reasoning is present."
+ ],
+ "T3Q13": [
+  "fail",
+  "Concludes EV uptake 'may not necessarily increase overall electricity demand' - the opposite of MBIE's forecast, which is in the KB."
+ ],
+ "T3Q14": [
+  "fail",
+  "Invents a 'Zero Emissions Discount' successor scheme."
+ ],
+ "T3Q15": [
+  "fail",
+  "Invents RUC calculated on ETS-excess emissions."
+ ],
+ "T4Q1": [
+  "pass",
+  "85.5% for 2024 correct and dated. Attributed to the Electricity Authority rather than MBIE; omits the 96.4% quarter."
+ ],
+ "T4Q2": [
+  "fail",
+  "Wrong year and wrong mix (hydro 84%, geothermal 4%); components do not reconcile. Actual 2024: hydro 53.5%, geothermal 19.9%, gas 9.3%, wind 8.9%, coal 5.1%, solar 1.4%."
+ ],
+ "T4Q3": [
+  "pass",
+  "Low hydro inflows requiring more thermal generation is the correct explanation. Omits the 2.4% to 5.1% shift."
+ ],
+ "T4Q4": [
+  "fail",
+  "Invents a day-ahead auction and a 'Retailer Supply Auction System (RSA)'. NZ prices in half-hourly real time. Also cites 'Billy', a plan-comparison tool, as a source."
+ ],
+ "T4Q5": [
+  "fail",
+  "Invents 'Infratil's Genesis Renewables', lists Tiwai Point (a smelter, i.e. a consumer) as a generator, and omits Mercury."
+ ],
+ "T4Q6": [
+  "partial",
+  "SOE and high-voltage transmission correct. Omits the System Operator role and the 11,000km network - half the expected answer."
+ ],
+ "T4Q7": [
+  "pass",
+  "Lines companies as regional distribution monopolies is correct. Omits the 29 / 150,000km / 62 retailers figures."
+ ],
+ "T4Q8": [
+  "pass",
+  "Regulator, rule-setting, competition and reliable supply at least cost all correct."
+ ],
+ "T4Q9": [
+  "fail",
+  "States demand is expected to decrease and invents '3-4 GWh per household'. MBIE's EDGS (in the KB) projects 62.1 TWh by 2050, +56.6%."
+ ],
+ "T4Q10": [
+  "partial",
+  "Wind and solar correct. Omits geothermal, gas peaking for firming, and the 96-98% by 2050 projection."
+ ],
+ "T4Q11": [
+  "fail",
+  "Invents 'production issues at major refineries and import terminals' and gas importing. Omits $800/MWh and industrial curtailment."
+ ],
+ "T4Q12": [
+  "fail",
+  "Lake Onslow placed 'near Masterton', called a battery facility, 'announced in 2014 but cancelled by the Electricity Authority in 2017'. Every specific is wrong."
+ ],
+ "T4Q13": [
+  "fail",
+  "Claims Lake Onslow 'was decommissioned in 2019'. It was never built."
+ ],
+ "T4Q14": [
+  "fail",
+  "Confuses Electrify NZ with Electrify the Hutt - the project's own sponsor. No mention of Fast-Track, RMA changes or NPS reform."
+ ],
+ "T4Q15": [
+  "fail",
+  "Invents an offshore wind farm '5km off the coast of Otago'. None operate; the Offshore Renewable Energy Act 2026 is the actual answer."
+ ],
+ "T4Q16": [
+  "partial",
+  "Correct that consenting costs rose. Invents a 'concession boom' quote, attributes to Rewiring, and omits the 70% / $1.29bn Te Waihanga findings."
+ ],
+ "T5Q1": [
+  "partial",
+  "Net zero by 2050 is right, but the split-gas structure - the substance of the question - is missing, and it cites a non-existent 'Emissions Reduction Plan Amendment Act 2022'."
+ ],
+ "T5Q2": [
+  "fail",
+  "'47% from 2005 levels by 2050'. Wrong baseline (2017), wrong figure (10% by 2030; 14-24% by 2050), wrong framing."
+ ],
+ "T5Q3": [
+  "pass",
+  "50% below 2005 by 2030 correct. Omits the 41% budget-basis equivalent and the 571 Mt budget."
+ ],
+ "T5Q4": [
+  "fail",
+  "States there is no target beyond 2030. The second NDC (51-55% below 2005 by 2035) was announced 30 January 2025."
+ ],
+ "T5Q5": [
+  "fail",
+  "Denies an Emissions Reduction Plan exists, substituting EECA's Sector Decarbonisation Programme."
+ ],
+ "T5Q6": [
+  "fail",
+  "ETS mechanism fabricated: regional allowance allocation, revenue returned to taxpayers, coverage limited to cement and steel. No mention of NZUs or the agriculture exclusion."
+ ],
+ "T5Q7": [
+  "fail",
+  "'About 80%' in 2020 against MBIE's 56%, attributed to the Electricity Authority."
+ ],
+ "T5Q8": [
+  "fail",
+  "Invents an Electricity Authority 'Coal Phase-out Plan' on an 'LCU basis from 1 July 2025'. The actual answer is the reverse: NES-GHG repealed and the 2037 phase-out removed."
+ ],
+ "T5Q9": [
+  "fail",
+  "Expands GIDI as 'Government Initiative for Decentralised Electrification' funding community projects for low-income households. It is Government Investment in Decarbonising Industry, for industrial process heat."
+ ],
+ "T5Q10": [
+  "fail",
+  "Invents a Waikato project electrifying 70 homes and 20 jobs, under a third wrong expansion of GIDI."
+ ],
+ "T5Q11": [
+  "pass",
+  "Name, mandate and advisory role correct."
+ ],
+ "T5Q12": [
+  "partial",
+  "Names the right agencies but substitutes appliance efficiency standards for the network investment and pricing settings the question is about."
+ ],
+ "T5Q13": [
+  "partial",
+  "Reaches the right conclusion - no single overarching strategy - and hedges appropriately, but supports it with a fabricated 'Climate Change Response Bill 2022' and an EA long-term plan."
+ ],
+ "T5Q14": [
+  "fail",
+  "Recasts Fast-Track Approvals as a 2020 Electricity Authority regime for connecting EV chargers. It is a one-stop-shop consenting process for significant infrastructure."
+ ],
+ "T5Q15": [
+  "partial",
+  "Directionally right that electrification cuts emissions, but the renewable-grid mechanism is absent and the '10% of the national inventory' figure is unverifiable."
+ ],
+ "T6Q1": [
+  "pass",
+  "PV effect, silicon, freed electrons and current all correct. Omits DC and the 18-22% conversion range; opens with a stray QR fragment."
+ ],
+ "T6Q2": [
+  "partial",
+  "Mono and poly described correctly in relative terms. No efficiency figures, and thin-film called 'thicker' when it is thinner."
+ ],
+ "T6Q3": [
+  "pass",
+  "DC to AC conversion and grid synchronisation correct."
+ ],
+ "T6Q4": [
+  "pass",
+  "Per-panel microinverters vs a shared string, and the shading advantage, both correct. Thin but accurate."
+ ],
+ "T6Q5": [
+  "pass",
+  "Grid draw, export credit and off-grid battery independence all correct. Omits the larger array requirement and EECA's cost-effectiveness note."
+ ],
+ "T6Q6": [
+  "pass",
+  "Hybrid = grid-connected plus battery, worthwhile for high night-time use. Omits the outage-backup case. Uses bullets, which the system prompt forbids."
+ ],
+ "T6Q7": [
+  "fail",
+  "States households 'typically do not sell their excess electricity directly back to the power company'. They can, and EECA says so. Then digresses into outage safety and battery economics."
+ ],
+ "T6Q8": [
+  "partial",
+  "Usage-from-bills and future needs correct. Omits roof orientation, tilt, shading and daytime occupancy - most of EECA's list."
+ ],
+ "T6Q9": [
+  "fail",
+  "Solar geometry garbled ('the sun moves from south to north between December and March'), never states that north-facing is optimal, and attributes to NIWA SolarView."
+ ],
+ "T7Q1": [
+  "fail",
+  "The refrigeration cycle is described incorrectly - the expansion valve is said to raise temperature, the evaporator to give heat to the air, and the water to be heated by the 'cold side'. Closes with a fabricated direct quote attributed to EECA."
+ ],
+ "T7Q2": [
+  "pass",
+  "Integrated vs split, including retrofit capability, correct."
+ ],
+ "T7Q3": [
+  "fail",
+  "States the whole cylinder must be replaced. The expected answer is that a split unit can be retrofitted - which Joulie itself said one question earlier."
+ ],
+ "T7Q4": [
+  "fail",
+  "Invents a 'single-source (single-pipe)' category and an '80% more heat' claim. Both configurations have similar efficiency."
+ ],
+ "T8Q1": [
+  "pass",
+  "Moves rather than generates heat, extracted from outside air. Final sentence about a 'secondary coil' is garbled but not load-bearing."
+ ],
+ "T8Q2": [
+  "pass",
+  "COP defined correctly, with the COP-3 worked example."
+ ],
+ "T8Q3": [
+  "pass",
+  "'3-4 times' against an expected 3-5 times - within tolerance."
+ ],
+ "T8Q4": [
+  "pass",
+  "Single-split, multi-split and ducted all correctly distinguished, including the ductwork cost caveat. Uses bullets and bold, which the system prompt forbids."
+ ],
+ "T8Q5": [
+  "fail",
+  "Claims a heat pump 'works just as efficiently at lower outside temperatures'. Efficiency falls as temperature drops, and the defrost cycle - the substance of the question - is never mentioned."
+ ],
+ "T8Q6": [
+  "pass",
+  "Yes, one unit does both. Omits the reversing refrigerant cycle and calls them 'multi-functional' rather than reverse-cycle."
+ ],
+ "T9Q1": [
+  "pass",
+  "Electromagnetic field inducing current in the pan, heated by its own resistance, is correct. Omits the coil beneath the glass, the cool surface, and eddy currents by name."
+ ],
+ "T9Q2": [
+  "partial",
+  "Explains why magnetic cookware is needed but never makes the contrast the question asks for - that gas and radiant elements heat any pan."
+ ],
+ "T9Q3": [
+  "partial",
+  "Cast iron, carbon steel and stainless correct. Omits enamelled cast iron and magnetic-base nonstick, does not flag that not all stainless is magnetic, and never says what will not work."
+ ],
+ "T9Q4": [
+  "partial",
+  "Says to check for ferrous material but never gives the fridge-magnet test or the coil symbol - the practical answer."
+ ],
+ "T10Q1": [
+  "partial",
+  "'Lithium-ion' is not wrong but skips the LFP-vs-NMC distinction the question is about."
+ ],
+ "T10Q2": [
+  "pass",
+  "Day charge, night discharge through an inverter, correct."
+ ],
+ "T10Q3": [
+  "fail",
+  "Reverses the distinction: claims DC-coupled systems 'are only charged by their batteries and may not be able to draw from the grid'. The real difference is where DC-to-AC conversion happens."
+ ],
+ "T10Q4": [
+  "pass",
+  "Hybrid inverter as a combined grid-tie inverter and battery charger is correct. Trailing QR reference to the 'Your meter' tool is irrelevant."
+ ],
+ "T10Q5": [
+  "fail",
+  "Answers about V2G instead of the question, and concludes it is 'not yet available'. A home battery can be charged from the grid - yes was the answer."
+ ],
+ "T11Q1": [
+  "partial",
+  "Gives two options; EECA describes three. The portable 3-pin cable is omitted."
+ ],
+ "T11Q2": [
+  "partial",
+  "App scheduling and remote control correct. Invents vehicle-type detection, and omits load balancing and the off-peak/renewables rationale."
+ ],
+ "T11Q3": [
+  "pass",
+  "'At least 3x faster' matches EECA exactly."
+ ],
+ "T11Q4": [
+  "fail",
+  "Never explains AC vs DC. Answers on cost and points at an approved-products list instead."
+ ],
+ "T11Q5": [
+  "fail",
+  "Figures do not match EECA's (150-200km per 30 min; 20-25km/hr), and AC charging is called 'inductive'."
+ ],
+ "T11Q6": [
+  "fail",
+  "Type 2 and CCS correct, but the standards codes are invented or misapplied ('SAE J2603', Type 1 as 'IEC 62196-2'), CHAdeMO is missing, fast chargers are described as not yet deployed, and EECA is glossed as the Electricity Authority."
+ ],
+ "T11Q7": [
+  "pass",
+  "V2G defined correctly, described as emerging in NZ with trials underway, and appropriately hedged."
+ ],
+ "T12Q1": [
+  "pass",
+  "Half-hourly recording, cellular transmission, accurate billing and TOU access all correct. Omits the encryption point."
+ ],
+ "T12Q2": [
+  "pass",
+  "Half-hourly data enabling TOU plans and off-peak shifting, correct. Omits EV charging and water heating as the flexible loads."
+ ]
+}

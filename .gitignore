@@ -30,3 +30,6 @@ assets/greeting.wav
 # Gradio
 flagged/
 .gradio/
+
+# Per-session latency/power metrics (joulie/metrics.py)
+logs/

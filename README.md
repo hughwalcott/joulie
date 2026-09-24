@@ -24,6 +24,17 @@ Activate the VM and Intall Dependencies:
 source .venv/bin/activate
 pip install -r requirements.txt
 ```` 
+`faster-whisper` pulls in `av` (PyAV), whose prebuilt wheel bundles its own
+copy of FFmpeg. `torchcodec` (used by `torchaudio` to load XTTS's reference
+wav) links against the system FFmpeg instead, so having both installed
+duplicate-loads FFmpeg into the same process and macOS logs an `objc[...]:
+Class AVFFrameReceiver is implemented in both ...` warning at startup —
+harmless, but rebuild `av` from source against the same FFmpeg to get rid of
+it and the ~20MB of duplicated libraries:
+````
+brew install ffmpeg pkg-config
+PKG_CONFIG_PATH="/opt/homebrew/lib/pkgconfig" pip install --no-binary av --force-reinstall --no-deps "av>=11"
+````
 Configure and run: 
 ```` 
 python main.py
@@ -60,3 +71,66 @@ ollama pull qwen2.5:14b-instruct-q4_K_M
 ```
 
 The model choice is measured, not assumed — see `evals/` for the question-bank harness and `evals/report.html` for the comparison against `llama3.2:3b` and `qwen3:14b`.
+
+## Conversation history and retrieved context
+Each turn's retrieved context rides on that turn's own user message and is **not** kept in
+history (`JOULIE_LLM_RAG_PLACEMENT`, default `question`; `system` restores the old shape so
+the two stay A/B-able). Ollama collates every `role: "system"` message into a single block
+at the *top* of the rendered prompt, so sending context as a system message inserted ~560
+tokens in front of the entire conversation on every turn and broke the KV prefix each time
+— 3.3→6.7s of prefill against a flat 3.4s once the block moved onto the question. See
+`scripts/isolate_ragplacement.py` and `logs/latency-analysis.md`.
+
+With context out of history a completed turn costs only its question and answer (~140 tokens
+at a typical reply length, ~260 at the longest measured), so `Agent` keeps up to
+`JOULIE_LLM_MAX_HISTORY_TURNS` (default `16`) completed turns and cuts back to
+`JOULIE_LLM_HISTORY_TRIM_TO` (default `8`) in one block once it exceeds that. A trim
+re-prefills everything after the system prompt (~10s at this model's ~185 tok/s), so the cap
+is a backstop for an unusually long visit rather than a working dial — a normal 10-15 turn
+visit never reaches it, and `SessionCore.end_session()` resets history per visitor. Set the
+cap to `0` to disable trimming entirely — at the default cap the first trim lands at turn 18.
+`JOULIE_LLM_NUM_CTX` (default `6144`) has to stay above roughly `260 * cap + 1300` tokens, or
+Ollama silently drops messages off the front and breaks the prefix by another route: a prompt
+at the 16-turn cap measures ~3.2k tokens with typical replies and ~5.3k with the longest
+measured, so `4096` would overflow a talkative visit.
+
+What this trades away: a follow-up question sees the previous answers but no longer the
+chunks behind them. `evals/followups.py` is the probe for that — `evals/run_qbank.py` gives
+every question a fresh `Agent`, so it cannot see it.
+
+## Per-turn and per-conversation performance metrics
+Every turn's latency (STT, LLM time-to-first-token, TTS synth/RTF per chunk) and,
+where available, GPU/CPU power draw, GPU clock frequency + active/idle residency,
+and thermal-pressure state are written to `logs/sessions/<session_id>.jsonl`; a
+roll-up `SessionSummary` (avg/max latency, whether any turn ran under thermal
+throttling) is written to `logs/sessions/<session_id>_summary.json` when the
+conversation ends. See `joulie/metrics.py` and `joulie/power.py`.
+
+GPU frequency/residency exists to tell apart three things a power-draw number
+alone can't distinguish: the GPU doing more real work (residency up, frequency
+steady), the GPU throttled (frequency down, residency up to compensate for doing
+the same work more slowly), and something other than Joulie's own turn keeping
+the GPU busy (residency up independent of that turn's actual workload).
+
+Each turn also records what was actually sent to Ollama: `prompt_chars` (total
+size of the request), `rag_chunk_count`/`rag_context_chars` (what retrieval
+added), and `history_turns` (how many turns survived the cap in
+`JOULIE_LLM_MAX_HISTORY_TURNS` and made it into this request). This exists to
+tell "turn position" apart from "input size" as the explanation for a latency
+change — the cap bounds `history_turns`, but content-dependent RAG retrieval
+can still make `prompt_chars` vary turn to turn even once history is flat.
+
+Power/thermal capture uses `sudo powermetrics` running in the background for the
+kiosk's lifetime. It needs a one-time, scoped passwordless-sudo entry on the kiosk
+account — without it, `PowerSampler` disables itself automatically (no password
+prompt, no hang) and turn metrics simply come back without power/thermal fields:
+
+```
+sudo visudo -f /etc/sudoers.d/joulie-powermetrics
+```
+```
+<kiosk-username> ALL=(root) NOPASSWD: /usr/bin/powermetrics
+```
+
+Set `JOULIE_POWER_SAMPLING_ENABLED=0` to disable power sampling entirely, or
+`JOULIE_METRICS_ENABLED=0` to disable all metrics capture.

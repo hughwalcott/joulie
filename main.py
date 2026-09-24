@@ -1,5 +1,11 @@
 import argparse
 import os
+import sys
+
+# Line-buffered stdout so tagged pipeline logs flush immediately in every mode.
+# session.py sets this too, but --ui never imports it, which left UI-mode logs
+# block-buffered and minutes stale whenever stdout was a pipe or a file.
+sys.stdout.reconfigure(line_buffering=True)
 
 # Silence the huggingface tokenizers fork warning. We intentionally use threads
 # alongside tokenizers; the warning is noisy and not actionable for our usage.

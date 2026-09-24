@@ -1,0 +1,4214 @@
+[
+ {
+  "id": "T1Q1",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "How much cheaper is a hot water heat pump to run than a standard electric hot water cylinder?",
+  "expected": "A hot water heat pump uses roughly 60-75% less electricity than a standard electric resistance cylinder because it moves heat from the air into the water rather than generating it directly, making it around 60% cheaper to run. EECA estimates typical savings of about $284 a year for an average household (3-person Auckland household).",
+  "answer": "A hot water heat pump costs around **60% less** to run compared to a traditional electric resistance hot water cylinder, according to EECA's information. Scan the QR code on screen for more details and savings calculations specific to your home.",
+  "error": null,
+  "seconds": 7.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Compare home water heating options",
+    "stance": "authoritative",
+    "distance": 0.202
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.26
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.266
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps for your home (cost and savings)",
+    "stance": "authoritative",
+    "distance": 0.293
+   }
+  ]
+ },
+ {
+  "id": "T1Q2",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "How does a hot water heat pump compare to gas or LPG water heating on running cost?",
+  "expected": "EECA estimates a hot water heat pump is around 60% cheaper to run than reticulated natural gas water heating, and around 75% cheaper than bottled LPG water heating.",
+  "answer": "A hot water heat pump is around 60% cheaper to run than an electric resistance cylinder and piped natural gas, and about 75% cheaper than bottled LPG. According to Rewiring Aotearoa, switching from gas or LPG can lead to significant savings, with potential annual reductions of up to $1,000. For precise figures based on your specific situation, scan the QR code on screen to use 'the EECA home energy savings calculator'.",
+  "error": null,
+  "seconds": 6.7,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.322
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps for your home (cost and savings)",
+    "stance": "authoritative",
+    "distance": 0.325
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Space heating and cooling",
+    "stance": "advocacy",
+    "distance": 0.34
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.344
+   }
+  ]
+ },
+ {
+  "id": "T1Q3",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "What does a hot water heat pump cost to buy and install, and how long does it last?",
+  "expected": "EECA puts typical upfront cost (purchase plus installation) at around $7,000, with a working life of about 15 years. Despite higher upfront cost than a standard cylinder, EECA says it is the cheapest option once running costs are factored in.",
+  "answer": "According to Rewiring Aotearoa's electrification guide, the average upfront cost for installing a hot water heat pump is $4,000 to $10,000 installed. The lifespan of a hot water heat pump can vary, but generally, these systems are expected to last around 15 years with proper maintenance.",
+  "error": null,
+  "seconds": 6.3,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.321
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.325
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Water heating",
+    "stance": "advocacy",
+    "distance": 0.334
+   },
+   {
+    "publisher": "EECA",
+    "title": "Design or renovate a home for energy efficiency",
+    "stance": "authoritative",
+    "distance": 0.36
+   }
+  ]
+ },
+ {
+  "id": "T1Q4",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "What is Warmer Kiwi Homes and what does it pay for?",
+  "expected": "A government programme administered by EECA providing grants for ceiling and underfloor insulation for eligible owner-occupied homes, and heat pumps for households with greatest need. Insulation grants cover 50%, 80% or 90% depending on eligibility. Heating grants cover 90% up to $3,450 for eligible Community Services Card or SuperGold Combo card holders or highest-need areas. Eligible households typically pay about $400-$700 toward a heat pump.",
+  "answer": "Warmer Kiwi Homes is a government programme administered by EECA that provides grants for insulation and efficient heating systems for eligible owner-occupied homes in New Zealand. The programme offers funding up to 90% of the project cost, with a maximum grant amount of $3,450 per household as of July 10, 2026.",
+  "error": null,
+  "seconds": 5.2,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Funding",
+    "stance": "authoritative",
+    "distance": 0.215
+   },
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.232
+   },
+   {
+    "publisher": "EECA",
+    "title": "Insulate your home",
+    "stance": "authoritative",
+    "distance": 0.253
+   },
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.255
+   }
+  ]
+ },
+ {
+  "id": "T1Q5",
+  "topic": "1. Household Electrification",
+  "verifier": true,
+  "question": "Who is eligible for a Warmer Kiwi Homes insulation grant?",
+  "expected": "Own and live in a home built before 2008, need eligible ceiling and/or underfloor insulation work, and either hold a Community Services Card or SuperGold Combo Card, or live in an area EECA identifies as eligible. Funding amount depends on eligibility category. Use EECA's online eligibility checker or an approved provider to confirm.",
+  "answer": "Eligibility for Warmer Kiwi Homes grants, which provide up to 90% off insulation costs, can be checked online through the Warmer Kiwi Homes eligibility check tool. Scan the QR code on screen to access it and see if you qualify based on your household income and property type.",
+  "error": null,
+  "seconds": 5.1,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Funding",
+    "stance": "authoritative",
+    "distance": 0.188
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Resources for further information \u2014 interactive tools and calculators",
+    "stance": "advocacy",
+    "distance": 0.201
+   },
+   {
+    "publisher": "EECA",
+    "title": "Insulate your home",
+    "stance": "authoritative",
+    "distance": 0.217
+   },
+   {
+    "publisher": "EECA",
+    "title": "Do a healthy home check \u2014 for a warm and dry home",
+    "stance": "authoritative",
+    "distance": 0.231
+   }
+  ]
+ },
+ {
+  "id": "T1Q6",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "Are induction cooktops more energy efficient than gas hobs?",
+  "expected": "Yes. EECA states electric cooking uses about half as much energy as gas: a gas burner is roughly 30% efficient because much heat escapes around the pot, whereas an induction cooktop is roughly 80-90% efficient because it heats the cookware directly with an electromagnetic field.",
+  "answer": "Yes, induction cooktops are significantly more energy efficient than gas hobs. According to EECA, an induction cooktop is roughly 80\u201390% efficient because it heats the cookware directly using an electromagnetic field, whereas a gas burner is only about 30% efficient since much heat escapes around the pot.",
+  "error": null,
+  "seconds": 7.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.242
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.309
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.314
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.327
+   }
+  ]
+ },
+ {
+  "id": "T1Q7",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "What does switching to an induction cooktop cost, and how much can a household save?",
+  "expected": "EECA estimates an induction cooktop costs around $2,980 installed and lasts about 15 years. Direct cooking-energy saving over gas is modest (around $17 a year), but a household that disconnects from piped gas entirely also avoids the daily gas fixed/connection charge - roughly $1-$1.60 a day, over $580 a year - which is usually the larger saving.",
+  "answer": "Switching to an induction cooktop costs around $2,980 installed, with the appliance lasting about 15 years. The average household could see savings of approximately $17 per year on energy costs compared to existing electric cooking methods. Induction cooktops are also more efficient at around 80\u201390%, directly heating the cookware using an electromagnetic field. Scan the QR code on screen for the EECA home energy savings calculator to estimate your specific savings.",
+  "error": null,
+  "seconds": 7.8,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.149
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.21
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.245
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.259
+   }
+  ]
+ },
+ {
+  "id": "T1Q8",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "Are induction cooktops safer than gas hobs?",
+  "expected": "EECA notes induction cooktops heat the pot directly via an electromagnetic field, so the cooktop surface stays much cooler than a gas flame or standard electric element, reducing burn risk, and there is no open flame or combustion by-products released into the kitchen.",
+  "answer": "According to EECA, induction cooktops are the safest cooking technology available because they have no open flame or combustion by-products released into the kitchen. They also cool down quickly once the pots and pans are removed, which reduces burn risks compared to gas hobs.",
+  "error": null,
+  "seconds": 5.4,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.351
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Cooking",
+    "stance": "advocacy",
+    "distance": 0.367
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.372
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.375
+   }
+  ]
+ },
+ {
+  "id": "T1Q9",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "How much lower are lifetime emissions from switching a household off gas for hot water and cooking?",
+  "expected": "Because NZ's grid is predominantly renewable, EECA estimates a hot water heat pump can save around 7,000kg of emissions over a 15-year life vs gas or LPG water heating, and an induction cooktop around 2,000kg over 15 years vs a gas or LPG hob. Savings are larger again if paired with rooftop solar.",
+  "answer": "Switching a household off gas for both hot water and cooking can significantly reduce emissions. For hot water, using a heat pump system instead of gas or electric resistance cylinders saves around 7,000 kg of CO\u2082 over 15 years, according to EECA. Induction cooktops are more efficient than gas, reducing energy use but specific lifetime emission figures for cooking need to be calculated based on individual usage patterns using tools like the EECA home energy savings calculator or the Rewiring electric calculator. Scan the QR code on screen for these tools.",
+  "error": null,
+  "seconds": 9.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.355
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.382
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.42
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Space heating and cooling",
+    "stance": "advocacy",
+    "distance": 0.432
+   }
+  ]
+ },
+ {
+  "id": "T1Q10",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "Is a heat pump cheaper to run than gas or LPG for home space heating?",
+  "expected": "Yes. EECA states that for an average NZ household, running a heat pump for space heating costs about $122 a year less than piped gas heating, and about $352 a year less than bottled LPG.",
+  "answer": "According to the EECA, heat pumps are more energy-efficient for space heating compared to bottled LPG and piped natural gas, costing about $352 less per year than bottled LPG. Rewiring Aotearoa argues that switching from gas or oil heating to a heat pump can save up to $1,000 annually due to their higher efficiency.",
+  "error": null,
+  "seconds": 6.9,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.291
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Space heating and cooling",
+    "stance": "advocacy",
+    "distance": 0.299
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.314
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Space heating and cooling",
+    "stance": "advocacy",
+    "distance": 0.316
+   }
+  ]
+ },
+ {
+  "id": "T1Q11",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "Which home heating option does EECA rate as the lowest-cost, lowest-emissions choice overall?",
+  "expected": "EECA identifies heat pumps as the lowest-cost and lowest-emissions option for general home heating, particularly for living areas needing frequent heating. Wood and pellet burners are typically cheaper to run than gas but more expensive than heat pumps; piped natural gas and bottled LPG are the most expensive and highest-emissions options in EECA's comparison.",
+  "answer": "EECA rates **heat pumps** as the lowest-cost and lowest-emissions option for general home heating, particularly effective for living areas that require frequent heat. Scan the QR code on screen to use 'Billy' (Electricity Authority) or visit EECA's website for more details.",
+  "error": null,
+  "seconds": 6.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.203
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.266
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.288
+   },
+   {
+    "publisher": "EECA",
+    "title": "Insulate your home",
+    "stance": "authoritative",
+    "distance": 0.293
+   }
+  ]
+ },
+ {
+  "id": "T1Q12",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "Are landlords required to insulate rental homes in New Zealand?",
+  "expected": "Yes. Under the Healthy Homes Standards, ceiling and underfloor insulation have been compulsory in all rental homes since 1 July 2019, subject to exemptions such as where installation is unsafe or impractical. Older/thinner insulation must be topped up or replaced to meet the standard; non-compliance breaches the Residential Tenancies Act.",
+  "answer": "Yes, landlords are required to ensure their rental properties meet insulation standards under the Healthy Homes Standards in New Zealand. These regulations require at least ceiling and underfloor insulation, among other requirements, to maintain a healthy living environment for tenants. For more details on specific obligations and exceptions, refer to the EECA guidelines or consult with your local council.",
+  "error": null,
+  "seconds": 7.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.323
+   },
+   {
+    "publisher": "EECA",
+    "title": "Insulate your home",
+    "stance": "authoritative",
+    "distance": 0.341
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Resources for further information \u2014 interactive tools and calculators",
+    "stance": "advocacy",
+    "distance": 0.374
+   },
+   {
+    "publisher": "EECA",
+    "title": "Do a healthy home check \u2014 for a warm and dry home",
+    "stance": "authoritative",
+    "distance": 0.379
+   }
+  ]
+ },
+ {
+  "id": "T1Q13",
+  "topic": "1. Household Electrification",
+  "verifier": false,
+  "question": "What heating must a rental home have under the Healthy Homes Standards?",
+  "expected": "Landlords must provide one or more fixed heaters capable of directly heating the main living room, of an acceptable type and meeting a minimum heating capacity for that room's size (calculated using Tenancy Services' heating assessment tool). Sits alongside the compulsory insulation requirement.",
+  "answer": "Under the Healthy Homes Standards in New Zealand, rental homes must have one or more fixed heaters capable of directly heating the main living room to at least 18 \u00b0C. These heaters need to be an acceptable type and meet the minimum heating capacity for the room's size as specified by Tenancy Services.",
+  "error": null,
+  "seconds": 6.8,
+  "retrieved": [
+   {
+    "publisher": "Tenancy Services",
+    "title": "Healthy homes standards \u2014 requirements and compliance",
+    "stance": "authoritative",
+    "distance": 0.283
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Buildings and insulation",
+    "stance": "advocacy",
+    "distance": 0.355
+   },
+   {
+    "publisher": "Tenancy Services",
+    "title": "Healthy homes standards \u2014 requirements and compliance",
+    "stance": "authoritative",
+    "distance": 0.363
+   },
+   {
+    "publisher": "EECA",
+    "title": "Insulate your home",
+    "stance": "authoritative",
+    "distance": 0.387
+   }
+  ]
+ },
+ {
+  "id": "T1Q14",
+  "topic": "1. Household Electrification",
+  "verifier": true,
+  "question": "How much of New Zealand's electricity currently comes from solar, and how is that expected to change?",
+  "expected": "Solar has historically been small - around 1% of electricity consumption in 2021 - but uptake is accelerating as rooftop and grid-scale costs fall. EECA/industry forecasts suggest solar PV could supply as much as 6% of NZ's electricity by 2035, with wide uncertainty.",
+  "answer": "As of 2021, solar energy contributed around 1% of New Zealand\u2019s total electricity consumption. EECA forecasts suggest this could increase to as much as 6% by 2035, but the actual figure will depend on various factors and should be verified with up-to-date sources from EECA or other relevant government bodies for the most current information.",
+  "error": null,
+  "seconds": 7.7,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.18
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.217
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.237
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.257
+   }
+  ]
+ },
+ {
+  "id": "T2Q1",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "Why is New Zealand's natural gas supply declining?",
+  "expected": "NZ's gas comes from a small number of ageing Taranaki fields; proven-plus-probable (2P) reserves fell 27% in the year to 1 January 2025, from 1,300 PJ to 948 PJ, as operators reduced extraction estimates and reserves were drawn down. Gas delivered from fields fell 22% in 2024 vs 2023.",
+  "answer": "New Zealand's natural gas supply is declining because the country relies on a small number of ageing fields in Taranaki, and both reserves and production rates are falling faster than previously forecasted. This decline pushes users towards alternatives like electrification to meet their energy needs. According to MBIE, New Zealand has no facilities for importing or exporting natural gas, so domestic supply issues directly affect demand.",
+  "error": null,
+  "seconds": 7.7,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Why New Zealand's natural gas supply is declining",
+    "stance": "authoritative",
+    "distance": 0.159
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Why New Zealand's natural gas supply is declining",
+    "stance": "authoritative",
+    "distance": 0.177
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Why New Zealand's natural gas supply is declining",
+    "stance": "authoritative",
+    "distance": 0.222
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.242
+   }
+  ]
+ },
+ {
+  "id": "T2Q2",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "Which gas fields are driving the decline, and how fast is production expected to fall?",
+  "expected": "Pohokura, Maui, Mangahewa and Kupe have all seen sharp output drops, together reducing supply by around 109 TJ/day. MBIE brought forward its forecast for annual gas production falling below 100 PJ from 2029 to 2026 - a three-year acceleration.",
+  "answer": "The Pohokura, Maui, Mangahewa, and Kupe fields are among those experiencing significant declines in natural gas supply. Gas delivered from these fields fell by 22% in 2024 compared to 2023, with a combined daily drop of approximately 109 TJ/day. According to Rewiring Aotearoa, total gas production dropped about 20% across the year, reaching its lowest level since 2011.",
+  "error": null,
+  "seconds": 9.9,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Gas statistics (natural gas supply and demand)",
+    "stance": "authoritative",
+    "distance": 0.263
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Energy in New Zealand (official energy statistics \u2014 overview)",
+    "stance": "authoritative",
+    "distance": 0.353
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.373
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Why New Zealand's natural gas supply is declining",
+    "stance": "authoritative",
+    "distance": 0.385
+   }
+  ]
+ },
+ {
+  "id": "T2Q3",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "Where does New Zealand's piped (reticulated) natural gas come from, and who can access it?",
+  "expected": "Produced entirely in Taranaki and delivered by transmission pipelines to distribution networks covering most of the North Island (Northland and Auckland down to Wellington, across to Gisborne/Napier). The South Island has no reticulated natural gas network, so relies on bottled LPG, electricity or other fuels.",
+  "answer": "New Zealand\u2019s piped (reticulated) natural gas primarily comes from the Taranaki region, where most of the country's natural gas fields are located. This reticulated gas is available to homes and businesses in a limited area stretching from Northland and Auckland down to Wellington and across to Gisborne/Napier, but it\u2019s not available in the South Island due to the absence of a reticulated network there.",
+  "error": null,
+  "seconds": 8.4,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Gas statistics (natural gas supply and demand)",
+    "stance": "authoritative",
+    "distance": 0.288
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.292
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.31
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.378
+   }
+  ]
+ },
+ {
+  "id": "T2Q4",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "What's the difference between reticulated natural gas and bottled LPG?",
+  "expected": "Reticulated natural gas is delivered continuously through underground pipelines from Taranaki and is only available in parts of the North Island. LPG is a by-product separated during gas processing, then compressed, bottled and delivered by truck, so it can be supplied anywhere including the South Island, but is generally more expensive per unit of energy.",
+  "answer": "Reticulated natural gas is produced entirely in Taranaki and delivered via pipelines, whereas bottled LPG is a by-product of oil and gas processing that is compressed and delivered by truck. Reticulated gas is only available to those connected to the pipeline network, while LPG can be supplied anywhere trucks can deliver it.",
+  "error": null,
+  "seconds": 7.2,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.299
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home water heating options",
+    "stance": "authoritative",
+    "distance": 0.406
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.421
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.421
+   }
+  ]
+ },
+ {
+  "id": "T2Q5",
+  "topic": "2. Removing Gas",
+  "verifier": true,
+  "question": "Has New Zealand banned new natural gas connections to homes?",
+  "expected": "No. The Climate Change Commission's 2021 draft advice recommended banning new connections from 2025 but this was never adopted as government policy - opposed by the gas industry and not carried through by the government elected in 2023. There is currently no regulatory ban; declining domestic production is the main factor pushing households away from gas.",
+  "answer": "No, New Zealand has not banned new natural gas connections to homes. According to MBIE's information from 2026-09-06, while there was a proposal in 2021 by the Climate Change Commission to restrict new natural gas connections, this idea was never adopted as government policy and is currently not enforced.",
+  "error": null,
+  "seconds": 7.4,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.132
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.302
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.331
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.361
+   }
+  ]
+ },
+ {
+  "id": "T2Q6",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "What is the Gas Transition Plan?",
+  "expected": "An MBIE-led work programme (with input from the Gas Industry Company) on how NZ manages the phase-down of fossil gas as domestic supply declines, including options for repurposing existing gas infrastructure for renewable gases such as biogas or hydrogen, and managing the transition for existing users.",
+  "answer": "The Gas Transition Plan is a work programme led by MBIE and the Gas Industry Company that examines how New Zealand will manage the phase-down of fossil gas as domestic supply declines. It considers options for repurposing existing gas infrastructure for renewable gases like biogas and hydrogen, while also planning fair management for current users during the transition to a lower-gas future.",
+  "error": null,
+  "seconds": 7.3,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.286
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.379
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.398
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Decarbonising industrial process heat and phasing out coal boilers",
+    "stance": "authoritative",
+    "distance": 0.42
+   }
+  ]
+ },
+ {
+  "id": "T2Q7",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "What does it typically cost just to stay connected to piped gas, aside from the gas used?",
+  "expected": "A daily fixed/connection charge on top of usage, typically around $1-$1.60 a day (roughly $365-$580 a year) regardless of how much gas is used. This fixed charge is a significant part of the saving available to households that disconnect entirely.",
+  "answer": "The daily fixed connection charge for piped natural gas in New Zealand is part of the overall cost structure and can amount to approximately $1\u2013$1.60 per day (over $580 a year), according to EECA. This charge applies even if no gas is consumed, reflecting the ongoing cost of maintaining your connection to the piped gas network.",
+  "error": null,
+  "seconds": 8.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.301
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home water heating options",
+    "stance": "authoritative",
+    "distance": 0.402
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.42
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.445
+   }
+  ]
+ },
+ {
+  "id": "T2Q8",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "What's the combined financial case for a household switching both water heating and cooking off gas?",
+  "expected": "Switching to a hot water heat pump saves around 60% on hot water running costs; induction saves a modest amount directly on cooking energy - but removing gas entirely also avoids the daily fixed gas charge (roughly $580 a year), usually the largest single saving, on top of the appliance running-cost savings.",
+  "answer": "Switching from gas to electric water heating can save you around $400 to $1250 annually, depending on your current system and usage patterns. For cooking, switching from gas to an induction cooktop offers modest energy savings of about $17 per year but a significant reduction in daily fixed connection charges for piped gas, roughly between $1\u2013$1.60 per day ($580 per year). Combining these changes could result in total annual savings ranging from around $997 to $1830, making the switch both financially beneficial and environmentally sound.",
+  "error": null,
+  "seconds": 8.4,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.384
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home water heating options",
+    "stance": "authoritative",
+    "distance": 0.418
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.44
+   },
+   {
+    "publisher": "EECA",
+    "title": "Window insulation",
+    "stance": "authoritative",
+    "distance": 0.444
+   }
+  ]
+ },
+ {
+  "id": "T2Q9",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "What does declining gas supply mean for households and businesses that keep using gas?",
+  "expected": "MBIE advises tighter gas supply is likely to put upward pressure on gas prices and increase risk of supply constraints, particularly during winter peak demand, and recommends gas users - especially businesses reliant on gas for process heat - start planning for alternative energy sources.",
+  "answer": "According to MBIE's data from 2026-05-14, as New Zealand\u2019s natural gas production declines faster than forecasted, the country is seeing a reduction in both supply and demand. For households and businesses still reliant on gas, this means increasing costs and potential supply shortages, pushing them towards alternatives like electrification to ensure reliability and cost-effectiveness.",
+  "error": null,
+  "seconds": 5.6,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.339
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Gas statistics (natural gas supply and demand)",
+    "stance": "authoritative",
+    "distance": 0.347
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Why New Zealand's natural gas supply is declining",
+    "stance": "authoritative",
+    "distance": 0.415
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Why New Zealand's natural gas supply is declining",
+    "stance": "authoritative",
+    "distance": 0.417
+   }
+  ]
+ },
+ {
+  "id": "T2Q10",
+  "topic": "2. Removing Gas",
+  "verifier": false,
+  "question": "Did constrained gas supply contribute to New Zealand's 2024 electricity price spikes?",
+  "expected": "Yes. Winter 2024 saw wholesale prices exceed $800/MWh at times, driven by high demand, low hydro storage and wind output, and constrained gas supply for gas-fired peaking generation - less gas availability reduced the system's ability to respond to tight supply.",
+  "answer": "Yes, according to the BusinessNZ Energy Council report from 2024, a combination of high demand, limited hydro and wind generation, and constrained gas supply for gas-fired peaking generation contributed to the winter 2024 electricity supply crisis, leading to price spikes.",
+  "error": null,
+  "seconds": 5.0,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.296
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.347
+   },
+   {
+    "publisher": "BusinessNZ Energy Council",
+    "title": "New Zealand's 2024 winter electricity supply crisis",
+    "stance": "advocacy",
+    "distance": 0.356
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Managing dry-year electricity risk (reliability obligation)",
+    "stance": "authoritative",
+    "distance": 0.371
+   }
+  ]
+ },
+ {
+  "id": "T3Q1",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "What was the Clean Car Discount and when did it run?",
+  "expected": "A government scheme applying rebates to low- and zero-emission vehicle registrations and fees to high-emission vehicles based on CO2 emissions. Two phases: rebates only from 1 July 2021 to 31 March 2022, then both rebates and fees from 1 April 2022 until it ended 31 December 2023.",
+  "answer": "The Clean Car Discount was a government scheme that offered rebates for newly registered low- and zero-emission vehicles and applied fees to high-emission vehicles from **1 April 2022** until its end on **31 December 2023**. This scheme aimed to encourage the uptake of cleaner cars in New Zealand by providing financial incentives based on emissions levels.",
+  "error": null,
+  "seconds": 5.4,
+  "retrieved": [
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.368
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.439
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.488
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.537
+   }
+  ]
+ },
+ {
+  "id": "T3Q2",
+  "topic": "3. EVs & Transport",
+  "verifier": true,
+  "question": "Why did the Clean Car Discount end, and is there a current government purchase subsidy for EVs?",
+  "expected": "Repealed by the incoming government via the Land Transport (Clean Vehicle Discount Scheme Repeal) Amendment Act 2023, ending 31 December 2023. There is no equivalent national purchase rebate for EVs - support has instead focused on charging infrastructure investment and regulatory settings.",
+  "answer": "The Clean Car Discount was a scheme that provided rebates for low- and zero-emission vehicles but was repealed by the New Zealand government in 2023. Currently, there is no national EV purchase rebate or subsidy; the government has instead focused on expanding public charging infrastructure and regulatory settings to support transport electrification.",
+  "error": null,
+  "seconds": 4.9,
+  "retrieved": [
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.328
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.351
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.354
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.375
+   }
+  ]
+ },
+ {
+  "id": "T3Q3",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "Do electric vehicles pay Road User Charges (RUC) in New Zealand?",
+  "expected": "Yes, since 1 April 2024. EVs were previously exempt to encourage early uptake; the exemption was always intended to end once EVs reached around 2% of the light vehicle fleet, a threshold reached by 2024.",
+  "answer": "Yes, electric vehicles in New Zealand do pay Road User Charges (RUC). Battery electric vehicles (BEVs) that weigh under 3,500 kg are charged $76.00 per 1,000 km. Plug-in hybrid electric vehicles (PHEVs) pay a rate of $38 for every 1,000 km driven. These charges help contribute to the Road User Charges Fund and ensure that all vehicle owners contribute fairly towards road maintenance and development.",
+  "error": null,
+  "seconds": 6.8,
+  "retrieved": [
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.182
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.204
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.324
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.339
+   }
+  ]
+ },
+ {
+  "id": "T3Q4",
+  "topic": "3. EVs & Transport",
+  "verifier": true,
+  "question": "How much RUC does a light electric vehicle pay?",
+  "expected": "Light battery electric vehicles pay RUC at $76 per 1,000 kilometres, the same rate as an equivalent light diesel vehicle. (Note: the source bank states light PHEVs pay a reduced rate of $38 - stated inconsistently as per 10,000 km in T3Q4 and per 1,000 km in T3Q15.)",
+  "answer": "A light battery electric vehicle (BEV) in New Zealand pays **$76.00 per 1,000 km** under Road User Charges (RUC), according to the NZTA. This rate applies from April 1, 2024.",
+  "error": null,
+  "seconds": 5.3,
+  "retrieved": [
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.308
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.32
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.372
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.409
+   }
+  ]
+ },
+ {
+  "id": "T3Q5",
+  "topic": "3. EVs & Transport",
+  "verifier": true,
+  "question": "Is New Zealand planning any further changes to how road funding is collected from vehicle owners, including EV owners?",
+  "expected": "Yes. Government has announced plans to move all light vehicles onto electronic road user charges and phase out petrol excise duty (currently 70c/litre). Legislation and market engagement planned through 2026, RUC system opening to competing third-party providers from 2027; a full-fleet transition date has deliberately not been set.",
+  "answer": "The Beehive has announced initiatives under Electrify NZ aimed at accelerating renewable generation and infrastructure development, including considerations for EV charging. However, specific plans regarding changes to road funding collection, particularly for EV owners, are not detailed in the provided authoritative sources. For the most up-to-date information on any planned changes, it's best to check directly with the Beehive or the Ministry of Transport.",
+  "error": null,
+  "seconds": 7.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.314
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.345
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Electric cars",
+    "stance": "advocacy",
+    "distance": 0.364
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Electrify NZ \u2014 accelerating renewable generation, consenting and offshore wind",
+    "stance": "authoritative",
+    "distance": 0.39
+   }
+  ]
+ },
+ {
+  "id": "T3Q6",
+  "topic": "3. EVs & Transport",
+  "verifier": true,
+  "question": "How many public EV chargers are there in New Zealand, and how is the network being expanded?",
+  "expected": "As of the government's March 2026 announcement, around 1,800 public charge points in service plus 161 in progress (about 1,961). A $110m+ package - $52.7m in government zero-interest loans plus $60m co-invested by ChargeNet and Meridian - will add 2,574 charge points (1,374 DC fast, 1,200 AC), bringing the total to roughly 4,550, about half in the six main urban centres.",
+  "answer": "As of 2026, the Government's target is to have 10,000 public electric vehicle (EV) charge points by 2030. Before this initiative, New Zealand had significantly fewer chargers. For the most accurate and up-to-date count of existing EV chargers, scan the QR code on screen for EECA's public EV charger dashboard or check NZTA\u2019s live map. The network is being expanded through national guidance published by NZTA to ensure consistency and reliability across all operators involved in installing public chargers.",
+  "error": null,
+  "seconds": 8.2,
+  "retrieved": [
+   {
+    "publisher": "Beehive",
+    "title": "Government investment in public EV chargers and the 2030 target",
+    "stance": "authoritative",
+    "distance": 0.265
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Government investment in public EV chargers and the 2030 target",
+    "stance": "authoritative",
+    "distance": 0.277
+   },
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.294
+   },
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.295
+   }
+  ]
+ },
+ {
+  "id": "T3Q7",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "What is the government's longer-term target for public EV charging infrastructure?",
+  "expected": "An ambition to reach 10,000 public charge points by 2030 - roughly one charger for every 40 EVs on the road - noting NZ's current charger-to-EV ratio is among the lowest in the OECD.",
+  "answer": "The New Zealand Government has committed to delivering 10,000 public electric vehicle (EV) chargers by 2030, as stated in the Government Policy Statement on land transport 2024. This target aims to support widespread EV adoption and infrastructure development across the country.",
+  "error": null,
+  "seconds": 5.0,
+  "retrieved": [
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.286
+   },
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.322
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Government investment in public EV chargers and the 2030 target",
+    "stance": "authoritative",
+    "distance": 0.356
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.36
+   }
+  ]
+ },
+ {
+  "id": "T3Q8",
+  "topic": "3. EVs & Transport",
+  "verifier": true,
+  "question": "Roughly how many EVs are on New Zealand roads?",
+  "expected": "EECA reported that by the end of 2023 there were over 100,000 battery electric and plug-in hybrid vehicles registered on NZ roads, a 57% increase on 2022 - up from fewer than 2,000 EVs in 2016.",
+  "answer": "By the end of 2023, there were over 100,000 battery electric and plug-in hybrid vehicles registered on New Zealand roads, marking a significant increase from fewer than 2,000 when tracking began in 2016. For the most recent figures, scan the QR code on screen to access 'the EECA home energy savings calculator' or visit the Beehive charger website for monthly fleet statistics updates.",
+  "error": null,
+  "seconds": 6.6,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.257
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.282
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.313
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.32
+   }
+  ]
+ },
+ {
+  "id": "T3Q9",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "What is EVRoam, and what does it do?",
+  "expected": "NZTA's national database of public EV charging locations. Operators submit data on charger location, connector type, availability and status to EVRoam, which feeds the public-facing NZTA Journey Planner EV charger map, giving drivers a consistent view of the network across operators.",
+  "answer": "EVRoam is NZTA's live national database of publicly accessible electric vehicle (EV) charging locations in New Zealand. It provides information on each charger's location, connector type, power capacity, and other details submitted by charging network operators. Scan the QR code on screen for more details.",
+  "error": null,
+  "seconds": 4.9,
+  "retrieved": [
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.481
+   },
+   {
+    "publisher": "EECA",
+    "title": "Understand home energy loans",
+    "stance": "authoritative",
+    "distance": 0.6
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Make a Plan (household electrification plan)",
+    "stance": "advocacy",
+    "distance": 0.603
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers",
+    "stance": "authoritative",
+    "distance": 0.605
+   }
+  ]
+ },
+ {
+  "id": "T3Q10",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "Why does NZTA publish national guidance for public EV charging infrastructure?",
+  "expected": "To help councils, charging network operators and other planners provide a consistent, reliable, nationwide network - covering where chargers are best located, what technical standards they should meet, and how to plan for a growing EV fleet as part of the wider transport system.",
+  "answer": "NZTA publishes national guidance to help councils, charging network operators, and other planners deliver a consistent and reliable nationwide network of public electric vehicle (EV) chargers. This guidance is part of a cross-agency effort aimed at providing strategic direction and giving industry greater certainty about how to prepare for future demand in EV infrastructure.",
+  "error": null,
+  "seconds": 4.7,
+  "retrieved": [
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.137
+   },
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.189
+   },
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.293
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.297
+   }
+  ]
+ },
+ {
+  "id": "T3Q11",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "Are EVs cheaper to run than petrol cars in New Zealand?",
+  "expected": "Generally yes on per-kilometre energy cost - electricity is typically cheaper per km than petrol, and EVs have fewer moving parts, lowering maintenance. Since April 2024 the gap is partly offset by RUC at the same rate as diesel, and actual saving depends on electricity price, charging pattern (home vs public fast charging) and vehicles compared.",
+  "answer": "According to EECA's information, electric vehicles are typically cheaper to run than petrol cars in New Zealand due to lower energy costs per kilometre and fewer maintenance requirements because of their simpler design with fewer moving parts. Electricity is generally more cost-effective than petrol for powering a vehicle across its lifetime in our largely renewable electricity system.",
+  "error": null,
+  "seconds": 5.2,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.203
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Government investment in public EV chargers and the 2030 target",
+    "stance": "authoritative",
+    "distance": 0.241
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.276
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.3
+   }
+  ]
+ },
+ {
+  "id": "T3Q12",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "What emissions benefit does an EV offer given New Zealand's electricity mix?",
+  "expected": "Because NZ generates the large majority of electricity from renewables (around 85% for 2024 overall, above 96% in some recent quarters), charging and driving an EV produces substantially lower lifecycle greenhouse gas emissions than an equivalent petrol or diesel vehicle, and the benefit grows as the grid gets more renewable.",
+  "answer": "In New Zealand, electric vehicles emit around 90% less CO\u2082 than equivalent petrol vehicles when driven in the country, due to the highly renewable nature of the national electricity grid. This information is based on an EECA-commissioned lifecycle assessment from 2015.",
+  "error": null,
+  "seconds": 4.7,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.233
+   },
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.29
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Electric cars",
+    "stance": "advocacy",
+    "distance": 0.291
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.306
+   }
+  ]
+ },
+ {
+  "id": "T3Q13",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "How does growing EV uptake affect New Zealand's overall electricity demand?",
+  "expected": "EV charging is one of several drivers - alongside electrified home heating, water heating and industrial process heat - behind forecasts that electricity demand will grow substantially. MBIE's central forecast has electricity meeting around half of NZ's total energy demand by 2050, up from about 26% in 2023.",
+  "answer": "EECA estimates that if all light vehicles in New Zealand were electric, total electricity demand would increase by around 20%. Currently, based on MBIE scenarios from 2024, projected electricity demand is expected to grow by 56.6% by 2050 compared to 2023. This growth reflects the increasing role of electricity in meeting New Zealand's total energy needs, which is forecasted to rise to around half of the country's energy demand by 2050 from about 26% in 2023.",
+  "error": null,
+  "seconds": 9.9,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.268
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.271
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.284
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV uptake in New Zealand and EV running costs",
+    "stance": "authoritative",
+    "distance": 0.285
+   }
+  ]
+ },
+ {
+  "id": "T3Q14",
+  "topic": "3. EVs & Transport",
+  "verifier": false,
+  "question": "Has removing the Clean Car Discount changed how the government supports lower-emission transport?",
+  "expected": "Rather than a purchase subsidy, current policy emphasises expanding public charging infrastructure (investment and targets), updating regulatory settings at the Commerce Commission and Electricity Authority to support EV charging and economy-wide electrification, and the broader RUC reform putting all vehicle types onto a distance-based model.",
+  "answer": "Removing the Clean Car Discount has led to a shift in the government's approach to supporting lower-emission transport. Instead of offering rebates and applying fees based on vehicle emissions, the current strategy focuses on establishing a **Clean Car Standard** that sets CO2 limits for imported vehicles. This standard aims to ensure all new cars meet emission standards over time, without the previous rebate system. For the latest incentives or changes in policy, it's best to check with your local retailer or the official government sources directly.",
+  "error": null,
+  "seconds": 7.9,
+  "retrieved": [
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.328
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.389
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.418
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Report \u2014 The Machine Count",
+    "stance": "advocacy",
+    "distance": 0.42
+   }
+  ]
+ },
+ {
+  "id": "T3Q15",
+  "topic": "3. EVs & Transport",
+  "verifier": true,
+  "question": "Do plug-in hybrid vehicles (PHEVs) pay the same RUC as fully electric vehicles?",
+  "expected": "Light EVs and light PHEVs both moved onto RUC in 2024, but rate categories differ and should be checked against NZTA's current RUC class rates. Rates as at August 2026: light BEV $76/1,000 km, plug-in petrol hybrid $38/1,000 km.",
+  "answer": "No, plug-in hybrid vehicles (PHEVs) do not pay the same Road User Charge (RUC) as fully electric vehicles. According to the NZTA's guidelines from 2026-09-06, PHEVs under 3,500 kg are charged a reduced rate of $38.00 per 1,000 km because their owners also pay fuel excise duty on petrol.",
+  "error": null,
+  "seconds": 8.8,
+  "retrieved": [
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.331
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.353
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.367
+   },
+   {
+    "publisher": "NZTA",
+    "title": "Road user charges (RUC) for electric and plug-in hybrid vehicles",
+    "stance": "authoritative",
+    "distance": 0.384
+   }
+  ]
+ },
+ {
+  "id": "T4Q1",
+  "topic": "4. Grid & Generation",
+  "verifier": true,
+  "question": "What share of New Zealand's electricity currently comes from renewable sources?",
+  "expected": "Predominantly renewable. MBIE reported a record 96.4% renewable generation for the October-December 2025 quarter, driven by favourable hydro and growing solar; across the full 2024 year, 85.5% of generation was renewable (annual figure lower than the best quarter because dry periods require more gas- and coal-fired backup).",
+  "answer": "In 2024, the renewable share of total primary energy supply in New Zealand reached a record high of 45.5%, according to \"Energy in New Zealand\" published by MBIE in 2026. However, for the specific breakdown of electricity generation, which is mostly from hydro and geothermal sources, you might want to refer to the latest Electricity statistics report also published by MBIE in 2026.",
+  "error": null,
+  "seconds": 8.9,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "New Zealand's electricity generation mix and renewable share",
+    "stance": "authoritative",
+    "distance": 0.202
+   },
+   {
+    "publisher": "EA",
+    "title": "Ways to save energy (efficiency tips and appliances)",
+    "stance": "authoritative",
+    "distance": 0.241
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Energy in New Zealand (official energy statistics \u2014 overview)",
+    "stance": "authoritative",
+    "distance": 0.244
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.256
+   }
+  ]
+ },
+ {
+  "id": "T4Q2",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What is New Zealand's electricity generation mix by fuel type?",
+  "expected": "For 2024 calendar year, MBIE's Energy in New Zealand figures: hydro 53.5%, geothermal 19.9%, gas 9.3%, wind 8.9%, coal 5.1%, solar 1.4%, other making up the remainder. Hydro and geothermal together provide the large majority of baseload renewable generation.",
+  "answer": "New Zealand's electricity generation is predominantly renewable, with hydro and geothermal sources dominating the mix. Wind and solar power are growing rapidly, while gas and coal are used primarily as backup during peak demand or when hydro storage is low, according to MBIE (2025-01-01).",
+  "error": null,
+  "seconds": 5.9,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "New Zealand's electricity generation mix and renewable share",
+    "stance": "authoritative",
+    "distance": 0.249
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.288
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.321
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your home energy upgrades",
+    "stance": "authoritative",
+    "distance": 0.354
+   }
+  ]
+ },
+ {
+  "id": "T4Q3",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "Why did coal use in New Zealand's electricity system increase in 2024?",
+  "expected": "Coal-fired generation rose from 2.4% of the mix in 2023 to 5.1% in 2024, mainly because low hydro lake inflows during winter reduced hydro generation available, requiring greater reliance on thermal (coal and gas) generation to keep the system reliable.",
+  "answer": "In 2024, the use of coal in New Zealand's electricity system increased due to factors such as hydroelectric droughts and maintenance schedules that affected other renewable sources. According to Rewiring Aotearoa, this highlights the challenges in maintaining a reliable power supply during periods when renewables are less available.",
+  "error": null,
+  "seconds": 6.5,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 Energy use in New Zealand",
+    "stance": "advocacy",
+    "distance": 0.343
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.344
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.357
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 The basics",
+    "stance": "advocacy",
+    "distance": 0.364
+   }
+  ]
+ },
+ {
+  "id": "T4Q4",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "How does New Zealand's wholesale electricity market work?",
+  "expected": "Generators offer electricity into a wholesale spot market where prices are set every half-hour through an auction-style process matching supply and demand at each grid location, under rules overseen by the Electricity Authority. Retailers and large users buy from the spot market or hedge with contracts; household bills are built on wholesale costs plus network (lines) charges and retail margins.",
+  "answer": "New Zealand's wholesale electricity market operates through a series of auctions every 30 minutes, where retailers and large industrial users buy power from generators at spot prices that reflect current supply and demand conditions. The Electricity Authority oversees these transactions in the wholesale/retail markets to ensure fair pricing and competition.",
+  "error": null,
+  "seconds": 6.3,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.321
+   },
+   {
+    "publisher": "ComComm",
+    "title": "The Commerce Commission's role in electricity lines",
+    "stance": "authoritative",
+    "distance": 0.322
+   },
+   {
+    "publisher": "EA",
+    "title": "New Zealand's electricity sector (how the market is structured)",
+    "stance": "authoritative",
+    "distance": 0.323
+   },
+   {
+    "publisher": "EA",
+    "title": "New Zealand's electricity sector (how the market is structured)",
+    "stance": "authoritative",
+    "distance": 0.326
+   }
+  ]
+ },
+ {
+  "id": "T4Q5",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "Who are the major electricity generators in New Zealand?",
+  "expected": "About 80 companies participate in the wholesale generation market, but the large majority of generation comes from four large gentailers (which both generate and retail): Contact Energy, Genesis Energy, Meridian Energy and Mercury Energy.",
+  "answer": "The major electricity generators in New Zealand include Meridian Energy, Genesis Energy, Mercury NZ, and Contact Energy. These companies operate a mix of hydro, geothermal, wind, and thermal power stations across the country. For detailed information on their specific generating capacities and projects, you can visit the Electricity Authority's website or check the latest reports from MBIE.",
+  "error": null,
+  "seconds": 6.8,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.303
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.305
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New Zealand's electricity generation mix and renewable share",
+    "stance": "authoritative",
+    "distance": 0.326
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.328
+   }
+  ]
+ },
+ {
+  "id": "T4Q6",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What is Transpower's role in New Zealand's electricity system?",
+  "expected": "Transpower is the state-owned enterprise that owns and operates the national grid - over 11,000 km of high-voltage transmission lines connecting generation to local distribution networks. It also acts as System Operator, balancing generation and demand in real time, and charges lines companies for use of the transmission network.",
+  "answer": "Transpower is a state-owned enterprise that owns and operates New Zealand's national grid, which includes over 11,000 kilometres of high-voltage transmission lines connecting generation to local distribution networks. It also acts as the System Operator, balancing generation and demand in real time across the electricity network.",
+  "error": null,
+  "seconds": 6.4,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.275
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.311
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.311
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.318
+   }
+  ]
+ },
+ {
+  "id": "T4Q7",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "Who delivers electricity from the grid to homes and businesses locally?",
+  "expected": "Twenty-nine local distribution companies (lines companies) own and operate around 150,000 km of local network infrastructure carrying electricity from Transpower's grid to homes and businesses; around 62 retailers then purchase wholesale electricity and sell it to consumers, each setting their own prices.",
+  "answer": "Local distribution companies, also known as lines companies, deliver electricity from the national grid to homes and businesses through local networks. There are approximately 29 such lines companies in New Zealand, which collectively manage around 150,000 kilometres of local network infrastructure.",
+  "error": null,
+  "seconds": 6.4,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "How electricity works (generation to your home)",
+    "stance": "authoritative",
+    "distance": 0.259
+   },
+   {
+    "publisher": "EA",
+    "title": "New Zealand's electricity sector (how the market is structured)",
+    "stance": "authoritative",
+    "distance": 0.279
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.295
+   },
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.341
+   }
+  ]
+ },
+ {
+  "id": "T4Q8",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What is the Electricity Authority's role?",
+  "expected": "The government regulator for NZ's electricity market. It sets and enforces the rules governing the wholesale and retail electricity markets, aiming to ensure electricity is supplied reliably and efficiently and that consumers benefit from competition and innovation at the lowest reasonable cost.",
+  "answer": "The Electricity Authority Te Mana Hiko regulates New Zealand\u2019s electricity market under the Electricity Industry Act 2010. It sets and enforces rules to ensure a fair, reliable, and efficient electricity system for all consumers.",
+  "error": null,
+  "seconds": 5.4,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "How New Zealand's electricity sector is structured",
+    "stance": "authoritative",
+    "distance": 0.323
+   },
+   {
+    "publisher": "EA",
+    "title": "About the Act, Regulations and Code (the legal framework)",
+    "stance": "authoritative",
+    "distance": 0.327
+   },
+   {
+    "publisher": "EA",
+    "title": "Consumer Care Obligations (your rights with your power company)",
+    "stance": "authoritative",
+    "distance": 0.359
+   },
+   {
+    "publisher": "EA",
+    "title": "About the Act, Regulations and Code (the legal framework)",
+    "stance": "authoritative",
+    "distance": 0.37
+   }
+  ]
+ },
+ {
+  "id": "T4Q9",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "How much is New Zealand's electricity demand expected to grow because of electrification?",
+  "expected": "MBIE's Electricity Demand and Generation Scenarios (July 2024) put reference-case demand at 62.1 TWh by 2050 - a 56.6% increase on 2023 - with a range across scenarios of 35.3% to 82.0% growth, driven mainly by electrification of transport, home heating/water heating and industrial process heat. Electricity projected to meet around half of total energy demand by 2050, up from about 26% in 2023.",
+  "answer": "According to MBIE scenarios published in 2024, New Zealand's future electricity demand is projected to increase by around 56.6% by 2050 compared to 2023 levels. The growth range across different scenarios varies from 35.3% to 82.0%, reflecting the expected shift towards electrification and increased use of renewable energy sources.",
+  "error": null,
+  "seconds": 6.1,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.242
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Energy in New Zealand (official energy statistics \u2014 overview)",
+    "stance": "authoritative",
+    "distance": 0.287
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.294
+   },
+   {
+    "publisher": "EA",
+    "title": "New Zealand's electricity sector (how the market is structured)",
+    "stance": "authoritative",
+    "distance": 0.297
+   }
+  ]
+ },
+ {
+  "id": "T4Q10",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What new generation is expected to be built to meet growing electricity demand?",
+  "expected": "MBIE's scenarios show most new capacity from onshore wind and solar farms (lowest-cost new-build), with some additional geothermal and small-scale hydro, and natural gas peaking plants retained for short-term firming when wind, solar and hydro output is low. Renewable share projected to reach roughly 96-98% by 2050 across most scenarios.",
+  "answer": "According to MBIE's Electricity Demand and Generation Scenarios (EDGS) published in July 2024, most of the new generation capacity required to meet growing electricity demand will come from onshore wind and solar farms. The EDGS also projects that about 62.1 TWh of electricity will be needed by 2050, marking a significant increase over current levels.",
+  "error": null,
+  "seconds": 11.7,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.265
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity Demand and Generation Scenarios (EDGS)",
+    "stance": "authoritative",
+    "distance": 0.344
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.345
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity Demand and Generation Scenarios (EDGS)",
+    "stance": "authoritative",
+    "distance": 0.359
+   }
+  ]
+ },
+ {
+  "id": "T4Q11",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What happened during New Zealand's 2024 electricity supply crisis?",
+  "expected": "In winter 2024, high demand, constrained hydro and wind generation and limited gas supply pushed wholesale prices above $800/MWh at times (vs typical prices well under $200/MWh). Some large industrial users cut back or shut down in response, sparking discussion about the need for more flexible/peaking generation, clearer investment signals, and mechanisms like long-term power purchase agreements.",
+  "answer": "During New Zealand's 2024 winter electricity supply crisis, high demand combined with constrained hydro and wind generation, along with limited gas supply for peaking generation, pushed wholesale electricity prices to record highs. According to Rewiring Aotearoa, these factors created significant challenges in meeting the country\u2019s energy needs during that period.",
+  "error": null,
+  "seconds": 8.9,
+  "retrieved": [
+   {
+    "publisher": "BusinessNZ Energy Council",
+    "title": "New Zealand's 2024 winter electricity supply crisis",
+    "stance": "advocacy",
+    "distance": 0.189
+   },
+   {
+    "publisher": "BusinessNZ Energy Council",
+    "title": "New Zealand's 2024 winter electricity supply crisis",
+    "stance": "advocacy",
+    "distance": 0.242
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.337
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Managing dry-year electricity risk (reliability obligation)",
+    "stance": "authoritative",
+    "distance": 0.352
+   }
+  ]
+ },
+ {
+  "id": "T4Q12",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What was the NZ Battery Project / Lake Onslow scheme, and what happened to it?",
+  "expected": "The NZ Battery Project investigated large-scale storage options, most prominently a pumped-hydro scheme at Lake Onslow in Central Otago, to store energy for dry years. The government scrapped the Lake Onslow option in December 2023 citing an estimated cost of around $16 billion, a build timeline of at least a decade, and concerns it was discouraging other renewable investment; the alternative was to accelerate solar, wind and geothermal and streamline consenting.",
+  "answer": "The NZ Battery Project explored large-scale storage solutions to address \"dry years\" when hydroelectric power generation is low due to reduced lake levels. The Lake Onslow pumped-hydro scheme, a key part of this project, aimed to provide significant energy storage capacity but was ultimately scrapped in December 2023. For the latest developments and detailed information, scan the QR code on screen to access 'the EA \"Your meter\" tool'.",
+  "error": null,
+  "seconds": 9.6,
+  "retrieved": [
+   {
+    "publisher": "Beehive",
+    "title": "The NZ Battery Project and Lake Onslow pumped-hydro scheme",
+    "stance": "authoritative",
+    "distance": 0.171
+   },
+   {
+    "publisher": "Beehive",
+    "title": "The NZ Battery Project and Lake Onslow pumped-hydro scheme",
+    "stance": "authoritative",
+    "distance": 0.334
+   },
+   {
+    "publisher": "Beehive",
+    "title": "The NZ Battery Project and Lake Onslow pumped-hydro scheme",
+    "stance": "authoritative",
+    "distance": 0.386
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Report \u2014 Electric Homes (2024)",
+    "stance": "advocacy",
+    "distance": 0.392
+   }
+  ]
+ },
+ {
+  "id": "T4Q13",
+  "topic": "4. Grid & Generation",
+  "verifier": true,
+  "question": "How is the government now managing dry year electricity risk since Lake Onslow was scrapped?",
+  "expected": "Rather than a single large storage project, policy has shifted toward faster consenting and stronger national direction for a broad range of renewable generation (wind, solar, geothermal), plus more recent proposals - including a discussion document on a reliability obligation - to make retailers/generators more directly responsible for ensuring adequate winter and dry-year backup supply. Still under consultation as of mid-2026.",
+  "answer": "The New Zealand Government has introduced a proposed reliability obligation in 2026-06-09 to manage dry-year electricity risk following the scrapping of the Lake Onslow pumped-hydro scheme. This approach shifts focus towards faster consenting for a broader range of renewable energy projects rather than relying on a single large storage project.",
+  "error": null,
+  "seconds": 8.3,
+  "retrieved": [
+   {
+    "publisher": "Beehive",
+    "title": "The NZ Battery Project and Lake Onslow pumped-hydro scheme",
+    "stance": "authoritative",
+    "distance": 0.248
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Managing dry-year electricity risk (reliability obligation)",
+    "stance": "authoritative",
+    "distance": 0.282
+   },
+   {
+    "publisher": "Beehive",
+    "title": "The NZ Battery Project and Lake Onslow pumped-hydro scheme",
+    "stance": "authoritative",
+    "distance": 0.355
+   },
+   {
+    "publisher": "Beehive",
+    "title": "The NZ Battery Project and Lake Onslow pumped-hydro scheme",
+    "stance": "authoritative",
+    "distance": 0.357
+   }
+  ]
+ },
+ {
+  "id": "T4Q14",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "What is Electrify NZ and what does it aim to do?",
+  "expected": "The government's package of measures announced August 2024 to speed up build-out of renewable electricity generation and transmission: a Fast-Track Approvals regime for major energy projects; RMA amendments shortening consenting timeframes and lengthening consent durations (up to 35 years) and lapse periods; stronger national policy statements for renewable electricity and transmission; a new offshore wind permitting regime; and modernised Commerce Commission/Electricity Authority regulatory settings including EV charging infrastructure.",
+  "answer": "Electrify NZ is a Government package of measures announced in August 2024 aimed at accelerating the build-out of renewable electricity generation and transmission infrastructure. Its primary goal is to support the electrification of transport, heating, and industry as key methods for reducing emissions, aligning with New Zealand's second Emissions Reduction Plan (ERP2) for 2026\u20132030.",
+  "error": null,
+  "seconds": 6.3,
+  "retrieved": [
+   {
+    "publisher": "Beehive",
+    "title": "Electrify NZ \u2014 accelerating renewable generation, consenting and offshore wind",
+    "stance": "authoritative",
+    "distance": 0.228
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.33
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.383
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Report \u2014 Electric Homes (2024)",
+    "stance": "advocacy",
+    "distance": 0.395
+   }
+  ]
+ },
+ {
+  "id": "T4Q15",
+  "topic": "4. Grid & Generation",
+  "verifier": true,
+  "question": "Is offshore wind generation happening in New Zealand?",
+  "expected": "No offshore wind farms are yet operating, but the regulatory framework is in place. The Offshore Renewable Energy Act 2026 came into effect in July 2026 establishing the permitting regime. Regulations governing feasibility-permit applications, application rounds, fees and levies come into force on 3 September 2026. Individual permit rounds should be checked against MBIE's latest information.",
+  "answer": "No offshore wind generation is currently happening in New Zealand. According to the Beehive announcement on 26 August 2024, developers are eyeing commissioning dates in the mid-2030s for such projects.",
+  "error": null,
+  "seconds": 3.9,
+  "retrieved": [
+   {
+    "publisher": "Beehive",
+    "title": "Electrify NZ \u2014 accelerating renewable generation, consenting and offshore wind",
+    "stance": "authoritative",
+    "distance": 0.34
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Electrify NZ \u2014 accelerating renewable generation, consenting and offshore wind",
+    "stance": "authoritative",
+    "distance": 0.346
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Managing dry-year electricity risk (reliability obligation)",
+    "stance": "authoritative",
+    "distance": 0.393
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New Zealand's electricity generation mix and renewable share",
+    "stance": "authoritative",
+    "distance": 0.404
+   }
+  ]
+ },
+ {
+  "id": "T4Q16",
+  "topic": "4. Grid & Generation",
+  "verifier": false,
+  "question": "Has it become more expensive to consent new renewable electricity projects in New Zealand?",
+  "expected": "Yes - a 2022 NZ Infrastructure Commission (Te Waihanga) study, cited by government in support of Electrify NZ consenting reforms, found the average cost of consenting infrastructure projects had risen about 70% since 2014, with developers spending an estimated $1.29 billion a year nationally on consenting costs.",
+  "answer": "According to Rewiring Aotearoa, securing consents for new renewable energy projects has indeed become more challenging and costly due to increased regulatory requirements and public opposition. However, authoritative sources like EECA or the Electricity Authority do not provide specific cost figures or trends for project consents. For detailed information on current regulations and costs, it's best to check directly with a lines company or an electricity industry consultant.",
+  "error": null,
+  "seconds": 5.9,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.305
+   },
+   {
+    "publisher": "EA",
+    "title": "Ways to save energy (efficiency tips and appliances)",
+    "stance": "authoritative",
+    "distance": 0.311
+   },
+   {
+    "publisher": "BusinessNZ Energy Council",
+    "title": "New Zealand's 2024 winter electricity supply crisis",
+    "stance": "advocacy",
+    "distance": 0.319
+   },
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.322
+   }
+  ]
+ },
+ {
+  "id": "T5Q1",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What is New Zealand's 2050 emissions target?",
+  "expected": "A split gas target: long-lived greenhouse gases (carbon dioxide, nitrous oxide, other gases apart from biogenic methane) must reach net zero or lower by 2050 and beyond - reductions can be combined with removals such as forest carbon sequestration. Biogenic methane (mostly livestock and landfill) is managed under a separate gross-reduction target, not included in the net-zero goal.",
+  "answer": "New Zealand's 2050 emissions target is a \"split-gas\" approach as defined by the Climate Change Response Act 2002 and amended by the Zero Carbon Act 2019. This target distinguishes between long-lived gases like carbon dioxide (CO2) and short-lived gases such as biogenic methane, setting separate reduction targets for each to meet its climate goals. For detailed information on how these targets are structured, you can refer to the He Pou a Rangi Climate Change Commission\u2019s FAQs or visit their website directly.",
+  "error": null,
+  "seconds": 7.4,
+  "retrieved": [
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.244
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.253
+   },
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.255
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.269
+   }
+  ]
+ },
+ {
+  "id": "T5Q2",
+  "topic": "5. Policy & Business",
+  "verifier": true,
+  "question": "What is New Zealand's biogenic methane target?",
+  "expected": "Legislated target requires emissions 10% below 2017 levels by 2030 and 14-24% below 2017 levels by 2050 and thereafter. The 2050 range was changed from the original 24-47% by the Climate Change Response (2050 Target and Other Matters) Amendment Act 2025, in force 17 December 2025.",
+  "answer": "New Zealand's biogenic methane target is managed under a separate gross-reduction requirement: at least 10% below 2017 levels by 2030, and 14\u201324% below 2017 levels by 2050 and beyond, according to the Climate Commission in 2025.",
+  "error": null,
+  "seconds": 5.7,
+  "retrieved": [
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.23
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.233
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.344
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.371
+   }
+  ]
+ },
+ {
+  "id": "T5Q3",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What is New Zealand's international climate commitment (NDC) for 2030?",
+  "expected": "NZ's first NDC under the Paris Agreement, updated in 2021, commits to reducing net emissions 50% below gross 2005 levels by 2030 (equivalent to a 41% reduction on an emissions-budget accounting basis), within a provisional emissions budget of 571 megatonnes CO2-equivalent for 2021-2030.",
+  "answer": "New Zealand\u2019s first Nationally Determined Contribution (NDC), updated in 2021, commits to reducing net emissions to 50% below gross 2005 levels by 2030. This is equivalent to a 41% reduction on an emissions-budget accounting basis within a provisional emissions budget of 571 megatonnes of CO2-equivalent for the period from 2021 to 2030, as stated by the New Zealand Government in January 2025.",
+  "error": null,
+  "seconds": 7.7,
+  "retrieved": [
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.265
+   },
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.287
+   },
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.29
+   },
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.295
+   }
+  ]
+ },
+ {
+  "id": "T5Q4",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "Has New Zealand set a climate target beyond 2030?",
+  "expected": "Yes. On 30 January 2025 the government announced NZ's second NDC: a commitment to reduce emissions by 51-55% below 2005 levels by 2035.",
+  "answer": "Yes, New Zealand has set an international climate target for 2035 as part of its second Nationally Determined Contribution (NDC2). According to Beehive.govt.nz's release on 30 January 2025, this target was established. For more details, scan the QR code on screen to access the official source.",
+  "error": null,
+  "seconds": 5.5,
+  "retrieved": [
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.223
+   },
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.234
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "New Zealand's 2050 emissions target (split-gas) and biogenic methane targets",
+    "stance": "authoritative",
+    "distance": 0.257
+   },
+   {
+    "publisher": "Beehive",
+    "title": "New Zealand's international climate targets (NDC1 2030 and NDC2 2035)",
+    "stance": "authoritative",
+    "distance": 0.284
+   }
+  ]
+ },
+ {
+  "id": "T5Q5",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What is an Emissions Reduction Plan, and what's happening with the current one?",
+  "expected": "The government's statutory plan under the Climate Change Response Act setting out policies and actions to meet each successive emissions budget on the way to the 2050 target. NZ's second Emissions Reduction Plan covers the 2026-2030 emissions budget period; electrification of transport, heating and industrial process heat is a central theme alongside forestry, agriculture and energy-sector measures.",
+  "answer": "New Zealand\u2019s Emissions Reduction Plan (ERP) outlines strategies for reducing greenhouse gas emissions in line with national targets. The second plan, ERP2 for 2026\u20132030, was published by the Ministry for the Environment on January 1, 2026, and it includes measures to accelerate renewable energy generation and support electrification across transport, heating, and industry sectors.",
+  "error": null,
+  "seconds": 7.1,
+  "retrieved": [
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.317
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Electrify NZ \u2014 accelerating renewable generation, consenting and offshore wind",
+    "stance": "authoritative",
+    "distance": 0.365
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Decarbonising industrial process heat and phasing out coal boilers",
+    "stance": "authoritative",
+    "distance": 0.368
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Report \u2014 The Machine Count",
+    "stance": "advocacy",
+    "distance": 0.408
+   }
+  ]
+ },
+ {
+  "id": "T5Q6",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What is the New Zealand Emissions Trading Scheme (ETS) and how does it work?",
+  "expected": "NZ's main carbon-pricing tool. Businesses in covered sectors - forestry (since 2008), energy/fossil fuels and industrial processes (since 2010), waste/landfill (since 2013) - must report emissions and surrender New Zealand Units (NZUs), bought at auction, purchased from other participants, or in some cases allocated free to trade-exposed industries. By pricing emissions it makes lower-emissions choices more attractive. Agriculture, roughly half of NZ's total emissions, is not currently priced through the ETS.",
+  "answer": "The New Zealand Emissions Trading Scheme (NZ ETS) is a carbon-pricing tool that puts a cost on emitting greenhouse gases to encourage lower-emissions choices. It covers around half of New Zealand's emissions, including energy production and transport sectors. The Climate Change Commission advises the Government on setting ETS rules such as unit supply and price controls to ensure it effectively incentivizes\u51cf\u6392\u9009\u62e9\uff0c\u5305\u62ec\u7535\u6c14\u5316\u70ed\u80fd\u548c\u4ea4\u901a\u3002",
+  "error": null,
+  "seconds": 6.1,
+  "retrieved": [
+   {
+    "publisher": "Climate Commission",
+    "title": "The New Zealand Emissions Trading Scheme (NZ ETS)",
+    "stance": "authoritative",
+    "distance": 0.135
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "The New Zealand Emissions Trading Scheme (NZ ETS)",
+    "stance": "authoritative",
+    "distance": 0.266
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.381
+   },
+   {
+    "publisher": "Climate Commission",
+    "title": "The New Zealand Emissions Trading Scheme (NZ ETS)",
+    "stance": "authoritative",
+    "distance": 0.39
+   }
+  ]
+ },
+ {
+  "id": "T5Q7",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "How reliant is New Zealand industry on fossil fuels for process heat?",
+  "expected": "MBIE figures show 56% of NZ's industrial process heat is currently supplied by fossil fuels, mainly natural gas and coal - process heat is one of the largest remaining fossil-fuel uses in the economy outside transport.",
+  "answer": "According to Rewiring Aotearoa's findings in their report \"The Machine Count\" from 2025, a significant portion of New Zealand's industrial processes still rely on fossil fuels. The exact percentage isn't specified, but the broader context indicates that electrification is key for reducing emissions across various sectors, including industry. For detailed information on specific industries and their readiness to switch to electric alternatives, you might want to consult the Electrify NZ work programme or other sector-specific reports.",
+  "error": null,
+  "seconds": 6.5,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 The basics",
+    "stance": "advocacy",
+    "distance": 0.305
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.34
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Report \u2014 The Machine Count",
+    "stance": "advocacy",
+    "distance": 0.343
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare home heating options and costs",
+    "stance": "authoritative",
+    "distance": 0.358
+   }
+  ]
+ },
+ {
+  "id": "T5Q8",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "Is New Zealand phasing out coal boilers?",
+  "expected": "In late 2023 / early 2024 the Coalition Government repealed the National Environmental Standards for Greenhouse Gas Emissions from Industrial Process Heat (NES-GHG) and amended the National Policy Statement. The national ban and mandatory 2037 phase-out on coal boilers were removed to give industries flexibility.",
+  "answer": "Yes, New Zealand is phasing out coal boilers according to government policy. The National Policy Statement and National Environmental Standard settings ban the installation of new low- and medium-temperature coal boilers and require existing ones to be phased out by 2037.",
+  "error": null,
+  "seconds": 4.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Emissions Plan Guidance",
+    "stance": "authoritative",
+    "distance": 0.375
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.384
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Decarbonising industrial process heat and phasing out coal boilers",
+    "stance": "authoritative",
+    "distance": 0.401
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.405
+   }
+  ]
+ },
+ {
+  "id": "T5Q9",
+  "topic": "5. Policy & Business",
+  "verifier": true,
+  "question": "What is the GIDI Fund and what does it support?",
+  "expected": "Government Investment in Decarbonising Industry Fund, administered by EECA, co-funds private-sector projects switching industrial process heat away from fossil fuels - e.g. replacing coal or gas boilers with electrode boilers, heat pumps or biomass. Several contestable rounds plus bespoke GIDI: Partnerships projects; the Partnerships stream alone has combined about $230 million of EECA co-investment with around $860 million of private funding.",
+  "answer": "The **GIDI Fund**, managed by EECA, provides co-funding for private-sector projects that transition industrial process heat from fossil fuels to cleaner alternatives such as electrode boilers, heat pumps, or biomass systems. This fund supports the phasing out of coal and gas boilers in industries through both standard contestable funding rounds and larger bespoke \"GIDI: Partnerships\" projects.",
+  "error": null,
+  "seconds": 5.3,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.266
+   },
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.268
+   },
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.469
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Decarbonising industrial process heat and phasing out coal boilers",
+    "stance": "authoritative",
+    "distance": 0.47
+   }
+  ]
+ },
+ {
+  "id": "T5Q10",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "Can you give an example of what GIDI-funded projects have achieved?",
+  "expected": "Two large GIDI: Partnerships projects - New Zealand Steel and Fonterra - together target roughly 9.3 million tonnes of lifetime CO2-equivalent abatement; NZ Steel's project alone expected to deliver about 7.2 million tonnes by 2035 and Fonterra's about 2.1 million tonnes by 2035, largely by switching process heat away from coal and gas.",
+  "answer": "Certainly! The Government Investment in Decarbonising Industry (GIDI) Fund has supported significant projects that transition industrial processes from fossil fuels to more sustainable options. For instance, two large-scale GIDI: Partnerships projects involved **New Zealand Steel** and **Fontech Smelters**, combining approximately **$230 million of EECA co-investment with around $860 million of private funding**. These initiatives have helped replace coal or gas boilers with technologies like electrode boilers, heat pumps, or biomass systems, significantly reducing carbon emissions in the industrial sector.",
+  "error": null,
+  "seconds": 8.4,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.328
+   },
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.336
+   },
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.362
+   },
+   {
+    "publisher": "EECA",
+    "title": "Government Investment in Decarbonising Industry (GIDI) Fund",
+    "stance": "authoritative",
+    "distance": 0.436
+   }
+  ]
+ },
+ {
+  "id": "T5Q11",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What is EECA and what is its role in New Zealand's electrification effort?",
+  "expected": "The Energy Efficiency and Conservation Authority, the Crown entity responsible for promoting energy efficiency, energy conservation and renewable energy use in NZ. It administers household and business funding programmes (Warmer Kiwi Homes, GIDI), publishes consumer and technical guidance on efficient technologies, and produces national data and analysis on energy use and the energy transition.",
+  "answer": "EECA stands for the Energy Efficiency and Conservation Authority, a Crown entity responsible for promoting energy efficiency, conservation, and renewable energy use in New Zealand. Its role in electrification includes fostering the adoption of electric vehicles and other efficient technologies to support a more sustainable and resilient electricity grid.",
+  "error": null,
+  "seconds": 5.4,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "EV Smart Charger Approved List",
+    "stance": "authoritative",
+    "distance": 0.252
+   },
+   {
+    "publisher": "EECA",
+    "title": "What EECA is and its role in electrification",
+    "stance": "authoritative",
+    "distance": 0.283
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.294
+   },
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.307
+   }
+  ]
+ },
+ {
+  "id": "T5Q12",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What regulatory changes is the government making to support electrification more broadly, beyond generation?",
+  "expected": "As part of Electrify NZ, the Commerce Commission and Electricity Authority are updating regulatory settings - for example around network investment and pricing - to support economy-wide electrification, including making it easier and more predictable to connect and fund infrastructure such as EV charging and electrified industrial process heat.",
+  "answer": "The New Zealand government's regulatory focus on supporting broader electrification includes expanding public charging infrastructure and setting a target of 10,000 publicly accessible electric vehicle chargers by 2030. Additionally, it aims to connect new local generation sources and prepare for extreme weather events while replacing ageing assets, as per the Commerce Commission\u2019s DPP4 and RCP4 documents from November 2024.",
+  "error": null,
+  "seconds": 7.4,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 Electrification for humans (people power)",
+    "stance": "advocacy",
+    "distance": 0.298
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.346
+   },
+   {
+    "publisher": "ComComm",
+    "title": "DPP4 and RCP4 (2025 reset): investment and bill impacts",
+    "stance": "authoritative",
+    "distance": 0.352
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Energy system",
+    "stance": "advocacy",
+    "distance": 0.357
+   }
+  ]
+ },
+ {
+  "id": "T5Q13",
+  "topic": "5. Policy & Business",
+  "verifier": true,
+  "question": "Does New Zealand have an overarching national energy strategy?",
+  "expected": "This is unsettled. MBIE spent 2024-2025 developing a draft NZ Energy Strategy alongside sub-strategies (Wood Energy Strategy, Government Statement on Biogas, draft Geothermal Strategy), but reporting from May 2026 indicated the government had stepped back from a single overarching strategy in favour of narrower sector-specific statements. Actively in flux - status should be confirmed with MBIE.",
+  "answer": "As of 2026, New Zealand does not have a single overarching national energy strategy; instead, it has sector-specific strategies developed by MBIE. The situation is contested and may change in the future. For more details, refer to the MBIE's website on energy strategies for New Zealand.",
+  "error": null,
+  "seconds": 5.9,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.177
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.187
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.219
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.238
+   }
+  ]
+ },
+ {
+  "id": "T5Q14",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "What is the Fast-Track Approvals regime, and how does it relate to electrification?",
+  "expected": "The Fast-Track Approvals Act creates a one-stop-shop consenting process to speed up decisions on nationally or regionally significant infrastructure and development projects, including major renewable electricity generation and transmission. Close to one in five fast-track applications are renewable energy projects.",
+  "answer": "The Fast-Track Approvals regime is part of the government's strategy to accelerate renewable electricity generation and offshore wind projects, as outlined in the Electrify NZ initiative from 2024. This regime aims to streamline consenting processes for new renewable energy projects, making it easier and faster to bring these projects online. It supports electrification efforts by ensuring a steady supply of renewable energy to power increased electrified activities across various sectors like transport and industry.",
+  "error": null,
+  "seconds": 6.3,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 Electrification for humans (people power)",
+    "stance": "advocacy",
+    "distance": 0.404
+   },
+   {
+    "publisher": "Min. of Transport",
+    "title": "The Clean Car Discount and its repeal",
+    "stance": "authoritative",
+    "distance": 0.42
+   },
+   {
+    "publisher": "Beehive",
+    "title": "Electrify NZ \u2014 accelerating renewable generation, consenting and offshore wind",
+    "stance": "authoritative",
+    "distance": 0.422
+   },
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.43
+   }
+  ]
+ },
+ {
+  "id": "T5Q15",
+  "topic": "5. Policy & Business",
+  "verifier": false,
+  "question": "In simple terms, why does electrification matter for New Zealand meeting its climate targets?",
+  "expected": "Because NZ's electricity is already predominantly renewable (85% or more most years), shifting energy use that currently relies on fossil fuels - cars and trucks, home heating and hot water, industrial process heat - onto electricity is one of the most direct ways to cut overall greenhouse gas emissions, since the same activity produces far fewer emissions running on the renewable grid than burning petrol, diesel, gas, coal or LPG.",
+  "answer": "Electrification matters because it's a key strategy identified by the government to meet early emissions budgets as outlined in New Zealand\u2019s second Emissions Reduction Plan (ERP2). By switching from fossil fuels to electricity powered by renewable sources like wind and solar, New Zealand can significantly reduce greenhouse gas emissions, particularly in sectors such as transport, home heating, and industrial processes. According to Rewiring Aotearoa, electrification could eliminate approximately 10% of the current national greenhouse gas inventory, making it a crucial component for achieving climate targets.",
+  "error": null,
+  "seconds": 7.1,
+  "retrieved": [
+   {
+    "publisher": "MfE",
+    "title": "New Zealand's second emissions reduction plan (ERP2, 2026\u20132030)",
+    "stance": "authoritative",
+    "distance": 0.32
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Report \u2014 Electric Homes (2024)",
+    "stance": "advocacy",
+    "distance": 0.322
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 The basics",
+    "stance": "advocacy",
+    "distance": 0.324
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Managing dry-year electricity risk (reliability obligation)",
+    "stance": "authoritative",
+    "distance": 0.331
+   }
+  ]
+ },
+ {
+  "id": "T6Q1",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "How does a solar panel actually convert sunlight into electricity?",
+  "expected": "A panel is made of photovoltaic cells, usually silicon. Sunlight energy is absorbed by the silicon and transferred to electrons, knocking them loose; the cell's layered structure directs this flow in one direction, creating direct current (DC), collected by thin metal contacts on the surface. Silicon is used because it is abundant, relatively cheap and conducts well once refined; commercial panels typically convert around 18-22% of sunlight into usable electricity.",
+  "answer": "A solar panel converts sunlight into electricity through photovoltaic cells made of silicon. When sunlight hits these cells, it dislodges electrons, creating a flow of electrical current. This process is known as the photovoltaic effect. The layered structure within each cell directs this flow to generate direct current (DC). However, since homes and the grid use alternating current (AC), a solar inverter is necessary to convert DC into usable AC power.",
+  "error": null,
+  "seconds": 6.4,
+  "retrieved": [
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.301
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.364
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.381
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.392
+   }
+  ]
+ },
+ {
+  "id": "T6Q2",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "What's the difference between monocrystalline, polycrystalline, and thin-film solar panels?",
+  "expected": "Monocrystalline: grown from a single pure silicon crystal (Czochralski method), uniform black appearance, highest typical efficiency around 17-22%, slightly higher price. Polycrystalline: multiple silicon crystal fragments cooled together, blue marbled look, lower efficiency around 15-17%, lower cost. Thin-film: non-crystalline material in thin layers, cheaper and flexible but around 10-13% efficiency, needs more roof area, rarely used on homes.",
+  "answer": "Monocrystalline panels are made from a single silicon crystal, giving them a uniform black appearance and the highest efficiency at around 18\u201322%. Polycrystalline panels consist of multiple silicon fragments melted together, which results in a blue mosaic pattern and slightly lower efficiency, typically between 15% to 17%, but they are less expensive. Thin-film panels use layers of semiconductor material that can be flexible and cheaper than the other types, though their efficiency is much lower at about 10\u201313%, requiring more roof space for equivalent power output.",
+  "error": null,
+  "seconds": 7.8,
+  "retrieved": [
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.473
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.49
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.504
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.512
+   }
+  ]
+ },
+ {
+  "id": "T6Q3",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "What does a solar inverter do, and why does a solar system need one?",
+  "expected": "Solar panels generate direct current (DC) but homes and the grid run on alternating current (AC). A solar inverter converts the panels' DC output into usable AC electricity that can power household appliances or be exported to the grid.",
+  "answer": "A solar inverter converts direct current (DC) electricity generated by solar panels into alternating current (AC), which is what homes use. This conversion is necessary because while solar panels produce DC power, household appliances and the electrical grid operate on AC. Therefore, every solar system requires an inverter to make the energy usable for daily needs.",
+  "error": null,
+  "seconds": 6.0,
+  "retrieved": [
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.32
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar product technical specification",
+    "stance": "authoritative",
+    "distance": 0.441
+   },
+   {
+    "publisher": "EA",
+    "title": "Solar power (generating, storing and selling your own power)",
+    "stance": "authoritative",
+    "distance": 0.445
+   },
+   {
+    "publisher": "EECA",
+    "title": "Best practice guide \u2014 residential solar PV and battery storage",
+    "stance": "authoritative",
+    "distance": 0.446
+   }
+  ]
+ },
+ {
+  "id": "T6Q4",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "What's the difference between a string inverter and microinverters?",
+  "expected": "A string inverter is a single central inverter that all panels in a series connect to, converting combined DC to AC in one place - cheaper and simpler, but if one panel is shaded or the inverter fails the whole string's output can be affected. Microinverters are fitted to each individual panel, converting DC to AC at the panel, so each panel performs independently, shading or a fault on one doesn't drag down others, and the system is easier to expand, though upfront cost is higher.",
+  "answer": "A string inverter connects multiple solar panels together in series, which means it can be less efficient if one panel is shaded or performs poorly because it affects the entire string. In contrast, microinverters are smaller devices attached to each individual panel, converting DC to AC right at the source and improving performance even when some panels might be partially shaded or angled differently. According to Rewiring Aotearoa, microinverters cost more initially but offer better overall effectiveness and are preferable for complex installations or roofs with varying shading conditions.",
+  "error": null,
+  "seconds": 8.0,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.372
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar product technical specification",
+    "stance": "authoritative",
+    "distance": 0.448
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.458
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.466
+   }
+  ]
+ },
+ {
+  "id": "T6Q5",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "What's the difference between a grid-connected and an off-grid home solar system?",
+  "expected": "A grid-connected (grid-tied) system stays linked to the local network: the home draws power from the grid when solar isn't generating enough, and can export surplus back, often for a credit. An off-grid system has no grid connection and must generate and store all power itself, requiring a much larger array and substantial battery bank (or fossil-fuel backup). EECA notes staying grid-connected is more cost-effective for most homes.",
+  "answer": "A grid-connected (grid-tied) home solar system stays linked to the electricity network, drawing power from the grid when needed and exporting surplus back to it. In contrast, an off-grid system is not connected to the national grid; it must generate all its own electricity and store excess in batteries for use during low-production periods like at night or on cloudy days. According to Rewiring Aotearoa, staying grid-connected offers significant benefits over going fully off-grid due to cost-effectiveness and reliability issues with completely independent systems.",
+  "error": null,
+  "seconds": 7.4,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.241
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your solar system",
+    "stance": "authoritative",
+    "distance": 0.28
+   },
+   {
+    "publisher": "EECA",
+    "title": "Best practice guide \u2014 residential solar PV and battery storage",
+    "stance": "authoritative",
+    "distance": 0.399
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Batteries",
+    "stance": "advocacy",
+    "distance": 0.413
+   }
+  ]
+ },
+ {
+  "id": "T6Q6",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "What is a hybrid solar system, and when does EECA suggest a household needs a battery?",
+  "expected": "A hybrid solar system is a grid-connected system that also includes a battery, storing excess daytime solar for evening/overnight use while still able to draw from or export to the grid. EECA's guidance: a battery is most worthwhile for households using a lot of electricity at night or wanting backup power during an outage; for households mostly using power in daylight, a battery is generally less cost-effective.",
+  "answer": "A **hybrid solar system** combines grid connection with battery storage, allowing households to store daytime solar energy for use at night or during outages. According to EECA's guidance in 2026, a household should consider installing a battery if it uses a significant amount of power at night or desires backup electricity during grid outages.",
+  "error": null,
+  "seconds": 5.2,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.303
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.326
+   },
+   {
+    "publisher": "EECA",
+    "title": "Best practice guide \u2014 residential solar PV and battery storage",
+    "stance": "authoritative",
+    "distance": 0.347
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.37
+   }
+  ]
+ },
+ {
+  "id": "T6Q7",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "Can a household with solar panels sell their excess electricity back to their power company?",
+  "expected": "Yes, in a typical grid-connected setup. EECA notes a household draws power from the grid when solar generation is insufficient and can sell surplus solar it doesn't use back to its power company; the rate paid varies by retailer and plan.",
+  "answer": "Yes, a household with solar panels can sell excess electricity back to their power company in a typical grid-connected setup. However, according to Rewiring Aotearoa, advocating for Symmetrical Export Tariffs would make this arrangement more fair and beneficial for households by paying customers fairly for exporting at peak times.",
+  "error": null,
+  "seconds": 5.0,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "Solar power (generating, storing and selling your own power)",
+    "stance": "authoritative",
+    "distance": 0.382
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.389
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.39
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.395
+   }
+  ]
+ },
+ {
+  "id": "T6Q8",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "What factors determine what size solar system a home should install?",
+  "expected": "EECA recommends considering: current electricity usage from past power bills (annual consumption and peak-use patterns); future needs such as adding an EV or more occupants; roof characteristics (available space, orientation - north-facing ideal in NZ - tilt, condition and shading); daytime occupancy patterns since solar only generates in daylight; and whether a battery is worthwhile, which depends on night vs day usage.",
+  "answer": "The size of a home solar system should be based on current electricity usage, factoring in future needs such as electric vehicle charging. According to Rewiring Aotearoa, it's more cost-effective to install a larger system that can cover potential future increases rather than upgrading later. Use 'the EECA solar power calculator' to estimate the right size for your home; scan the QR code on screen for details.",
+  "error": null,
+  "seconds": 5.8,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Plan your solar system",
+    "stance": "authoritative",
+    "distance": 0.276
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar quotes and installation",
+    "stance": "authoritative",
+    "distance": 0.351
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.397
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.402
+   }
+  ]
+ },
+ {
+  "id": "T6Q9",
+  "topic": "6. Solar Technology",
+  "verifier": false,
+  "question": "Why does a solar panel's orientation and tilt affect how much electricity it generates in New Zealand?",
+  "expected": "Because NZ is in the Southern Hemisphere, a north-facing roof receives the most direct sun over a day. EECA identifies orientation (ideally north-facing), roof tilt angle and shading as key factors - a well-oriented, unshaded array produces significantly more electricity than an identical array facing south or shaded part of the day.",
+  "answer": "In New Zealand, which is located in the Southern Hemisphere, the optimal orientation for solar panels is north-facing because this maximizes exposure to sunlight. Additionally, the tilt of the panels should ideally match the latitude of your location to capture the most energy throughout the year. This setup ensures that the panels receive maximum direct sunlight during daylight hours, enhancing their electricity generation efficiency. Scan the QR code on screen to use 'the EECA solar power calculator' for a tailored estimate based on your specific location and roof conditions.",
+  "error": null,
+  "seconds": 6.8,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.332
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.354
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.363
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar energy in New Zealand: current share and outlook",
+    "stance": "authoritative",
+    "distance": 0.37
+   }
+  ]
+ },
+ {
+  "id": "T7Q1",
+  "topic": "7. Hot Water Heat Pump Tech",
+  "verifier": false,
+  "question": "How does a hot water heat pump actually heat the water - what's happening inside it?",
+  "expected": "It uses a vapour-compression refrigeration cycle, the same principle as a fridge in reverse. A refrigerant absorbs heat from surrounding air and evaporates from liquid to gas; that gas is compressed, raising its temperature above the target water temperature; the hot pressurised refrigerant passes through a condenser coil giving up heat to the water (condensing back to liquid); the cooled liquid refrigerant cycles back to repeat.",
+  "answer": "A hot water heat pump uses a vapour-compression refrigeration cycle to heat water efficiently. It starts by absorbing heat from the surrounding air and converting the refrigerant into a gas in the evaporator. This gas is then compressed, increasing its temperature above the target water temperature. The heated, pressurised refrigerant moves through a condenser coil where it transfers its heat to the water, warming it up before cooling down back into a liquid state and circulating back to repeat the cycle.",
+  "error": null,
+  "seconds": 6.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.399
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps for your home (cost and savings)",
+    "stance": "authoritative",
+    "distance": 0.417
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.443
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.446
+   }
+  ]
+ },
+ {
+  "id": "T7Q2",
+  "topic": "7. Hot Water Heat Pump Tech",
+  "verifier": false,
+  "question": "What's the difference between an integrated and a split hot water heat pump system?",
+  "expected": "An integrated (all-in-one) unit combines heat pump and water cylinder into a single outdoor device, simpler to install where there's room outside. A split system has the heat pump outside and the cylinder separately (often indoors) connected by refrigerant pipework - more flexible where space is tight, and split units can be retrofitted to an existing hot water cylinder.",
+  "answer": "An integrated hot water heat pump combines the heat pump and cylinder into a single outdoor unit, which is simpler to install but requires adequate space outdoors. A split system has the heat pump outside and the cylinder inside or out, connected by refrigerant pipework, offering more flexibility especially in tight spaces where it can be retrofitted to an existing hot water cylinder.",
+  "error": null,
+  "seconds": 6.7,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.283
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.319
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.324
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Water heating",
+    "stance": "advocacy",
+    "distance": 0.422
+   }
+  ]
+ },
+ {
+  "id": "T7Q3",
+  "topic": "7. Hot Water Heat Pump Tech",
+  "verifier": false,
+  "question": "Can a household add a hot water heat pump to their existing hot water cylinder, rather than replacing the whole system?",
+  "expected": "In many cases yes - a split-system heat pump's outdoor unit can be retrofitted to work with an existing hot water cylinder rather than requiring full cylinder replacement, lowering the cost and disruption of switching from gas or standard electric hot water.",
+  "answer": "Yes, according to EECA, you can retrofit a hot water heat pump to an existing hot water cylinder, which lowers both cost and disruption. This option uses the same efficient technology as systems that require a new cylinder, achieving similar efficiency levels. The choice between retrofitted or new depends on your layout and space constraints rather than energy performance differences.",
+  "error": null,
+  "seconds": 6.4,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.34
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps for your home (cost and savings)",
+    "stance": "authoritative",
+    "distance": 0.43
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.442
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.451
+   }
+  ]
+ },
+ {
+  "id": "T7Q4",
+  "topic": "7. Hot Water Heat Pump Tech",
+  "verifier": false,
+  "question": "Is an integrated hot water heat pump more efficient than a split system, or vice versa?",
+  "expected": "No - both configurations use the same underlying heat-pump technology and achieve similar efficiency levels. The choice comes down to home layout, available indoor/outdoor space and installation preferences, rather than one being inherently more efficient.",
+  "answer": "Both integrated and split systems are highly efficient, but their efficiency isn\u2019t inherently different from each other; it depends on factors like installation quality and usage conditions. The EECA recommends choosing based on practical considerations such as space availability and ease of installation rather than expecting one type to be more energy-efficient than the other.",
+  "error": null,
+  "seconds": 6.1,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.33
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps for your home (cost and savings)",
+    "stance": "authoritative",
+    "distance": 0.355
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Space heating",
+    "stance": "advocacy",
+    "distance": 0.357
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Water heating",
+    "stance": "advocacy",
+    "distance": 0.368
+   }
+  ]
+ },
+ {
+  "id": "T8Q1",
+  "topic": "8. Space Heating Heat Pump Tech",
+  "verifier": false,
+  "question": "How does a heat pump warm a room, if it isn't generating heat the way a plug-in heater does?",
+  "expected": "A heat pump moves heat rather than generating it. It pumps refrigerant between an outdoor and an indoor unit, using the temperature difference to make the refrigerant evaporate (absorbing heat from outdoor air, even when cold) or condense (releasing that heat indoors), depending on heating or cooling. Because it moves existing heat rather than converting electricity into heat, it delivers several times more heat energy than the electrical energy it consumes.",
+  "answer": "A heat pump warms a room by moving heat from outside air into the room, rather than generating heat like a plug-in electric heater. It uses a refrigerant that absorbs heat from the outdoor unit and transfers it to the indoor unit through an evaporative process, making the space warmer while consuming much less energy compared to conventional heaters.",
+  "error": null,
+  "seconds": 6.7,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.344
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat and cool efficiently at home",
+    "stance": "authoritative",
+    "distance": 0.399
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.412
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.447
+   }
+  ]
+ },
+ {
+  "id": "T8Q2",
+  "topic": "8. Space Heating Heat Pump Tech",
+  "verifier": false,
+  "question": "What does COP (coefficient of performance) mean for a heat pump, and why does it matter?",
+  "expected": "COP is the ratio of useful heat delivered to electrical energy consumed. A simple electric heater converts electricity to heat roughly 1-for-1 (COP about 1), but because a heat pump moves existing heat from outdoor air it can have a COP greater than one - a COP of 3 means three units of heat for every one unit of electricity, the other two coming from outside air. Higher COP means better efficiency and lower running costs.",
+  "answer": "Coefficient of Performance (COP) measures how efficiently a heat pump converts electricity into heating energy. For a heat pump, a COP greater than one indicates that it delivers more heat energy to your home than the electrical energy it consumes. A higher COP means better efficiency and lower running costs because the heat pump is extracting additional heat from outside air, delivering several times more heat per unit of electricity compared to direct electric heating with a COP of 1.",
+  "error": null,
+  "seconds": 7.1,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.287
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.316
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.385
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.388
+   }
+  ]
+ },
+ {
+  "id": "T8Q3",
+  "topic": "8. Space Heating Heat Pump Tech",
+  "verifier": false,
+  "question": "How much more heating can a heat pump produce compared to the electricity it uses, in practical terms?",
+  "expected": "EECA states heat pumps can provide about 3-5 times the amount of heating for the same amount of input energy as gas heaters achieve for the same amount of gas - a heat pump moves several units of ambient heat into a room for every unit of electricity consumed, rather than converting energy to heat 1-for-1.",
+  "answer": "According to EECA, heat pumps provide about 3\u20135 times more heat per unit of electricity compared to what other forms of electric heaters achieve. This means for every kilowatt-hour (kWh) of electricity used, a heat pump can generate between 3 and 5 kWh worth of heat energy.",
+  "error": null,
+  "seconds": 5.1,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Space heating",
+    "stance": "advocacy",
+    "distance": 0.266
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.276
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Hot water heating",
+    "stance": "advocacy",
+    "distance": 0.284
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Space heating and cooling",
+    "stance": "advocacy",
+    "distance": 0.303
+   }
+  ]
+ },
+ {
+  "id": "T8Q4",
+  "topic": "8. Space Heating Heat Pump Tech",
+  "verifier": false,
+  "question": "What's the difference between a single-split, multi-split, and ducted heat pump?",
+  "expected": "Single-split: one outdoor unit connected to one indoor unit heating a single room - cheapest and easiest to install. Multi-split: one outdoor unit connected to several indoor units in different rooms, suiting larger homes wanting more than one room heated without multiple outdoor units. Ducted: one outdoor unit connected to a central indoor unit distributing heated or cooled air through ductwork to multiple rooms, giving whole-house climate control from concealed vents, but typically costs more upfront especially if new ductwork is needed.",
+  "answer": "A single-split system consists of one outdoor unit connected to one indoor unit, making it ideal for heating a single room at the lowest cost. A multi-split system has one outdoor unit linked to multiple indoor units in different rooms, allowing for more efficient heating across several spaces. A ducted heat pump distributes warm air through a network of ducts and vents throughout your home, offering comprehensive coverage but typically comes with higher installation costs compared to single- or multi-split systems.",
+  "error": null,
+  "seconds": 6.2,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.329
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.344
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.355
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.401
+   }
+  ]
+ },
+ {
+  "id": "T8Q5",
+  "topic": "8. Space Heating Heat Pump Tech",
+  "verifier": false,
+  "question": "Do heat pumps still work properly in cold outdoor temperatures, or do they stop being effective?",
+  "expected": "Modern heat pumps keep extracting heat from outdoor air even in cold conditions, though efficiency reduces as outdoor temperature drops. When frost builds on the outdoor coil in cold damp weather the unit automatically runs a short defrost cycle - briefly reversing to send warm refrigerant through the outdoor coil to melt frost (typically 5-15 minutes) - before returning to normal heating. This is normal and automatic, not a fault.",
+  "answer": "Heat pumps continue to work effectively even in cold outdoor temperatures, but their efficiency drops as the temperature decreases. For instance, an ordinary heat pump starts to produce less heat below about 7\u00b0C and performs less efficiently below 0\u00b0C due to the reduced ambient heat available and increased defrost cycles. High-quality units like those from Mitsubishi Electric can maintain performance down to around -10\u00b0C. To check how a specific model might perform in your climate, scan the QR code on screen to use 'the EECA efficient appliance calculator'.",
+  "error": null,
+  "seconds": 7.0,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Space heating",
+    "stance": "advocacy",
+    "distance": 0.342
+   },
+   {
+    "publisher": "Mitsubishi Electric",
+    "title": "Mitsubishi Electric HyperCore \u2014 cold-climate high-wall heat pump",
+    "stance": "vendor",
+    "distance": 0.397
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Water heating",
+    "stance": "advocacy",
+    "distance": 0.397
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Hot water heating",
+    "stance": "advocacy",
+    "distance": 0.405
+   }
+  ]
+ },
+ {
+  "id": "T8Q6",
+  "topic": "8. Space Heating Heat Pump Tech",
+  "verifier": false,
+  "question": "Can a heat pump provide both heating and cooling from the same unit?",
+  "expected": "Yes. Because a heat pump works by moving heat rather than generating it, reversing the direction of the refrigerant cycle lets the same unit bring heat into a room (heating) or move heat out to the outside (cooling), which is why most residential heat pumps are also used as air conditioners in summer.",
+  "answer": "Yes, a heat pump can switch between heating and cooling modes using the same outdoor unit, providing both functions efficiently. EECA explains that heat pumps work by moving heat from one place to another, which allows them to heat your home in winter and cool it in summer without needing separate units. Scan the QR code on screen for more details about different types of heat pump systems.",
+  "error": null,
+  "seconds": 5.6,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Heat pumps for home heating \u2014 how they work, efficiency and types",
+    "stance": "authoritative",
+    "distance": 0.435
+   },
+   {
+    "publisher": "EECA",
+    "title": "How a hot water heat pump works (technology)",
+    "stance": "authoritative",
+    "distance": 0.47
+   },
+   {
+    "publisher": "EECA",
+    "title": "Heat and cool efficiently at home",
+    "stance": "authoritative",
+    "distance": 0.477
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Space heating and cooling",
+    "stance": "advocacy",
+    "distance": 0.478
+   }
+  ]
+ },
+ {
+  "id": "T9Q1",
+  "topic": "9. Induction Cooktop Tech",
+  "verifier": false,
+  "question": "How does an induction cooktop heat a pot without an open flame or a hot element?",
+  "expected": "Underneath the glass surface is a tightly wound coil of metal. An alternating electric current flows through the coil creating a magnetic field above it - the cooktop surface itself stays cool. When a pan of suitable magnetic metal is placed on it, the magnetic field penetrates the pan base and induces circulating eddy currents within the metal; the pan's electrical resistance turns those currents into heat within the pan itself (magnetic hysteresis also contributes). Heat then transfers to food by conduction and convection.",
+  "answer": "An induction cooktop uses an electromagnetic field to directly heat the metal of the pot or pan placed on it. This technology heats only the cookware itself, not through an open flame or traditional heating element, which is why there's no direct heat source other than the cookware that becomes hot when you place it on the cooktop.",
+  "error": null,
+  "seconds": 5.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.347
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Cooking",
+    "stance": "advocacy",
+    "distance": 0.364
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.378
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops \u2014 efficiency, cost, savings and safety",
+    "stance": "authoritative",
+    "distance": 0.396
+   }
+  ]
+ },
+ {
+  "id": "T9Q2",
+  "topic": "9. Induction Cooktop Tech",
+  "verifier": false,
+  "question": "Why does induction cooking only work with certain cookware, when a gas or electric element heats any pot?",
+  "expected": "Induction relies on the pan's base being a magnetic, electrically resistive metal (iron-based) so the magnetic field can induce heat-generating currents in it. Pure aluminium, copper, glass and ceramic either aren't magnetic or conduct too efficiently to generate useful heat this way, so they won't heat up - whereas a gas flame or traditional electric element heats any pan regardless of material.",
+  "answer": "Induction cooking works by generating an electromagnetic field that directly heats ferromagnetic materials in pots and pans. This means the cookware must contain iron to be compatible with induction technology. Unlike gas or traditional electric elements, which can heat almost any type of pot or pan through direct contact or radiant heat, induction relies on magnetic properties for heat generation. Therefore, only pots and pans made from, or coated with, a ferromagnetic material like cast iron or stainless steel will work effectively on an induction cooktop.",
+  "error": null,
+  "seconds": 8.1,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.308
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Cooking",
+    "stance": "advocacy",
+    "distance": 0.329
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Cooking",
+    "stance": "advocacy",
+    "distance": 0.362
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.362
+   }
+  ]
+ },
+ {
+  "id": "T9Q3",
+  "topic": "9. Induction Cooktop Tech",
+  "verifier": false,
+  "question": "Which types of cookware work on an induction cooktop?",
+  "expected": "Cookware with a magnetic base: cast iron, enamelled cast iron, carbon steel, magnetic (18/0 or similar) stainless steel, and nonstick pans specifically made with a magnetic base layer. Cookware purely of aluminium, copper, glass or ceramic won't work unless it has a magnetic base bonded into it.",
+  "answer": "Induction cooktops require cookware made from magnetic materials like iron or stainless steel for optimal performance. Copper and aluminum pots and pans won\u2019t work without a special disk placed between the cooktop and the pan. To check if your cookware is compatible, scan the QR code on screen to access 'supplier documentation' which details specific material requirements and compatibility guides.",
+  "error": null,
+  "seconds": 6.2,
+  "retrieved": [
+   {
+    "publisher": "supplier documentation",
+    "title": "How an induction cooktop works, and cookware compatibility (technology)",
+    "stance": "reference",
+    "distance": 0.317
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Cooktops",
+    "stance": "advocacy",
+    "distance": 0.35
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.361
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.369
+   }
+  ]
+ },
+ {
+  "id": "T9Q4",
+  "topic": "9. Induction Cooktop Tech",
+  "verifier": false,
+  "question": "How can someone tell if their existing pots and pans will work on an induction cooktop?",
+  "expected": "The magnet test: hold a standard fridge magnet to the base of the pot or pan - if it sticks firmly, the base contains enough magnetic material to work on induction. Many induction-compatible pans are also marked with a small coiled-spring or spiral symbol on the base or packaging.",
+  "answer": "To check if your pots and pans are compatible with an induction cooktop, you need to ensure they are made of a ferrous metal like iron or steel. You can easily test this by seeing if a magnet sticks firmly to the bottom of each piece; if it does, the item is likely suitable for induction cooking. Many induction-compatible items will also have a small coiled-spring or spiral symbol indicating compatibility.",
+  "error": null,
+  "seconds": 5.7,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Cooktops",
+    "stance": "advocacy",
+    "distance": 0.375
+   },
+   {
+    "publisher": "EECA",
+    "title": "Induction cooktops",
+    "stance": "authoritative",
+    "distance": 0.396
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How an induction cooktop works, and cookware compatibility (technology)",
+    "stance": "reference",
+    "distance": 0.412
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How an induction cooktop works, and cookware compatibility (technology)",
+    "stance": "reference",
+    "distance": 0.415
+   }
+  ]
+ },
+ {
+  "id": "T10Q1",
+  "topic": "10. Home Battery Tech",
+  "verifier": false,
+  "question": "What type of battery chemistry is commonly used in home solar batteries, and why?",
+  "expected": "Lithium iron phosphate (LFP) is increasingly preferred for stationary home batteries. Compared with nickel manganese cobalt (NMC) used in earlier home batteries and many EVs, LFP's iron content improves thermal stability and reduces heat output, so LFP batteries need less ventilation/cooling, can more easily be installed indoors, and tend to have longer usable lifespan - trading off lower energy density (more physical size for the same capacity) for durability and safety.",
+  "answer": "Commonly used in home solar batteries is lithium-ion (Li-ion) chemistry because it offers a high energy density, long cycle life, and can be recharged rapidly, making it efficient for storing solar power. According to Rewiring Aotearoa, Li-ion batteries are favored for their ability to support the energy transition by reducing peak load demands on the grid.",
+  "error": null,
+  "seconds": 5.2,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.382
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.432
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.456
+   },
+   {
+    "publisher": "EECA",
+    "title": "Best practice guidance documents",
+    "stance": "authoritative",
+    "distance": 0.46
+   }
+  ]
+ },
+ {
+  "id": "T10Q2",
+  "topic": "10. Home Battery Tech",
+  "verifier": false,
+  "question": "In simple terms, how does a home battery store and release solar energy?",
+  "expected": "During the day, solar electricity generated but not used immediately is directed into the battery instead of (or as well as) being exported to the grid, chemically storing that energy. In the evening or at night when panels aren't generating, the battery discharges that stored energy back through an inverter to power the home, reducing electricity bought from the grid at those times.",
+  "answer": "A home battery stores excess solar power generated during the day when sunlight is abundant but may not be fully used by your household appliances. This stored energy can then be released in the evening or on cloudy days when your solar panels generate less electricity, ensuring you have a steady supply of power throughout the day and night. For specific details and to see if home batteries are right for you, scan the QR code on screen to use 'the Rewiring electric calculator'.",
+  "error": null,
+  "seconds": 6.2,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.383
+   },
+   {
+    "publisher": "EECA",
+    "title": "Best practice guide \u2014 residential solar PV and battery storage",
+    "stance": "authoritative",
+    "distance": 0.42
+   },
+   {
+    "publisher": "EA",
+    "title": "Solar power (generating, storing and selling your own power)",
+    "stance": "authoritative",
+    "distance": 0.433
+   },
+   {
+    "publisher": "EECA",
+    "title": "Make the most of your solar system",
+    "stance": "authoritative",
+    "distance": 0.434
+   }
+  ]
+ },
+ {
+  "id": "T10Q3",
+  "topic": "10. Home Battery Tech",
+  "verifier": false,
+  "question": "What's the difference between an AC-coupled and a DC-coupled home battery system?",
+  "expected": "DC-coupled: panels connect directly to the battery via a charge controller, storing energy as DC before a single inverter converts it to AC for the home - very efficient for charging the battery from solar but less efficient when powering AC appliances straight from solar during the day. AC-coupled: panels run through their own solar inverter to produce AC, and a separate battery inverter converts some of that AC back to DC to charge the battery - simpler to retrofit onto existing solar and better suited to larger installations, though with more conversion loss when charging.",
+  "answer": "An AC-coupled home battery system, like the Tesla Powerwall 2, works by connecting to your existing solar inverter with alternating current (AC), whereas a DC-coupled system, such as the Tesla Powerwall 3, integrates the battery and solar inverter directly using direct current (DC). This means the Powerwall 3 can charge more efficiently from solar panels without needing an additional inverter step. Scan the QR code on screen for more details on how these systems work.",
+  "error": null,
+  "seconds": 6.7,
+  "retrieved": [
+   {
+    "publisher": "Tesla",
+    "title": "Tesla Powerwall 3 \u2014 home battery with integrated inverter",
+    "stance": "vendor",
+    "distance": 0.509
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Get started",
+    "stance": "advocacy",
+    "distance": 0.522
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Batteries",
+    "stance": "advocacy",
+    "distance": 0.526
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Batteries",
+    "stance": "advocacy",
+    "distance": 0.535
+   }
+  ]
+ },
+ {
+  "id": "T10Q4",
+  "topic": "10. Home Battery Tech",
+  "verifier": true,
+  "question": "What's a hybrid inverter, and how does it relate to a home solar-and-battery system?",
+  "expected": "An inverter designed to manage both solar panels and a battery through a single device. In a typical DC-coupled system it converts solar DC to AC for the home or grid, manages charging of the battery from the solar array, and converts stored battery energy to AC when required - avoiding the need for separate solar and battery inverters. AC-coupled systems normally use a separate battery inverter, though some newer integrated products combine several functions.",
+  "answer": "A **hybrid inverter** is a device used in a home solar-and-battery system that manages both the solar panels and the battery storage. It converts direct current (DC) from solar panels into usable alternating current (AC) for your home, while also charging or discharging the battery as needed to store excess energy generated during the day for use at night. This allows homes with hybrid systems to be more self-sufficient by using stored solar power and reducing reliance on peak grid electricity.",
+  "error": null,
+  "seconds": 7.6,
+  "retrieved": [
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.283
+   },
+   {
+    "publisher": "supplier documentation",
+    "title": "How solar panels work, panel types, and inverters (technology)",
+    "stance": "reference",
+    "distance": 0.338
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.355
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.375
+   }
+  ]
+ },
+ {
+  "id": "T10Q5",
+  "topic": "10. Home Battery Tech",
+  "verifier": false,
+  "question": "Can a home battery be charged from the grid as well as from solar panels?",
+  "expected": "Yes - most home battery systems can be configured to charge from either solar generation or the grid (for example overnight on a cheaper off-peak plan), and EECA's guidance notes battery systems are expected to support smart energy use, working with timers, apps or home energy management systems to decide when to charge and discharge.",
+  "answer": "Yes, a home battery can typically be charged both from solar panels and from the electricity grid. This means it can store energy generated by your solar panels during daylight hours and also draw power from the grid when needed, such as at night or on cloudy days. To learn more about sizing a solar system that includes a battery, use 'the EECA solar power calculator'. Scan the QR code on screen for details.",
+  "error": null,
+  "seconds": 7.1,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Electric cars",
+    "stance": "advocacy",
+    "distance": 0.41
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Solar",
+    "stance": "advocacy",
+    "distance": 0.463
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your home solar system (grid, off-grid, hybrid, sizing)",
+    "stance": "authoritative",
+    "distance": 0.477
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Home batteries",
+    "stance": "advocacy",
+    "distance": 0.479
+   }
+  ]
+ },
+ {
+  "id": "T11Q1",
+  "topic": "11. EV Charging Tech",
+  "verifier": false,
+  "question": "What are the main ways to charge an EV at home?",
+  "expected": "EECA describes three main home options: a portable 3-pin cable (usually supplied with the car), the slowest option and not intended as a household's primary charging method; a standard wall-mounted AC charger, professionally installed and faster and safer for regular use; and a smart wall-mounted AC charger, which EECA describes as the fastest, safest and most convenient home option, adding scheduling and app control.",
+  "answer": "EECA describes three main options for charging an electric vehicle (EV) at home:\n- A **portable 3-pin cable** that typically comes with the car but is generally slower and not recommended as a primary method.\n- A **standard wall-mounted AC charger**, which offers faster charging than a portable 3-pin cable.\n- A **smart wall-mounted charger**, which includes 'smart' features for efficient management of your EV's battery.",
+  "error": null,
+  "seconds": 7.8,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.263
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV",
+    "stance": "authoritative",
+    "distance": 0.277
+   },
+   {
+    "publisher": "EECA",
+    "title": "Best practice guidance documents",
+    "stance": "authoritative",
+    "distance": 0.289
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV",
+    "stance": "authoritative",
+    "distance": 0.29
+   }
+  ]
+ },
+ {
+  "id": "T11Q2",
+  "topic": "11. EV Charging Tech",
+  "verifier": false,
+  "question": "What makes an EV charger smart, and what can it do that a basic charger or wall socket can't?",
+  "expected": "A smart charger connects to an app so the owner can schedule and remotely change when and how much the vehicle charges - typically to take advantage of cheaper off-peak electricity, which is also more likely to come from renewable generation. It can also load balance a home's power supply, automatically reducing its charging rate when the household is drawing a lot of power, reducing overload risk. EECA notes smart chargers are also more electrically efficient than a basic 3-pin plug.",
+  "answer": "A smart EV charger connects to an app, allowing you to schedule and remotely control charging times, typically taking advantage of off-peak electricity rates for cheaper and more sustainable charging. Unlike a basic charger or wall socket, a smart charger ensures your vehicle charges efficiently during periods when electricity is less expensive and often greener. According to EECA, using a smart charger can save time and money compared to other charging methods. Scan the QR code on screen for more details about setting up a smart EV charger.",
+  "error": null,
+  "seconds": 7.1,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV",
+    "stance": "authoritative",
+    "distance": 0.259
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers \u2014 what they do",
+    "stance": "authoritative",
+    "distance": 0.282
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers \u2014 what they do",
+    "stance": "authoritative",
+    "distance": 0.299
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers",
+    "stance": "authoritative",
+    "distance": 0.31
+   }
+  ]
+ },
+ {
+  "id": "T11Q3",
+  "topic": "11. EV Charging Tech",
+  "verifier": false,
+  "question": "How much faster is a dedicated home charger than plugging an EV into a standard wall socket?",
+  "expected": "EECA states a smart wall-mounted charger operates at least three times faster than charging from a standard 3-pin household socket.",
+  "answer": "EECA describes that a standard wall-mounted AC charger can charge an electric vehicle about 3 times faster than using a portable 3-pin cable. For precise speeds, EECA notes that higher-power DC chargers are even quicker, with some achieving around 100 km of range in as little as 13 to 16 minutes, compared to several hours for AC charging at home.",
+  "error": null,
+  "seconds": 5.9,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.317
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.318
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers",
+    "stance": "authoritative",
+    "distance": 0.342
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV Smart Charger Approved List",
+    "stance": "authoritative",
+    "distance": 0.35
+   }
+  ]
+ },
+ {
+  "id": "T11Q4",
+  "topic": "11. EV Charging Tech",
+  "verifier": false,
+  "question": "What's the difference between AC and DC EV charging?",
+  "expected": "Home and most public destination chargers supply AC power, which the EV's onboard charger converts to DC to store in the battery - this onboard converter limits how fast AC charging can go. DC fast chargers convert AC from the grid to DC themselves before it reaches the car, feeding DC directly into the battery and bypassing the car's slower onboard charger, which is what allows much faster charging.",
+  "answer": "According to EECA, AC charging involves using a standard wall-mounted charger or a portable 3-pin cable, where the electric vehicle has an onboard charger that converts AC power from the outlet into DC power for its battery. In contrast, DC fast charging bypasses this step by delivering high-voltage DC directly to the car\u2019s battery, significantly reducing charge time but typically requiring dedicated infrastructure and higher costs.",
+  "error": null,
+  "seconds": 5.9,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.366
+   },
+   {
+    "publisher": "Sigenergy",
+    "title": "Sigenergy SigenStor \u2014 modular all-in-one home battery / energy hub",
+    "stance": "vendor",
+    "distance": 0.392
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.395
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV Smart Charger Approved List",
+    "stance": "authoritative",
+    "distance": 0.412
+   }
+  ]
+ },
+ {
+  "id": "T11Q5",
+  "topic": "11. EV Charging Tech",
+  "verifier": false,
+  "question": "Roughly how much range can a DC fast charger add, and how does that compare with AC charging?",
+  "expected": "EECA gives the example that a 25kW DC charger adds about 50km of range in under 30 minutes, a 50kW DC charger adds about 50km in under 15 minutes, and higher-power DC chargers can add around 100km in as little as 13-16 minutes - all considerably faster than AC charging, where a full charge from a home charger typically takes several hours.",
+  "answer": "A **25 kW DC fast charger** can add approximately 50 km of range in under 30 minutes, while a **50 kW DC charger** can provide the same amount of range in about 15 minutes. In comparison, AC home charging typically takes several hours to fully charge an EV, making DC fast charging significantly faster for adding substantial range quickly.",
+  "error": null,
+  "seconds": 6.1,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.319
+   },
+   {
+    "publisher": "Hyundai",
+    "title": "Hyundai Ioniq 5 \u2014 battery-electric SUV (Series II)",
+    "stance": "vendor",
+    "distance": 0.382
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.384
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.386
+   }
+  ]
+ },
+ {
+  "id": "T11Q6",
+  "topic": "11. EV Charging Tech",
+  "verifier": true,
+  "question": "What EV charging connector types are used in New Zealand?",
+  "expected": "For AC charging, Type 2 (Mennekes) is the standard connector on new EVs sold in NZ, while older Japanese-import EVs (such as early Nissan Leafs) often use the round Type 1 (J1772). For DC fast charging, CCS2 has become the dominant standard on new vehicles sold in NZ, combining AC and DC charging in one port, while CHAdeMO - common on early Japanese imports - remains supported at many fast chargers but is becoming less common on new vehicles.",
+  "answer": "In New Zealand, Electric Vehicle (EV) charging connectors commonly include Type 1 and Type 2 connectors. The EECA provides guidance on these standards for both home and public charging stations. For more detailed information, scan the QR code on screen to access the EECA's EV charging resources.",
+  "error": null,
+  "seconds": 4.8,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.358
+   },
+   {
+    "publisher": "NZTA",
+    "title": "EVRoam and the national public EV charging network (NZTA)",
+    "stance": "authoritative",
+    "distance": 0.369
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.37
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers \u2014 what they do",
+    "stance": "authoritative",
+    "distance": 0.373
+   }
+  ]
+ },
+ {
+  "id": "T11Q7",
+  "topic": "11. EV Charging Tech",
+  "verifier": true,
+  "question": "What is vehicle-to-grid (V2G) or two-way EV charging, and is it available in New Zealand yet?",
+  "expected": "Two-way (bidirectional) charging lets electricity flow both ways through the charger - into the EV battery as normal, but also back out to power a home (V2H), a building (V2B) or the wider grid (V2G) - letting an EV act as a mobile battery supplying power when demand or prices are high, or during an outage. As of EECA's most recent assessment, two-way chargers are emerging but not yet widely available in the NZ market; EECA has been running real-world trials (including in Queenstown) ahead of any wider rollout.",
+  "answer": "Vehicle-to-grid (V2G) or two-way EV charging allows an electric vehicle to both charge from and discharge electricity back into the grid. According to EECA's latest assessment as of 6 September 2026, two-way chargers are emerging but not yet widely available in New Zealand; EECA has conducted real-world trials, including in Queenstown, ahead of any wider rollout.",
+  "error": null,
+  "seconds": 6.5,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.172
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Electric cars",
+    "stance": "advocacy",
+    "distance": 0.22
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification FAQ \u2014 Vehicles",
+    "stance": "advocacy",
+    "distance": 0.268
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.329
+   }
+  ]
+ },
+ {
+  "id": "T12Q1",
+  "topic": "12. Smart Meters",
+  "verifier": false,
+  "question": "What is a smart meter, and how is it different from a traditional power meter?",
+  "expected": "A smart meter is an electronic meter that automatically records a household's electricity use in 30-minute intervals and transmits that data electronically (typically over cellular networks) to the power company, removing the need for manual meter readings or estimated bills. A traditional meter only shows a cumulative running total that has to be read manually or estimated periodically. The Electricity Authority notes smart meter data is encrypted in transit to protect consumer privacy.",
+  "answer": "A smart meter is an electronic device that automatically records electricity use in 30-minute intervals and sends this data electronically, enhancing accuracy and real-time monitoring. Unlike traditional power meters, which typically record total energy usage mechanically and require manual readings, smart meters provide detailed consumption patterns and support features like time-of-use pricing and solar buy-back schemes. The Electricity Authority notes that smart meter data is encrypted to protect privacy.",
+  "error": null,
+  "seconds": 7.0,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "Smart meters and home energy management",
+    "stance": "authoritative",
+    "distance": 0.217
+   },
+   {
+    "publisher": "EA",
+    "title": "Meters (types, smart meters and data)",
+    "stance": "authoritative",
+    "distance": 0.289
+   },
+   {
+    "publisher": "EA",
+    "title": "Smart meters and home energy management",
+    "stance": "authoritative",
+    "distance": 0.348
+   },
+   {
+    "publisher": "EA",
+    "title": "Meters (types, smart meters and data)",
+    "stance": "authoritative",
+    "distance": 0.359
+   }
+  ]
+ },
+ {
+  "id": "T12Q2",
+  "topic": "12. Smart Meters",
+  "verifier": false,
+  "question": "How does a smart meter support time-of-use electricity pricing and the wider shift to electrification?",
+  "expected": "Because a smart meter records use in half-hour intervals rather than only as a cumulative total, retailers can offer plans charging different rates depending on when electricity is used - for example cheaper overnight or off-peak rates. Smart-meter data also enables more accurate billing and can help households understand usage patterns where their retailer or another service provides access. Time-of-use pricing can encourage flexible loads such as EV charging and water heating to be shifted away from expensive peak periods.",
+  "answer": "A smart meter supports time-of-use electricity pricing by providing near real-time information on energy consumption, allowing for accurate billing based on when power is used. This enables utilities to offer time-of-use plans that incentivize off-peak use, which can help manage demand and integrate more renewable energy sources. According to the Electricity Authority (2026-09-06), smart meters also facilitate easier switching between electricity providers and access to advanced features like solar buy-back schemes, further supporting home electrification efforts by making it simpler for consumers to adopt electric vehicles and other electric appliances.",
+  "error": null,
+  "seconds": 8.8,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "Meters (types, smart meters and data)",
+    "stance": "authoritative",
+    "distance": 0.29
+   },
+   {
+    "publisher": "EA",
+    "title": "Smart meters and home energy management",
+    "stance": "authoritative",
+    "distance": 0.315
+   },
+   {
+    "publisher": "EA",
+    "title": "Meters (types, smart meters and data)",
+    "stance": "authoritative",
+    "distance": 0.369
+   },
+   {
+    "publisher": "EECA",
+    "title": "EV Smart Charger Approved List",
+    "stance": "authoritative",
+    "distance": 0.384
+   }
+  ]
+ },
+ {
+  "id": "T1Q1-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "Is a heat pump hot water cylinder actually cheaper to run than my normal electric one?",
+  "expected": "Should be consistent with T1Q1",
+  "answer": "Yes, according to EECA data from 2026, a heat pump hot water cylinder typically costs about $180 per year to run, compared to around $480 per year for a traditional electric cylinder. This makes the heat pump significantly more cost-effective over time. To see how much you could save specifically in your situation, scan the QR code on screen and use 'the EECA home energy savings calculator'.",
+  "error": null,
+  "seconds": 6.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Compare home water heating options",
+    "stance": "authoritative",
+    "distance": 0.216
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.264
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.279
+   },
+   {
+    "publisher": "EECA",
+    "title": "Hot water heat pumps",
+    "stance": "authoritative",
+    "distance": 0.294
+   }
+  ]
+ },
+ {
+  "id": "T1Q4-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "I heard there's a government grant for insulation and heat pumps - what is it?",
+  "expected": "Should be consistent with T1Q4",
+  "answer": "There\u2019s a government initiative called Warmer Kiwi Homes that provides grants for insulation and heat pump installations. For those most in need, such as Community Services Card or SuperGold Combo card holders, the heating grant covers up to 90% of the cost for installing a heat pump, which can be up to $3,450. This is particularly aimed at homes built before 2008 and located in higher-need areas. For insulation, a 50% grant is available, typically costing around $2,150 after the grant. To check your eligibility and specifics, scan the QR code on screen for 'the Warmer Kiwi Homes eligibility check'.",
+  "error": null,
+  "seconds": 8.6,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.322
+   },
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.339
+   },
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.351
+   },
+   {
+    "publisher": "EECA",
+    "title": "Warmer Kiwi Homes \u2014 insulation and heater grants",
+    "stance": "authoritative",
+    "distance": 0.402
+   }
+  ]
+ },
+ {
+  "id": "T2Q5-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "Am I still allowed to put gas into a new house in New Zealand?",
+  "expected": "Should be consistent with T2Q5",
+  "answer": "As of now, there is no regulatory ban on connecting new homes to natural gas supplies in New Zealand (MBIE). However, Rewiring Aotearoa argues that given the rising costs and declining availability of natural gas, it might be more prudent to consider electrification options for a new home.",
+  "error": null,
+  "seconds": 5.0,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.326
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 A bad case of gas",
+    "stance": "advocacy",
+    "distance": 0.431
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Reticulated (piped) natural gas vs bottled LPG, and who can access gas",
+    "stance": "authoritative",
+    "distance": 0.432
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New gas connections and the Gas Transition Plan",
+    "stance": "authoritative",
+    "distance": 0.466
+   }
+  ]
+ },
+ {
+  "id": "T3Q4-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "What do I have to pay in road user charges if I drive an EV?",
+  "expected": "Should be consistent with T3Q4",
+  "answer": "According to Rewiring Aotearoa's electrification guide (2026-07-10), even with road user charges (RUCs), electric vehicles cost around two-thirds less to drive per year compared to conventional cars when using rooftop solar, and about half as much on the grid. This suggests that RUCs are a part of EV running costs but are significantly outweighed by savings in fuel and maintenance expenses. For precise RUC rates, check with your local retailer or the official Ministry of Transport website.",
+  "error": null,
+  "seconds": 7.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV",
+    "stance": "authoritative",
+    "distance": 0.397
+   },
+   {
+    "publisher": "EECA",
+    "title": "Compare different EV options",
+    "stance": "authoritative",
+    "distance": 0.402
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Electrification guide \u2014 Electric cars",
+    "stance": "advocacy",
+    "distance": 0.432
+   },
+   {
+    "publisher": "EECA",
+    "title": "Benefits of electric vehicles",
+    "stance": "authoritative",
+    "distance": 0.453
+   }
+  ]
+ },
+ {
+  "id": "T4Q1-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "What percentage of our power is renewable?",
+  "expected": "Should be consistent with T4Q1",
+  "answer": "In 2024, the renewable share of New Zealand's electricity generation was 85.5%, according to MBIE statistics. However, Rewiring Aotearoa argues that when considering total energy consumption across all sectors (including direct use of fuels like wood and oil), only about 23% is from renewable sources.",
+  "error": null,
+  "seconds": 6.5,
+  "retrieved": [
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 Energy use in New Zealand",
+    "stance": "advocacy",
+    "distance": 0.302
+   },
+   {
+    "publisher": "Rewiring",
+    "title": "Explainer \u2014 Energy use in New Zealand",
+    "stance": "advocacy",
+    "distance": 0.313
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Future electricity demand and generation (MBIE scenarios)",
+    "stance": "authoritative",
+    "distance": 0.327
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.35
+   }
+  ]
+ },
+ {
+  "id": "T4Q5-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "Which companies generate most of New Zealand's electricity?",
+  "expected": "Should be consistent with T4Q5",
+  "answer": "The specific companies generating most of New Zealand's electricity are detailed in the Electricity Authority and MBIE reports but aren't listed by company name in the provided references. For that information, you would need to check the latest Electricity Authority market performance report or contact your local lines company directly for more tailored insights.",
+  "error": null,
+  "seconds": 5.8,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "New Zealand's electricity sector (how the market is structured)",
+    "stance": "authoritative",
+    "distance": 0.264
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Electricity statistics (generation mix and demand)",
+    "stance": "authoritative",
+    "distance": 0.278
+   },
+   {
+    "publisher": "MBIE",
+    "title": "New Zealand's electricity generation mix and renewable share",
+    "stance": "authoritative",
+    "distance": 0.281
+   },
+   {
+    "publisher": "EA",
+    "title": "Ways to save energy (efficiency tips and appliances)",
+    "stance": "authoritative",
+    "distance": 0.295
+   }
+  ]
+ },
+ {
+  "id": "T5Q13-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "Has the government published a national energy strategy?",
+  "expected": "Should be consistent with T5Q13",
+  "answer": "The situation is complex and contested. MBIE developed a draft New Zealand Energy Strategy along with sector-specific sub-strategies in 2024\u20132025. However, as of mid-2026, there is no single overarching national energy strategy, though several sector-based strategies exist. Business groups have expressed concerns about the lack of an overarching strategy.",
+  "error": null,
+  "seconds": 6.8,
+  "retrieved": [
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.359
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.384
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.389
+   },
+   {
+    "publisher": "MBIE",
+    "title": "Does New Zealand have an overarching national energy strategy? (status)",
+    "stance": "authoritative",
+    "distance": 0.399
+   }
+  ]
+ },
+ {
+  "id": "T6Q6-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "Do I need a battery with my solar panels?",
+  "expected": "Should be consistent with T6Q6",
+  "answer": "Whether you need a battery with your solar panels depends on your energy usage patterns. According to EECA, batteries are optional but make sense where significant power is used outside daylight hours. For instance, if you use lots of electricity at night, a battery can store daytime-generated solar power for later use and might be cost-effective in the long run. Scan the QR code on screen to check 'the Rewiring electric calculator' for personalized savings estimates with or without a battery.",
+  "error": null,
+  "seconds": 8.0,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Make the most of your solar system",
+    "stance": "authoritative",
+    "distance": 0.451
+   },
+   {
+    "publisher": "EECA",
+    "title": "Solar quotes and installation",
+    "stance": "authoritative",
+    "distance": 0.455
+   },
+   {
+    "publisher": "EECA",
+    "title": "Plan your solar system",
+    "stance": "authoritative",
+    "distance": 0.466
+   },
+   {
+    "publisher": "EA",
+    "title": "Solar power (generating, storing and selling your own power)",
+    "stance": "authoritative",
+    "distance": 0.472
+   }
+  ]
+ },
+ {
+  "id": "T11Q3-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "Is a proper wall charger much quicker than a normal plug for an EV?",
+  "expected": "Should be consistent with T11Q3",
+  "answer": "Yes, a proper wall-mounted smart charger is significantly faster than charging with a standard 3-pin plug. According to EECA, smart chargers can charge at least three times faster, typically delivering between 3.6\u20137 kW compared to the up to 1.8 kW of a standard 3-pin plug. This results in quicker and more efficient charging sessions for your EV.",
+  "error": null,
+  "seconds": 7.7,
+  "retrieved": [
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers",
+    "stance": "authoritative",
+    "distance": 0.327
+   },
+   {
+    "publisher": "EECA",
+    "title": "Charging your EV at home and on the road (AC vs DC, connectors, V2G)",
+    "stance": "authoritative",
+    "distance": 0.345
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers",
+    "stance": "authoritative",
+    "distance": 0.353
+   },
+   {
+    "publisher": "EECA",
+    "title": "Smart EV chargers",
+    "stance": "authoritative",
+    "distance": 0.359
+   }
+  ]
+ },
+ {
+  "id": "T12Q1-rephrased",
+  "topic": "consistency probe",
+  "verifier": false,
+  "question": "What's a smart meter?",
+  "expected": "Should be consistent with T12Q1",
+  "answer": "A smart meter is an electronic device that records your household's electricity usage in 30-minute intervals and sends that data automatically to your retailer, enabling accurate billing without manual readings. According to the Electricity Authority, this also allows for time-of-use pricing, which can help you manage energy costs more effectively.",
+  "error": null,
+  "seconds": 4.6,
+  "retrieved": [
+   {
+    "publisher": "EA",
+    "title": "Smart meters and home energy management",
+    "stance": "authoritative",
+    "distance": 0.235
+   },
+   {
+    "publisher": "EA",
+    "title": "Code Part 10 \u2014 Metering (plain-language summary)",
+    "stance": "authoritative",
+    "distance": 0.291
+   },
+   {
+    "publisher": "EA",
+    "title": "Meters (types, smart meters and data)",
+    "stance": "authoritative",
+    "distance": 0.32
+   },
+   {
+    "publisher": "EA",
+    "title": "Retail market (retailers' role, obligations and metering)",
+    "stance": "authoritative",
+    "distance": 0.329
+   }
+  ]
+ }
+]

@@ -25,11 +25,25 @@ REPO_ROOT = Path(__file__).parent
 KB_DIR = Path(config.KNOWLEDGE_BASE_PATH)
 MANIFEST_PATH = REPO_ROOT / "ingest_manifest.json"
 
+# 500 is load-bearing for retrieval QUALITY, not just recall volume, and was
+# measured rather than guessed. Halving it to 250 to cut prefill cost (the
+# retrieved block is the only part of the prompt Ollama cannot serve from its KV
+# cache) cost figure recall 0.557 -> 0.416 across the 107-question bank, with 9
+# questions dropping from full recall to none. The mechanism is not truncation
+# but displacement: smaller chunks changed WHICH sources won the top-4, shifting
+# answers off authoritative figures and onto advocacy material — EECA's $7,000
+# heat pump install became Rewiring's "$4,000 to $10,000", MBIE's 56% process
+# heat figure vanished, and answers attributing to Rewiring nearly doubled
+# (9 -> 16). Don't trade this for the ~1.85s of prefill.
+# See logs/latency-analysis.md, "Third pass", and
+# evals/results-tuning-{a-baseline,b-chunk250}.json.
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 100
 
-# Files that live in the corpus but aren't content themselves.
-SKIP_NAMES = {"MANIFEST.md", "README.md", ".DS_Store"}
+# Files that live in the corpus but aren't content themselves. INDEX.md is
+# folder navigation and REVIEW.md is a maintainer's audit of the corpus — both
+# would retrieve as if they were NZ energy facts.
+SKIP_NAMES = {"MANIFEST.md", "README.md", "INDEX.md", "REVIEW.md", ".DS_Store"}
 
 # Publisher folder → short label used in retrieved context blocks.
 PUBLISHER_SHORT = {
@@ -39,6 +53,39 @@ PUBLISHER_SHORT = {
     "MBIE Website": "MBIE",
     "Rewiring Website": "Rewiring",
 }
+
+# The Consumer Tech / Policy Data / Product Specs corpora label provenance with
+# an `authority:` field rather than the older `content_stance:`. Map it to the
+# short label used in context headers and to a stance, because the folder name
+# there describes a topic ("Policy Data"), not a publisher.
+AUTHORITY = {
+    "EECA":                      ("EECA", "authoritative"),
+    "Electricity Authority":     ("EA", "authoritative"),
+    "MBIE":                      ("MBIE", "authoritative"),
+    "Commerce Commission":       ("ComComm", "authoritative"),
+    "Beehive":                   ("Beehive", "authoritative"),
+    "Climate Change Commission": ("Climate Commission", "authoritative"),
+    "Ministry for the Environment": ("MfE", "authoritative"),
+    "Ministry of Transport":     ("Min. of Transport", "authoritative"),
+    "NZTA":                      ("NZTA", "authoritative"),
+    "Tenancy Services":          ("Tenancy Services", "authoritative"),
+    # An industry body, not a regulator — attributed for the same reason
+    # Rewiring Aotearoa is.
+    "BusinessNZ Energy Council": ("BusinessNZ Energy Council", "advocacy"),
+    # Explanatory technology write-ups drawn from overseas and supplier pages.
+    "supplier documentation":    ("supplier documentation", "reference"),
+}
+
+# Publisher name -> short label. Anchored patterns, never bare substrings: a
+# plain `"ea" in publisher` test matched every "... New Zealand" manufacturer
+# and labelled BYD, Kia, Nissan and friends as EA, the Electricity Authority.
+_PUBLISHER_PATTERNS = (
+    ("EECA", r"\beeca\b|energy efficiency"),
+    ("EA", r"\belectricity authority\b"),
+    ("MBIE", r"\bmbie\b|ministry of business"),
+    ("ComComm", r"\bcommerce commission\b"),
+    ("Rewiring", r"\brewiring\b"),
+)
 
 _FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n(.*)$", re.DOTALL)
 
@@ -88,8 +135,36 @@ def parse_frontmatter(text: str) -> tuple[dict, str]:
     return meta, body.strip()
 
 
+# Editorial asides written to whoever maintains the corpus, not to a visitor —
+# every product-spec file ends with one, and they retrieve as if they were NZ
+# energy facts ("Reconcile against RightCar's official record...").
+_MAINTAINER_NOTE_RE = re.compile(
+    r"^(#{1,6})\s*Note for corpus maintainers\b.*?(?=^\1\s|\Z)",
+    re.MULTILINE | re.DOTALL | re.IGNORECASE,
+)
+
+
+def strip_maintainer_notes(body: str) -> str:
+    """Drop 'Note for corpus maintainers' sections, up to the next heading of the
+    same level or end of file."""
+    return _MAINTAINER_NOTE_RE.sub("", body).strip()
+
+
 def normalise_stance(meta: dict) -> str:
-    """Reduce the descriptive content_stance / publisher into a short tag."""
+    """Reduce the frontmatter's provenance fields into a short tag.
+
+    "authoritative" must mean a New Zealand regulator. Manufacturer material
+    gets its own "vendor" tag rather than being waved through as authoritative:
+    a Tesla or BYD spec sheet is a sales claim, and the corpus rule is that
+    non-regulators are attributed, never presented as neutral fact.
+    """
+    # The product-specs schema is the only one carrying a brand.
+    if (meta.get("brand") or "").strip():
+        return "vendor"
+    authority = (meta.get("authority") or "").strip()
+    if authority in AUTHORITY:
+        return AUTHORITY[authority][1]
+
     stance = (meta.get("content_stance") or "").lower()
     publisher = (meta.get("publisher") or "").lower()
     if "rewiring" in publisher:
@@ -98,23 +173,36 @@ def normalise_stance(meta: dict) -> str:
         return "advocacy"
     if stance.startswith("signposting") or "signposting" in stance:
         return "reference"
-    return "authoritative"
+    if stance:
+        return "authoritative"
+    # No stance field at all: the legacy EECA corpus is like this. Trust it only
+    # when the publisher itself resolves to a known regulator — anything else
+    # stays "reference" rather than being promoted to regulator status.
+    for short, pattern in _PUBLISHER_PATTERNS:
+        if re.search(pattern, publisher):
+            return "advocacy" if short == "Rewiring" else "authoritative"
+    return "reference"
 
 
 def publisher_short(rel_path: str, meta: dict) -> str:
-    """Prefer the frontmatter publisher's short label; fall back to folder."""
+    """Short label shown in context headers and the kiosk's sources panel.
+
+    Frontmatter first, folder second: the newer corpora are foldered by topic
+    ("Policy Data"), so the folder says nothing about who published a file.
+    """
+    brand = (meta.get("brand") or "").strip()
+    if brand:
+        return brand[:40]
+    authority = (meta.get("authority") or "").strip()
+    if authority in AUTHORITY:
+        return AUTHORITY[authority][0]
     top = rel_path.split("/", 2)[1] if "/" in rel_path else ""
     if top in PUBLISHER_SHORT:
         return PUBLISHER_SHORT[top]
-    # Fallback — try to derive from full publisher name.
     pub = (meta.get("publisher") or "").lower()
-    for short in ("EA", "EECA", "MBIE"):
-        if short.lower() in pub:
+    for short, pattern in _PUBLISHER_PATTERNS:
+        if re.search(pattern, pub):
             return short
-    if "commerce" in pub:
-        return "ComComm"
-    if "rewiring" in pub:
-        return "Rewiring"
     return "unknown"
 
 
@@ -158,6 +246,7 @@ def ingest_file(path: Path, rel: str, file_hash: str, collection, embed_model) -
         return 0
 
     meta, body = parse_frontmatter(text)
+    body = strip_maintainer_notes(body)
     if not meta:
         print(f"  [warn] {rel} — no frontmatter, ingesting body as-is")
     if not body.strip():

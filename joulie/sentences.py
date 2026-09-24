@@ -32,14 +32,37 @@ MIN_FIRST_CHUNK_WORDS = 8
 _NUMBER_RE = re.compile(r'\d[\d,]*(?:\.\d+)?')
 _SPOKEN_UNIT_RE = re.compile(r'[$%]')
 
-# XTTS costs roughly 0.65s + 0.10s per word (measured on M4 Pro / MPS), so these
-# budgets are latency dials: ~14 words is ~2s of synthesis, ~25 words is ~3.2s.
-# They ramp rather than jumping straight to the full budget because playback of
-# one chunk has to cover synthesis of the next — a short opening chunk followed
-# by a full-size one starves the output stream and leaves an audible gap.
-FIRST_CHUNK_MAX_WORDS = 14
-RAMP_CHUNK_MAX_WORDS = 18
-CHUNK_MAX_WORDS = 25
+# XTTS speaks at ~2.45 spoken words per second, so a chunk's word count fixes
+# both how long it takes to synthesise and how much playback time it buys the
+# chunk behind it. The budgets ramp rather than jumping straight to the full
+# size because playback of one chunk is the only thing covering synthesis of the
+# next: chunk k+1 must synthesise in less than chunk k takes to play, which is
+#
+#     rtf * W(k+1) / 2.45  <=  W(k) / 2.45      ->      W(k+1) <= W(k) / rtf
+#
+# The rtf to solve that against is the CONTENDED one, not XTTS's steady state.
+# Session 20260916T225408 measured every chunk synthesised while Ollama was
+# still decoding at RTF 0.759 mean / 0.804 median, against 0.406 / 0.371 for
+# chunks synthesised after the stream finished — XTTS and Ollama contend for the
+# same Metal device, and the opening chunks always land inside that window.
+# The previous 14/18/25 ramp was fitted by isolate_xtts.py with no Ollama in the
+# process, so it budgeted the 0.36 steady state and stepped 1.29x and 1.39x
+# where the contended rate only allows 1.25x. It also made chunk 1 ~5.7s of
+# audio costing ~4.6s to synthesise — 40% of the 10.9s to first audio.
+# See logs/latency-analysis.md, "Third pass".
+CONTENDED_RTF = 0.80
+
+# Each step stays within the 1.25x the contended rate allows. The opening budget
+# is not pushed below 11 on purpose: MIN_FIRST_CHUNK_WORDS is 8, and a [8, 9]
+# window is too narrow for a clause break to ever land inside, which would make
+# every first chunk a mid-clause word-gap cut. [8, 11] leaves room to find one.
+# Index past the end uses the last entry, the steady-state budget.
+CHUNK_WORD_BUDGETS = (11, 13, 16, 20, 25)
+
+# Kept as names because tests and callers read them; they are the ends of the ramp.
+FIRST_CHUNK_MAX_WORDS = CHUNK_WORD_BUDGETS[0]
+RAMP_CHUNK_MAX_WORDS = CHUNK_WORD_BUDGETS[1]
+CHUNK_MAX_WORDS = CHUNK_WORD_BUDGETS[-1]
 
 
 @dataclass(frozen=True)
@@ -75,8 +98,18 @@ def split_sentences(text: str) -> tuple[list[str], str]:
             # Single letter initialisms: "A. Smith", "e.g."
             if re.fullmatch(r'[a-z]', preceding_word):
                 continue
-            # Decimal numbers: "2.5 kW", "$3.70 per kWh"
-            if re.fullmatch(r'\d+', preceding_word):
+            # List numbering: "1. Check your meter". A DECIMAL cannot reach
+            # here — _END_RE requires whitespace or end-of-string after the dot,
+            # and "2.5" has a digit there — so this guard only ever sees an
+            # integer that ends a sentence. Matching every integer meant a
+            # sentence closing on a year or a statistic ("…compared to 2023.")
+            # was never a boundary, and SYSTEM_PROMPT asks for a year on every
+            # statistic: 17% of the answers in evals/results-tuning-a-baseline
+            # .json were affected, and the un-split text accumulated into a
+            # single end-of-stream chunk — one measured 52 spoken words, ~21s of
+            # audio. Two digits is enough for list numbering and leaves years
+            # and quantities alone.
+            if re.fullmatch(r'\d{1,2}', preceding_word):
                 continue
 
         sentence = text[pos:m.end()].strip()
@@ -110,13 +143,24 @@ def split_speakable(text: str, spoken: int = 0) -> tuple[list[Chunk], str]:
             units.append((remainder[:pos].strip(), "clause"))
             remainder = remainder[pos:]
 
+    # Fold sub-floor units forward BEFORE budgeting, not after. A reply opening
+    # with a short complete sentence ("Yes." / "Great question.") produces a unit
+    # that cannot be spoken alone, and budgeting first would hand the sentence
+    # behind it the index-1 budget on the assumption that the stub survives as
+    # chunk 1 — then merge the two and ship 19-21 spoken words as chunk 1, more
+    # than twice the budget. Merging first means every unit is budgeted against
+    # the index it will actually be spoken at.
+    units = _merge_short_units(units)
+
     chunks: list[Chunk] = []
     for body, boundary in units:
         pieces = _split_to_budget(body, spoken + len(chunks))
         chunks.extend(Chunk(p, "clause") for p in pieces[:-1])
         chunks.append(Chunk(pieces[-1], boundary))
 
-    chunks = _merge_short(chunks)
+    # Catches the one case unit-merging cannot: a sub-floor tail left by
+    # _split_to_budget when a unit does not divide evenly into its budgets.
+    chunks = _merge_short(chunks, spoken)
 
     # A trailing sub-floor chunk goes back on the buffer so it can merge with
     # whatever arrives next; the caller's end-of-stream flush speaks it if
@@ -128,12 +172,27 @@ def split_speakable(text: str, spoken: int = 0) -> tuple[list[Chunk], str]:
     return chunks, remainder
 
 
+def split_to_budget(text: str, spoken: int = 0) -> list[Chunk]:
+    """Cut a span that is already known to be complete into budgeted chunks.
+
+    The streaming path reaches chunks through split_speakable, which only emits
+    text it can close off at a sentence or clause. say_stream's end-of-stream
+    flush has no such text — it has whatever is left in the buffer — and used to
+    queue all of it as a single chunk whatever its length. This gives that tail
+    the same budget as everything else. The final piece carries a "sentence"
+    boundary because it ends the utterance.
+    """
+    body = text.strip()
+    if not body:
+        return []
+    pieces = _split_to_budget(body, spoken)
+    chunks = [Chunk(p, "clause") for p in pieces[:-1]]
+    chunks.append(Chunk(pieces[-1], "sentence"))
+    return _merge_short(chunks, spoken)
+
+
 def _budget(index: int) -> int:
-    if index == 0:
-        return FIRST_CHUNK_MAX_WORDS
-    if index == 1:
-        return RAMP_CHUNK_MAX_WORDS
-    return CHUNK_MAX_WORDS
+    return CHUNK_WORD_BUDGETS[min(index, len(CHUNK_WORD_BUDGETS) - 1)]
 
 
 def _floor(index: int) -> int:
@@ -184,7 +243,13 @@ def _split_to_budget(text: str, index: int) -> list[str]:
     while True:
         at = index + len(pieces)
         budget = _budget(at)
-        if spoken_words(rest) <= budget:
+        # Stop while what is left would not survive on its own. Cutting a
+        # 12-15 word sentence against the opening budget leaves a two-word tail,
+        # and XTTS babbles on inputs that short — the very thing
+        # _MIN_CHUNK_WORDS exists to prevent. Speaking such a sentence whole
+        # costs at most _MIN_CHUNK_WORDS over budget and keeps a real terminal
+        # contour, which beats both the babble and a mid-clause break.
+        if spoken_words(rest) <= budget + _MIN_CHUNK_WORDS:
             break
         pos = _clause_split_pos(rest, budget, _floor(at))
         head = rest[:pos].strip() if pos else ""
@@ -197,7 +262,33 @@ def _split_to_budget(text: str, index: int) -> list[str]:
     return pieces or [text.strip()]
 
 
-def _merge_short(chunks: list[Chunk]) -> list[Chunk]:
+def _merge_short_units(units: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    """Fold a unit too short to speak into the unit behind it, keeping the later
+    unit's boundary. Runs on units rather than budgeted chunks so the merge
+    cannot change which budget a chunk is measured against."""
+    merged: list[tuple[str, str]] = []
+    for body, boundary in units:
+        if merged and _too_short(merged[-1][0]):
+            prev_body, _ = merged.pop()
+            merged.append((f"{prev_body} {body}".strip(), boundary))
+        else:
+            merged.append((body, boundary))
+    return merged
+
+
+def _merge_short(chunks: list[Chunk], spoken: int = 0) -> list[Chunk]:
+    """Fold sub-floor chunks into the one behind them, then re-apply the word
+    budget to whatever that produced.
+
+    _merge_short_units already handles the common case upstream, on units. This
+    is the net for what it cannot reach: a sub-floor tail left behind when a
+    unit does not divide evenly into its budgets. The re-budget matters either
+    way — a merge that does not re-check produces exactly the bug this pair was
+    written for, chunk 1 shipping at 19-21 spoken words against an 11-word
+    budget (6.2-6.9s of synthesis at the contended RTF, the 6.12s outlier in
+    session 20260916T225408 turn 2). Merging is right, because XTTS babbles on
+    two-word inputs; merging without re-budgeting is not.
+    """
     merged: list[Chunk] = []
     for c in chunks:
         if merged and _too_short(merged[-1].text):
@@ -205,4 +296,10 @@ def _merge_short(chunks: list[Chunk]) -> list[Chunk]:
             merged.append(Chunk(f"{prev.text} {c.text}".strip(), c.boundary))
         else:
             merged.append(c)
-    return merged
+
+    rebudgeted: list[Chunk] = []
+    for c in merged:
+        pieces = _split_to_budget(c.text, spoken + len(rebudgeted))
+        rebudgeted.extend(Chunk(p, "clause") for p in pieces[:-1])
+        rebudgeted.append(Chunk(pieces[-1], c.boundary))
+    return rebudgeted

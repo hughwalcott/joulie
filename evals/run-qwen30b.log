@@ -1,0 +1,72 @@
+Error: command buffer exited with error status.
+	The Metal Performance Shaders operations encoded on it may not have completed.
+	Error: 
+	(null)
+	Insufficient Memory (00000008:kIOGPUCommandBufferCallbackErrorOutOfMemory)
+	<AGXG16XFamilyCommandBuffer: 0xbcfbfc000>
+    label = <none> 
+    device = <AGXG16SDevice: 0xbcffc8000>
+        name = Apple M4 Pro 
+    commandQueue = <AGXG16XFamilyCommandQueue: 0x10032d2a0>
+        label = <none> 
+        device = <AGXG16SDevice: 0xbcffc8000>
+            name = Apple M4 Pro 
+    retainedReferences = 1
+Error: command buffer exited with error status.
+	The Metal Performance Shaders operations encoded on it may not have completed.
+	Error: 
+	(null)
+	Insufficient Memory (00000008:kIOGPUCommandBufferCallbackErrorOutOfMemory)
+	<AGXG16XFamilyCommandBuffer: 0xbd3688a80>
+    label = <none> 
+    device = <AGXG16SDevice: 0xbcffc8000>
+        name = Apple M4 Pro 
+    commandQueue = <AGXG16XFamilyCommandQueue: 0x10032d2a0>
+        label = <none> 
+        device = <AGXG16SDevice: 0xbcffc8000>
+            name = Apple M4 Pro 
+    retainedReferences = 1
+Error: command buffer exited with error status.
+	The Metal Performance Shaders operations encoded on it may not have completed.
+	Error: 
+	(null)
+	Insufficient Memory (00000008:kIOGPUCommandBufferCallbackErrorOutOfMemory)
+	<AGXG16XFamilyCommandBuffer: 0xbd3688a80>
+    label = <none> 
+    device = <AGXG16SDevice: 0xbcffc8000>
+        name = Apple M4 Pro 
+    commandQueue = <AGXG16XFamilyCommandQueue: 0x10032d2a0>
+        label = <none> 
+        device = <AGXG16SDevice: 0xbcffc8000>
+            name = Apple M4 Pro 
+    retainedReferences = 1
+Error: command buffer exited with error status.
+	The Metal Performance Shaders operations encoded on it may not have completed.
+	Error: 
+	(null)
+	Insufficient Memory (00000008:kIOGPUCommandBufferCallbackErrorOutOfMemory)
+	<AGXG16XFamilyCommandBuffer: 0xbd3688a80>
+    label = <none> 
+    device = <AGXG16SDevice: 0xbcffc8000>
+        name = Apple M4 Pro 
+    commandQueue = <AGXG16XFamilyCommandQueue: 0x10032d2a0>
+        label = <none> 
+        device = <AGXG16SDevice: 0xbcffc8000>
+            name = Apple M4 Pro 
+    retainedReferences = 1
+Error: command buffer exited with error status.
+	The Metal Performance Shaders operations encoded on it may not have completed.
+	Error: 
+	(null)
+	Insufficient Memory (00000008:kIOGPUCommandBufferCallbackErrorOutOfMemory)
+	<AGXG16XFamilyCommandBuffer: 0xbd3688a80>
+    label = <none> 
+    device = <AGXG16SDevice: 0xbcffc8000>
+        name = Apple M4 Pro 
+    commandQueue = <AGXG16XFamilyCommandQueue: 0x10032d2a0>
+        label = <none> 
+        device = <AGXG16SDevice: 0xbcffc8000>
+            name = Apple M4 Pro 
+    retainedReferences = 1
+/opt/homebrew/Cellar/python@3.11/3.11.15_4/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

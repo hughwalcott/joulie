@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -5,6 +6,19 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 from joulie import config
+
+
+@dataclass(frozen=True)
+class Source:
+    """One publisher whose material was put in front of the model for a turn.
+
+    Deliberately NOT called a citation: these are the chunks retrieval placed in
+    the prompt, which is not the same as what the answer actually leaned on. The
+    stance travels with the publisher so an advocacy source can never be
+    displayed as if it were a regulator.
+    """
+    publisher: str
+    stance: str
 
 
 class Retriever:
@@ -59,6 +73,21 @@ class Retriever:
         return chunks
 
     @staticmethod
+    def summarise_sources(chunks: list[dict[str, Any]]) -> tuple[Source, ...]:
+        """Collapse retrieved chunks to one entry per publisher, most-retrieved
+        first. Several chunks routinely come from one document, and a kiosk panel
+        has room for publishers, not chunks. A method rather than a module
+        function so joulie.llm can reach it through the retriever it already
+        holds — importing joulie.rag would drag chromadb and sentence-transformers
+        into every RAG-disabled run."""
+        counts: dict[Source, int] = {}
+        for c in chunks:
+            publisher = c.get("publisher_short") or c.get("publisher") or "unknown"
+            source = Source(publisher=publisher, stance=c.get("stance", "authoritative"))
+            counts[source] = counts.get(source, 0) + 1
+        return tuple(sorted(counts, key=lambda s: -counts[s]))
+
+    @staticmethod
     def format_context(chunks: list[dict[str, Any]]) -> str:
         """Group chunks by stance so the LLM sees the authoritative/advocacy
         split up-front. Advocacy is labelled explicitly so the model knows to
@@ -69,10 +98,14 @@ class Retriever:
         buckets: dict[str, list[dict[str, Any]]] = {
             "authoritative": [],
             "advocacy": [],
+            "vendor": [],
             "reference": [],
         }
         for c in chunks:
-            buckets.get(c["stance"], buckets["authoritative"]).append(c)
+            # Unknown stances land in "reference", never "authoritative" — a
+            # typo in a frontmatter tag must not promote a sales page to
+            # regulator status.
+            buckets.get(c["stance"], buckets["reference"]).append(c)
 
         parts: list[str] = []
 
@@ -93,6 +126,14 @@ class Retriever:
                 "## Advocacy — Rewiring Aotearoa (attribute claims to Rewiring, not as neutral fact)"
             )
             parts.extend(render_chunk(c) for c in buckets["advocacy"])
+        if buckets["vendor"]:
+            parts.append(
+                "## Manufacturer specifications (vendor material — these are the "
+                "manufacturer's own claims. Quote figures as the manufacturer's, "
+                "never as an independent finding, and never as a recommendation "
+                "or endorsement of the brand)"
+            )
+            parts.extend(render_chunk(c) for c in buckets["vendor"])
         if buckets["reference"]:
             parts.append("## Reference / signposting")
             parts.extend(render_chunk(c) for c in buckets["reference"])

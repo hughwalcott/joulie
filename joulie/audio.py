@@ -15,7 +15,7 @@ from TTS.api import TTS
 
 from joulie import config
 from joulie.quiet import allow_xtts_checkpoint_unpickling, silenced_stdout
-from joulie.sentences import Chunk, split_speakable
+from joulie.sentences import Chunk, split_speakable, split_to_budget
 
 allow_xtts_checkpoint_unpickling()
 
@@ -202,6 +202,7 @@ class Speaker:
                 self.tts = TTS(config.XTTS_MODEL)
             self._mode = "xtts"
             self._xtts_model = self.tts.synthesizer.tts_model
+            self._mps = _mps
             if _mps:
                 self._xtts_model = self._xtts_model.to("mps")
             self._xtts_sample_rate = config.XTTS_SAMPLE_RATE
@@ -209,7 +210,13 @@ class Speaker:
             # re-encoding of the reference WAV (the main source of 60s latency).
             print(f"[tts] computing speaker conditioning latents...")
             self._gpt_cond_latent, self._speaker_embedding = (
-                self._xtts_model.get_conditioning_latents(audio_path=[str(ref_wav)])
+                self._xtts_model.get_conditioning_latents(
+                    audio_path=[str(ref_wav)],
+                    gpt_cond_len=config.XTTS_GPT_COND_LEN,
+                    gpt_cond_chunk_len=config.XTTS_GPT_COND_CHUNK_LEN,
+                    max_ref_length=config.XTTS_MAX_REF_LEN,
+                    sound_norm_refs=config.XTTS_SOUND_NORM_REFS,
+                )
             )
             # Warm up MPS kernel JIT — first inference is slow without this.
             print(f"[tts] warming up {_device} kernels...")
@@ -255,6 +262,16 @@ class Speaker:
                 speed=config.XTTS_SPEED,
             )
             wav = np.array(out["wav"], dtype=np.float32)
+            if self._mps:
+                # PyTorch's MPS caching allocator never returns freed pages to
+                # the OS on its own — per-sentence inference on variable-length
+                # text left the driver-reserved pool growing unbounded across a
+                # session (logs/latency-analysis.md: isolate_xtts.py showed 2.9GB
+                # -> 9.3GB over 12 turns, and RSS climbing ~130MB/turn, with zero
+                # growth in either once this call is added). Costs nothing
+                # measurable in per-sentence synth time.
+                import torch
+                torch.mps.empty_cache()
             return self._resample(wav, self._xtts_sample_rate)
         else:
             wav = self.tts.tts(text=sentence, speaker=self._voice)
@@ -302,12 +319,17 @@ class Speaker:
         self._interrupt.clear()
         self._write(self._synth_sentence(text))
 
-    def say_stream(self, token_iter: Iterator[str]) -> None:
+    def say_stream(self, token_iter: Iterator[str]) -> dict:
+        """Returns TTS timing for the caller to fold into TurnMetrics:
+        {"ttfa_seconds", "chunk_synth_seconds", "chunk_rtf"}."""
         print("[tts] streaming pipeline starting")
         self._interrupt.clear()
         t0 = time.monotonic()
         chunk_q: queue.Queue = queue.Queue(maxsize=8)
         audio_q: queue.Queue = queue.Queue(maxsize=4)
+        synth_seconds: list = []
+        synth_rtf: list = []
+        result: dict = {"ttfa_seconds": None}
 
         def accumulate():
             remainder = ""
@@ -326,11 +348,21 @@ class Speaker:
                         print(f"[tts] +{time.monotonic() - t0:.2f}s first chunk queued")
                     print(f"[tts] chunk {count} [{c.boundary}]: {spoken[:60]}{'...' if len(spoken) > 60 else ''}")
                     chunk_q.put(Chunk(spoken, c.boundary))
-            tail = sanitize_for_speech(remainder)
-            if tail and not self._interrupt.is_set():
-                count += 1
-                print(f"[tts] chunk {count} (trailing): {tail[:60]}")
-                chunk_q.put(Chunk(tail, "sentence"))
+            # The end-of-stream flush used to queue whatever was left as ONE
+            # chunk, bypassing the word budget every other chunk goes through.
+            # Anything the splitter could not close off — a reply that stops
+            # without terminal punctuation, or text whose sentence boundaries
+            # were missed — landed here at full length: one answer in the eval
+            # corpus produced a 52-word tail, ~21s of audio in a single
+            # synthesis. Budget it like any other chunk.
+            if remainder.strip() and not self._interrupt.is_set():
+                for c in split_to_budget(remainder.strip(), spoken=count):
+                    spoken_text = sanitize_for_speech(c.text)
+                    if not spoken_text:
+                        continue
+                    count += 1
+                    print(f"[tts] chunk {count} (trailing) [{c.boundary}]: {spoken_text[:60]}")
+                    chunk_q.put(Chunk(spoken_text, c.boundary))
             print(f"[tts] accumulate done ({count} chunks)")
             chunk_q.put(_SENT_DONE)
 
@@ -348,7 +380,10 @@ class Speaker:
                     audio = self._synth_sentence(item.text)
                     synth_s = time.monotonic() - started
                     audio_s = max(audio.size / _DEVICE_RATE, 1e-6)
-                    print(f"[tts] synth {n}: {synth_s:.2f}s -> {audio_s:.2f}s audio (RTF {synth_s / audio_s:.2f})")
+                    rtf = synth_s / audio_s
+                    print(f"[tts] synth {n}: {synth_s:.2f}s -> {audio_s:.2f}s audio (RTF {rtf:.2f})")
+                    synth_seconds.append(synth_s)
+                    synth_rtf.append(rtf)
                     audio_q.put(np.concatenate([audio, _trailing_silence(item.boundary)]))
                 except Exception as exc:
                     print(f"[tts] synthesis error: {exc}")
@@ -375,7 +410,8 @@ class Speaker:
                     continue
                 n += 1
                 if n == 1:
-                    print(f"[tts] +{time.monotonic() - t0:.2f}s FIRST AUDIO to device")
+                    result["ttfa_seconds"] = time.monotonic() - t0
+                    print(f"[tts] +{result['ttfa_seconds']:.2f}s FIRST AUDIO to device")
                 self._write(item)
             print(f"[tts] playback done ({time.monotonic() - t0:.2f}s total)")
 
@@ -384,6 +420,9 @@ class Speaker:
         t_play = threading.Thread(target=play, daemon=True)
         t_acc.start(); t_syn.start(); t_play.start()
         t_acc.join(); t_syn.join(); t_play.join()
+        result["chunk_synth_seconds"] = synth_seconds
+        result["chunk_rtf"] = synth_rtf
+        return result
 
     def prerender_greeting(self, text: str, path: str) -> None:
         # Audio from _synth_sentence is already resampled to _DEVICE_RATE.
