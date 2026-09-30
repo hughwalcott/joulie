@@ -15,6 +15,8 @@ Te Rangi owns a workshop in Seaview and is tired of his LPG bill. At a chamber-o
 ### A3. Aroha asks in te reo Māori *(JTBD-03)*
 Aroha walks up, picks up the handset, and asks Joulie a question in te reo. Joulie detects the language, responds in te reo with the same factual content it would have offered in English, and continues the conversation in te reo until Aroha hangs up.
 
+*Status:* the language-switching path ships with Mandarin (`zh`) first. Te reo arrives through the text-only path (answer on screen, spoken English note) once it has been evaluated with a te reo speaker, and is spoken once a te reo voice exists.
+
 ### A4. Question beyond Joulie's scope *(JTBD-04)*
 Priya asks, "Can I get the council EV-charger subsidy if I'm renting?" Joulie says it doesn't have a confident answer on current subsidy eligibility and offers to record a spoken message for the Electrify the Hutt team. Priya says "yes please", speaks her question and a contact phone number, Joulie reads it back to confirm, and the recording is queued for the team to follow up.
 

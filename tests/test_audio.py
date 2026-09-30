@@ -68,3 +68,57 @@ class TestPassthrough:
         # XTTS's own cleaner expands these; we must not damage them first.
         text = "Households saved $284 in 2024, about 30% of the bill."
         assert sanitize_for_speech(text) == text
+
+
+class TestSanitizeMandarin:
+    def test_units_are_spoken_in_chinese(self):
+        assert sanitize_for_speech("每年节省300 kWh。", "zh") == "每年节省300 千瓦时。"
+
+    def test_units_touching_han_characters_are_still_found(self):
+        assert sanitize_for_speech("用kWh计算", "zh") == "用千瓦时计算"
+
+    def test_nz_becomes_the_chinese_name(self):
+        assert sanitize_for_speech("NZ的电价", "zh") == "新西兰的电价"
+
+    def test_acronyms_are_still_spelled_out(self):
+        assert sanitize_for_speech("根据EECA的数据", "zh") == "根据E E C A的数据"
+
+    def test_english_is_the_default(self):
+        assert sanitize_for_speech("300 kWh") == "300 kilowatt hours"
+
+
+class TestSanitizeOtherLanguages:
+    def test_german_units_and_country(self):
+        assert (sanitize_for_speech("Rund 3000 kWh pro Jahr in NZ.", "de")
+                == "Rund 3000 Kilowattstunden pro Jahr in Neuseeland.")
+
+    def test_french_units(self):
+        assert sanitize_for_speech("6,5 kW", "fr") == "6,5 kilowatts"
+
+    def test_hindi_spells_out_its_numbers(self):
+        # XTTS expands digits for every voiced language except Hindi.
+        assert sanitize_for_speech("2024 में 300 kWh", "hi") == "दो हज़ार चौबीस में तीन सौ किलोवाट घंटे"
+
+    def test_european_digits_are_left_for_the_xtts_cleaner(self):
+        assert "3000" in sanitize_for_speech("3000 kWh", "es")
+
+    def test_an_unknown_language_falls_back_to_english_forms(self):
+        assert sanitize_for_speech("300 kWh", "xx") == "300 kilowatt hours"
+
+
+class TestWhisperRouting:
+    def _transcriber(self, monkeypatch):
+        from joulie import config
+        from joulie.audio import Transcriber
+        monkeypatch.setattr(config, "WHISPER_STRONG_LANGUAGES", ("hi",))
+        t = Transcriber.__new__(Transcriber)
+        t.model, t.strong_model = "base", "small"
+        return t
+
+    def test_hindi_is_transcribed_by_the_stronger_model(self, monkeypatch):
+        assert self._transcriber(monkeypatch)._model_for("hi") == "small"
+
+    def test_detection_and_english_stay_on_base(self, monkeypatch):
+        t = self._transcriber(monkeypatch)
+        assert t._model_for(None) == "base" and t._model_for("en") == "base"
+        assert t._model_for("de") == "base"

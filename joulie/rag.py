@@ -29,6 +29,7 @@ class Retriever:
         embed_model: str = config.EMBED_MODEL,
         top_k: int = config.RAG_TOP_K,
         distance_threshold: float = config.RAG_DISTANCE_THRESHOLD,
+        multilingual: bool = True,
     ):
         print(f"[rag] loading embedding model '{embed_model}'...")
         self.embed_model = SentenceTransformer(embed_model)
@@ -41,11 +42,47 @@ class Retriever:
         self.distance_threshold = distance_threshold
         print(f"[rag] {self.collection.count()} chunks indexed")
 
-    def retrieve(self, query: str) -> list[dict[str, Any]]:
-        if not query.strip() or self.collection.count() == 0:
+        self.ml_model = None
+        self.ml_collection = None
+        if multilingual and (set(config.LANGUAGES) | set(config.TEXT_ONLY_LANGUAGES)) - {"en"}:
+            self._load_multilingual()
+
+    def _load_multilingual(self) -> None:
+        try:
+            collection = self.client.get_collection(config.MULTILINGUAL_CHROMA_COLLECTION)
+        except Exception:
+            collection = None
+        if collection is None or collection.count() == 0:
+            print(f"[rag] no '{config.MULTILINGUAL_CHROMA_COLLECTION}' collection — "
+                  f"non-English questions will retrieve on their English translation. "
+                  f"Run ingest.py to build it.")
+            return
+        if collection.count() != self.collection.count():
+            print(f"[rag] WARNING: multilingual collection has {collection.count()} chunks "
+                  f"against {self.collection.count()} — run ingest.py to resync")
+        print(f"[rag] loading multilingual embedding model '{config.MULTILINGUAL_EMBED_MODEL}'...")
+        # CPU on purpose: a single short query embeds in ~7ms there, and Metal is
+        # already contended by Ollama and XTTS. When that memory ran out, MPS
+        # returned corrupt embeddings without raising (evals/multilingual_retrieval.py).
+        self.ml_model = SentenceTransformer(config.MULTILINGUAL_EMBED_MODEL, device="cpu")
+        self.ml_collection = collection
+
+    def handles(self, lang: str) -> bool:
+        """Whether a question in `lang` can be searched as asked, without first
+        being translated to English."""
+        return (lang == "en" or (self.ml_collection is not None
+                                 and lang in config.RAG_MULTILINGUAL_LANGUAGES))
+
+    def retrieve(self, query: str, lang: str = "en") -> list[dict[str, Any]]:
+        if lang != "en" and self.handles(lang):
+            model, collection = self.ml_model, self.ml_collection
+            threshold = config.RAG_MULTILINGUAL_DISTANCE_THRESHOLD
+        else:
+            model, collection, threshold = self.embed_model, self.collection, self.distance_threshold
+        if not query.strip() or collection.count() == 0:
             return []
-        embedding = self.embed_model.encode([query], convert_to_numpy=True).tolist()
-        result = self.collection.query(
+        embedding = model.encode([query], convert_to_numpy=True).tolist()
+        result = collection.query(
             query_embeddings=embedding,
             n_results=self.top_k,
         )
@@ -55,7 +92,7 @@ class Retriever:
 
         chunks: list[dict[str, Any]] = []
         for doc, meta, dist in zip(docs, metas, dists):
-            if dist > self.distance_threshold:
+            if dist > threshold:
                 continue
             chunks.append({
                 "text": doc,

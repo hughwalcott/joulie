@@ -4,6 +4,7 @@ import threading
 import time
 import wave
 from collections.abc import Iterator
+from dataclasses import dataclass
 from pathlib import Path
 # Bound directly because the PortAudio callback signature shadows `time`.
 from time import monotonic
@@ -13,7 +14,7 @@ import sounddevice as sd
 from faster_whisper import WhisperModel
 from TTS.api import TTS
 
-from joulie import config
+from joulie import config, language, numbers_hi
 from joulie.quiet import allow_xtts_checkpoint_unpickling, silenced_stdout
 from joulie.sentences import Chunk, split_speakable, split_to_budget
 
@@ -40,27 +41,38 @@ _ALNUM_RE = re.compile(r"\w")
 # XTTS lowercases its input before synthesis, so acronyms arrive as pronounceable
 # words ("EECA" → "eeca") unless we respell them as spaced letters. Its number
 # cleaner expands the digits but leaves units alone ("6.5 kW" → "six point five
-# kw"), so units are spelled out here too. Order matters — kWh before kW.
-_SPOKEN_FORMS = tuple(
-    (re.compile(rf"\b{pattern}\b"), replacement)
-    for pattern, replacement in (
-        ("kWh", "kilowatt hours"),
-        ("MWh", "megawatt hours"),
-        ("kW", "kilowatts"),
-        ("EECA", "E E C A"),
-        ("MBIE", "M B I E"),
-        ("ICP", "I C P"),
-        ("QR", "Q R"),
-        ("EV", "E V"),
-        ("PV", "P V"),
-        ("LED", "L E D"),
-        ("EA", "E A"),
-        ("NZ", "New Zealand"),
-    )
+# kw"), so units are spelled out here too, in the language being spoken — each
+# language's words live in joulie/language.py. Order matters — kWh before kW.
+#
+# Bounded on ASCII rather than \b: Python counts Han characters as word
+# characters, so \b never fires between "用" and "kWh" in a Chinese reply.
+_ACRONYMS = (
+    ("EECA", "E E C A"),
+    ("MBIE", "M B I E"),
+    ("ICP", "I C P"),
+    ("QR", "Q R"),
+    ("EV", "E V"),
+    ("PV", "P V"),
+    ("LED", "L E D"),
+    ("EA", "E A"),
 )
 
 
-def sanitize_for_speech(text: str) -> str:
+def _compile(pairs):
+    return tuple(
+        (re.compile(rf"(?<![A-Za-z0-9_]){pattern}(?![A-Za-z0-9_])"), replacement)
+        for pattern, replacement in pairs
+    )
+
+
+_SPOKEN_FORMS = {
+    code: _compile(tuple(zip(("kWh", "MWh", "kW"), entry.units)) + _ACRONYMS
+                   + (("NZ", entry.country),))
+    for code, entry in language.LANGUAGES.items()
+}
+
+
+def sanitize_for_speech(text: str, lang: str = "en") -> str:
     """Strip URLs and markdown decoration from a chunk before it reaches TTS and
     respell acronyms and units that XTTS would otherwise mangle. UI display keeps
     the original text; only the spoken stream is scrubbed.
@@ -70,8 +82,11 @@ def sanitize_for_speech(text: str) -> str:
     """
     text = _URL_RE.sub("", text)
     text = text.translate(_MARKDOWN_CHARS)
-    for pattern, replacement in _SPOKEN_FORMS:
+    for pattern, replacement in _SPOKEN_FORMS.get(lang, _SPOKEN_FORMS["en"]):
         text = pattern.sub(replacement, text)
+    if lang == "hi":
+        # The one voiced language whose digits XTTS leaves unexpanded.
+        text = numbers_hi.expand_numbers(text)
     text = _ORPHAN_PUNCT_RE.sub(r"\1", text)
     text = _WS_RE.sub(" ", text).strip()
     if not _ALNUM_RE.search(text):
@@ -159,15 +174,45 @@ class Recorder:
         return np.concatenate(frames, axis=0).flatten()
 
 
+@dataclass(frozen=True)
+class Transcript:
+    text: str
+    language: str
+    probability: float = 1.0
+    # Whisper's full (language, probability) list — only present when Whisper
+    # detected the language itself rather than being told it.
+    all_probs: tuple = ()
+
+
+# Steers Whisper's script when the language is forced — the auto-detect pass
+# cannot know what it is transcribing. Mandarin comes out in Traditional or
+# Simplified characters at whim; Hindi comes out romanised. The Hindi prompt
+# only helps WHISPER_STRONG_MODEL: base, given it, hallucinates.
+_INITIAL_PROMPTS = {
+    "zh": "以下是普通话的句子。",
+    "hi": "नमस्ते, यह हिंदी में एक वाक्य है।",
+}
+
+
 class Transcriber:
     def __init__(self, model_name: str = config.WHISPER_MODEL):
         print(f"[stt] loading faster-whisper '{model_name}'...")
         self.model = WhisperModel(model_name, device="cpu", compute_type="int8")
+        self.strong_model = None
+        strong = set(config.WHISPER_STRONG_LANGUAGES) & language.active_codes()
+        if strong:
+            print(f"[stt] loading faster-whisper '{config.WHISPER_STRONG_MODEL}' "
+                  f"for {', '.join(sorted(strong))}...")
+            self.strong_model = WhisperModel(config.WHISPER_STRONG_MODEL, device="cpu",
+                                             compute_type="int8")
 
-    def transcribe(self, audio: np.ndarray) -> tuple[str, str]:
-        if audio.size == 0:
-            return "", "en"
-        segments, info = self.model.transcribe(
+    def _model_for(self, lang: str | None):
+        if lang in config.WHISPER_STRONG_LANGUAGES and self.strong_model is not None:
+            return self.strong_model
+        return self.model
+
+    def _run(self, audio: np.ndarray, **kw):
+        segments, info = self._model_for(kw.get("language")).transcribe(
             audio,
             beam_size=1,
             vad_filter=True,
@@ -175,9 +220,41 @@ class Transcriber:
             # ("Hi, I'm Joulie" transcribed as "I'm Joulie"), which changes the
             # question the LLM is asked.
             vad_parameters={"speech_pad_ms": 400},
+            **kw,
         )
-        text = " ".join(seg.text.strip() for seg in segments).strip()
-        return text, info.language
+        return " ".join(seg.text.strip() for seg in segments).strip(), info
+
+    def transcribe(self, audio: np.ndarray, lang: str | None = None) -> Transcript:
+        """Auto-detects when `lang` is None — the one-pass common case.
+        SessionCore passes a language only to redo a detection it rejected."""
+        if audio.size == 0:
+            return Transcript("", lang or language.DEFAULT)
+        kw = {}
+        if lang is not None:
+            kw["language"] = lang
+            if lang in _INITIAL_PROMPTS:
+                kw["initial_prompt"] = _INITIAL_PROMPTS[lang]
+        text, info = self._run(audio, **kw)
+        return Transcript(
+            text=text,
+            language=info.language,
+            probability=info.language_probability,
+            all_probs=tuple(info.all_language_probs or ()),
+        )
+
+    def translate(self, audio: np.ndarray, lang: str) -> str:
+        """English rendering of a non-English utterance. The knowledge base and
+        its embedder are English-only, so this — not the transcript — is what
+        retrieval searches with."""
+        if audio.size == 0:
+            return ""
+        text, _ = self._run(audio, language=lang, task="translate")
+        return text
+
+
+# A word each warm-up can pronounce: XTTS babbles on a lone Latin "ok" in a
+# script it doesn't expect.
+_WARMUP_TEXT = {"zh": "好", "hi": "नमस्ते", "ru": "да"}
 
 
 _SENT_DONE = object()
@@ -218,14 +295,19 @@ class Speaker:
                     sound_norm_refs=config.XTTS_SOUND_NORM_REFS,
                 )
             )
-            # Warm up MPS kernel JIT — first inference is slow without this.
+            # Warm up MPS kernel JIT — first inference is slow without this. The
+            # other languages in XTTS_WARMUP_LANGUAGES get one too: zh-cn loads
+            # pypinyin and its tokenizer path on first use, which would otherwise
+            # land on the first Mandarin visitor's answer.
             print(f"[tts] warming up {_device} kernels...")
-            self._xtts_model.inference(
-                text="ok",
-                language=config.XTTS_LANGUAGE,
-                gpt_cond_latent=self._gpt_cond_latent,
-                speaker_embedding=self._speaker_embedding,
-            )
+            for lang in [c for c in config.XTTS_WARMUP_LANGUAGES
+                         if c in language.active_codes() and self.can_speak(c)]:
+                self._xtts_model.inference(
+                    text=_WARMUP_TEXT.get(lang, "ok"),
+                    language=self._xtts_code(lang),
+                    gpt_cond_latent=self._gpt_cond_latent,
+                    speaker_embedding=self._speaker_embedding,
+                )
             print(f"[tts] XTTS-v2 ready (device: {_device}, output: {_DEVICE_RATE}Hz)")
         else:
             print(f"[tts] reference WAV not found — falling back to VITS '{model_name}'")
@@ -251,12 +333,24 @@ class Speaker:
         self._out.start()
         print("[tts] OutputStream ready (stays open for the process lifetime)")
 
-    def _synth_sentence(self, sentence: str) -> np.ndarray:
+    @staticmethod
+    def _xtts_code(lang: str) -> str:
+        # English keeps honouring JOULIE_XTTS_LANGUAGE.
+        return config.XTTS_LANGUAGE if lang == "en" else language.get(lang).xtts_code
+
+    def can_speak(self, lang: str) -> bool:
+        """The VITS fallback is English-only; XTTS covers every language with an
+        xtts_code that isn't configured as text-only."""
+        if lang == "en":
+            return True
+        return getattr(self, "_mode", None) == "xtts" and not language.is_text_only(lang)
+
+    def _synth_sentence(self, sentence: str, lang: str = "en") -> np.ndarray:
         if self._mode == "xtts":
             # Use cached conditioning latents — avoids re-encoding ref WAV each call.
             out = self._xtts_model.inference(
                 text=sentence,
-                language=config.XTTS_LANGUAGE,
+                language=self._xtts_code(lang),
                 gpt_cond_latent=self._gpt_cond_latent,
                 speaker_embedding=self._speaker_embedding,
                 speed=config.XTTS_SPEED,
@@ -313,13 +407,13 @@ class Speaker:
         except Exception as exc:
             print(f"[tts] stop failed: {exc}")
 
-    def say(self, text: str) -> None:
+    def say(self, text: str, lang: str = "en") -> None:
         if not text.strip():
             return
         self._interrupt.clear()
-        self._write(self._synth_sentence(text))
+        self._write(self._synth_sentence(text, lang))
 
-    def say_stream(self, token_iter: Iterator[str]) -> dict:
+    def say_stream(self, token_iter: Iterator[str], lang: str = "en") -> dict:
         """Returns TTS timing for the caller to fold into TurnMetrics:
         {"ttfa_seconds", "chunk_synth_seconds", "chunk_rtf"}."""
         print("[tts] streaming pipeline starting")
@@ -340,7 +434,7 @@ class Speaker:
                 remainder += token
                 chunks, remainder = split_speakable(remainder, spoken=count)
                 for c in chunks:
-                    spoken = sanitize_for_speech(c.text)
+                    spoken = sanitize_for_speech(c.text, lang)
                     if not spoken:
                         continue
                     count += 1
@@ -357,7 +451,7 @@ class Speaker:
             # synthesis. Budget it like any other chunk.
             if remainder.strip() and not self._interrupt.is_set():
                 for c in split_to_budget(remainder.strip(), spoken=count):
-                    spoken_text = sanitize_for_speech(c.text)
+                    spoken_text = sanitize_for_speech(c.text, lang)
                     if not spoken_text:
                         continue
                     count += 1
@@ -377,7 +471,7 @@ class Speaker:
                 n += 1
                 try:
                     started = time.monotonic()
-                    audio = self._synth_sentence(item.text)
+                    audio = self._synth_sentence(item.text, lang)
                     synth_s = time.monotonic() - started
                     audio_s = max(audio.size / _DEVICE_RATE, 1e-6)
                     rtf = synth_s / audio_s

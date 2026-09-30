@@ -12,8 +12,11 @@ class FakeRetriever:
     def __init__(self, chunks=None):
         self.chunks = chunks or []
 
-    def retrieve(self, text):
+    def retrieve(self, text, lang="en"):
         return self.chunks
+
+    def handles(self, lang):
+        return lang == "en"
 
     def summarise_sources(self, chunks):
         return tuple(c["publisher_short"] for c in chunks)
@@ -369,3 +372,126 @@ class TestContextWindowWarning:
         agent = make_agent(num_ctx=0)
         agent._warn_if_near_ctx(999999)
         assert capsys.readouterr().out == ""
+
+
+class TestLanguageDirective:
+    """JTBD-03. The directive rides on the current question only — never in the
+    system prompt, where Ollama would hoist it and break the KV prefix, and never
+    in history, where every later turn would pay for it again."""
+
+    CHUNKS = [{"text": "Heat pumps are efficient.", "publisher_short": "EECA"}]
+
+    def test_an_english_turn_is_unchanged(self):
+        agent = make_agent(retriever=FakeRetriever(self.CHUNKS))
+        messages, _ = agent._build_messages("what about heat pumps?")
+        assert messages[-1]["content"].endswith("\n\nwhat about heat pumps?")
+        assert "Reply in" not in messages[-1]["content"]
+
+    def test_a_mandarin_turn_carries_the_directive_on_the_question(self):
+        agent = make_agent(retriever=FakeRetriever(self.CHUNKS))
+        messages, _ = agent._build_messages("热泵怎么样？", lang="zh")
+        assert "Simplified Chinese" in messages[-1]["content"]
+        assert messages[-1]["content"].endswith("热泵怎么样？")
+        assert messages[0] == {"role": "system", "content": "SYS"}
+
+    def test_the_directive_never_enters_history(self):
+        agent = make_agent(retriever=FakeRetriever(self.CHUNKS))
+        finish_turn_lang(agent, "热泵怎么样？", "热泵很高效。", "zh")
+        messages, _ = agent._build_messages("多少钱？", lang="zh")
+        assert user_texts(messages)[0] == "热泵怎么样？"
+
+    def test_under_system_placement_the_directive_stays_off_the_system_role(self):
+        agent = make_agent(retriever=FakeRetriever(self.CHUNKS), rag_placement="system")
+        messages, _ = agent._build_messages("热泵怎么样？", lang="zh")
+        system = [m["content"] for m in messages if m["role"] == "system"]
+        assert not any("Simplified Chinese" in c for c in system)
+        assert "Simplified Chinese" in messages[-1]["content"]
+
+    def test_retrieval_searches_with_the_english_query(self):
+        seen = []
+
+        class Recording(FakeRetriever):
+            def retrieve(self, text, lang="en"):
+                seen.append((text, lang))
+                return self.chunks
+
+        agent = make_agent(retriever=Recording(self.CHUNKS))
+        agent._build_messages("热泵怎么样？", lang="zh", retrieval_query="What about heat pumps?")
+        assert seen == [("What about heat pumps?", "en")]
+
+    def test_a_covered_language_is_searched_as_asked(self):
+        seen = []
+
+        class Multilingual(FakeRetriever):
+            def retrieve(self, text, lang="en"):
+                seen.append((text, lang))
+                return self.chunks
+
+            def handles(self, lang):
+                return True
+
+        agent = make_agent(retriever=Multilingual(self.CHUNKS))
+        agent._build_messages("हीट पंप कैसा है?", lang="hi", retrieval_query="unused")
+        assert seen == [("हीट पंप कैसा है?", "hi")]
+
+
+def finish_turn_lang(agent, user_text, reply_text, lang):
+    messages, current_turn = agent._build_messages(user_text, lang=lang)
+    current_turn.append({"role": "assistant", "content": reply_text})
+    return messages
+
+
+class TestEuropeanDirective:
+    def test_a_german_turn_is_asked_for_in_german(self):
+        agent = make_agent(retriever=FakeRetriever(TestLanguageDirective.CHUNKS))
+        messages, _ = agent._build_messages("Lohnt sich eine Wärmepumpe?", lang="de")
+        assert "Reply in German" in messages[-1]["content"]
+        assert "Billy" in messages[-1]["content"]
+
+
+class TestPerLanguageBudgets:
+    """LLM_NUM_PREDICT and the history cap were sized on English. Hindi costs
+    Qwen ~5.6x the tokens for the same text, so both scale by language."""
+
+    def test_english_keeps_its_cap(self):
+        agent = make_agent(num_predict=260)
+        assert agent._options("en")["num_predict"] == 260
+
+    def test_hindi_gets_room_to_finish_its_answer(self):
+        agent = make_agent(num_predict=260)
+        assert agent._options("hi")["num_predict"] >= 260 * 5
+
+    def test_a_disabled_cap_stays_disabled_in_every_language(self):
+        agent = make_agent(num_predict=0)
+        assert "num_predict" not in agent._options("hi")
+
+    def test_warmup_can_still_override(self):
+        assert make_agent(num_predict=260)._options(num_predict=1)["num_predict"] == 1
+
+
+class TestTokenTrim:
+    def _agent_with_history(self, turns, prompt_tokens, answer_tokens):
+        agent = make_agent(max_history_turns=16, trim_to=8, num_ctx=8192, num_predict=260)
+        for i in range(turns):
+            finish_turn(agent, f"q{i}", f"a{i}")
+        agent.last_eval_stats = {"prompt_eval_count": prompt_tokens, "eval_count": answer_tokens}
+        return agent
+
+    def test_a_hindi_session_near_num_ctx_halves_its_history(self):
+        # Five Hindi turns in, the prompt is already most of the window.
+        agent = self._agent_with_history(6, prompt_tokens=4800, answer_tokens=700)
+        agent._build_messages("अगला सवाल", lang="hi")
+        assert len(agent.turns) == 3 + 1
+        assert agent.last_prompt_stats["history_trimmed"]
+
+    def test_an_english_session_well_inside_the_window_is_untouched(self):
+        # Turn 17 of a long English visit: ~3.9k tokens, far from 80% of 8192.
+        agent = self._agent_with_history(16, prompt_tokens=3700, answer_tokens=200)
+        agent._build_messages("next question")
+        assert len(agent.turns) == 17
+        assert not agent.last_prompt_stats["history_trimmed"]
+
+    def test_no_stats_yet_means_no_trim(self):
+        agent = self._agent_with_history(3, prompt_tokens=0, answer_tokens=0)
+        agent._build_messages("next", lang="hi")
+        assert len(agent.turns) == 4

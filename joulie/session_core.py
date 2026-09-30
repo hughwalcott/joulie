@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from joulie import config, metrics
+from joulie import config, language, metrics
 from joulie.audio import Recorder, Speaker, Transcriber
 from joulie.llm import Agent
 from joulie.power import PowerSampler
@@ -68,6 +68,15 @@ class SessionCore:
         self._in_session = False
         self._processing = False
         self._lock = threading.Lock()
+        # The language Joulie is answering in (JTBD-03). Starts in English each
+        # session — the greeting is spoken before anyone has said anything.
+        self._session_lang = language.DEFAULT
+        self._fallback_noticed = False
+        unreviewed = language.unreviewed()
+        if unreviewed:
+            print(f"[session] answering in {len(language.active_codes())} languages; "
+                  f"disclaimer and error line not yet checked by a native speaker "
+                  f"for: {', '.join(unreviewed)}")
 
         # Set by the handset driver: it must not start recording until the
         # greeting has finished playing, or the greeting lands in the recording.
@@ -79,6 +88,10 @@ class SessionCore:
     @property
     def in_session(self) -> bool:
         return self._in_session
+
+    @property
+    def session_lang(self) -> str:
+        return self._session_lang
 
     @property
     def recording(self) -> bool:
@@ -97,6 +110,8 @@ class SessionCore:
                 return False
             self._in_session = True
         self.agent.reset()
+        self._session_lang = language.DEFAULT
+        self._fallback_noticed = False
         self._session_id = time.strftime("%Y%m%dT%H%M%S")
         self._session_started_at = time.time()
         self._turn_metrics = []
@@ -146,6 +161,9 @@ class SessionCore:
                 self._recording = False
         print("[session] on-hook — clearing context")
         self.agent.reset()
+        # The next visitor starts in English whatever this one spoke (JTBD-05).
+        self._session_lang = language.DEFAULT
+        self._fallback_noticed = False
         # Called unbound (not self._flush_session_summary()) so end_session keeps
         # working against the bare CoreStub in tests/test_session_core.py, which
         # only defines the attributes end_session historically touched.
@@ -233,16 +251,52 @@ class SessionCore:
                 return
 
             print("[stt] transcribing...")
-            text, lang = self.transcriber.transcribe(audio)
+            transcript = self.transcriber.transcribe(audio)
+            lang = language.choose_language(
+                self._session_lang, transcript.all_probs,
+                audio.size / config.SAMPLE_RATE,
+            )
+            tm.stt_detected_language = transcript.language
+            tm.stt_language_probability = transcript.probability
+            if lang != transcript.language or lang != language.DEFAULT:
+                # Redone in the session's language when Whisper transcribed in one
+                # the policy rejected (English half-heard as Welsh, a short "ok"
+                # mid-Mandarin), and on every non-English turn: the auto-detect
+                # pass has no initial prompt, and for Mandarin it wrote
+                # Traditional characters with misheard words (熱水氣 for 热水器)
+                # that the prompted pass got right. English never pays this.
+                print(f"[stt] detected {transcript.language} "
+                      f"(p={transcript.probability:.2f}) — transcribing as {lang}")
+                transcript = self.transcriber.transcribe(audio, lang)
+                tm.stt_retranscribed = True
+            if lang != self._session_lang:
+                print(f"[lang] session switched {self._session_lang} -> {lang}")
+                self._session_lang = lang
+            tm.response_language = lang
+            text = transcript.text
             tm.stt_seconds = time.monotonic() - turn_start
             print(f"[stt] +{tm.stt_seconds:.2f}s transcribe done")
             if not text:
                 print("[stt] no speech detected")
-                yield TurnEvent(status="listening", error="no speech")
+                yield TurnEvent(status="listening", error="no speech", lang=lang)
                 return
 
             print(f"[visitor] ({lang}) {text}")
             yield TurnEvent(status="thinking", visitor=text, lang=lang)
+
+            retrieval_query = None
+            retriever = self.agent.retriever
+            # A second Whisper pass of 1-2s, and a loose one ("power plans" came
+            # back as "power plants"), so only for languages the multilingual
+            # index cannot search as asked.
+            if (lang != language.DEFAULT and retriever is not None
+                    and not retriever.handles(lang)):
+                translate_start = time.monotonic()
+                retrieval_query = self.transcriber.translate(audio, lang) or None
+                tm.stt_translate_seconds = time.monotonic() - translate_start
+                print(f"[stt] +{tm.stt_translate_seconds:.2f}s translated for "
+                      f"retrieval: {retrieval_query}")
+            voiced = self.speaker.can_speak(lang)
 
             # Tee the LLM token stream: TTS thread consumes one copy, UI updates from the other.
             ui_q: queue.Queue = queue.Queue()
@@ -253,7 +307,8 @@ class SessionCore:
                 llm_start = time.monotonic()
                 tokens = 0
                 try:
-                    for token in self.agent.stream(text):
+                    for token in self.agent.stream(text, lang=lang,
+                                                   retrieval_query=retrieval_query):
                         tokens += 1
                         if first:
                             tm.llm_ttft_seconds = time.monotonic() - turn_start
@@ -278,7 +333,17 @@ class SessionCore:
 
             def run_tts():
                 try:
-                    tts_stats = self.speaker.say_stream(iter_tts())
+                    if not voiced:
+                        # A language Joulie understands but cannot voice: the
+                        # answer goes to the screen only, with a spoken English
+                        # note the first time so the visitor knows to look.
+                        if not self._fallback_noticed:
+                            self._fallback_noticed = True
+                            self.speaker.say(language.fallback_notice(lang))
+                        for _ in iter_tts():
+                            pass
+                        return
+                    tts_stats = self.speaker.say_stream(iter_tts(), lang)
                     tm.tts_ttfa_seconds = tts_stats.get("ttfa_seconds") or 0.0
                     tm.tts_chunk_synth_seconds = tts_stats.get("chunk_synth_seconds", [])
                     tm.tts_chunk_rtf = tts_stats.get("chunk_rtf", [])
@@ -318,7 +383,7 @@ class SessionCore:
                     yield TurnEvent(
                         status="speaking" if reply else "thinking",
                         visitor=text, joulie=reply, tool=turn_tool,
-                        sources=turn_sources,
+                        sources=turn_sources, lang=lang,
                     )
                     continue
                 if item is None:
@@ -339,7 +404,7 @@ class SessionCore:
                         sentences_seen = len(sentences)
                         turn_tool = detect_tool(reply) or turn_tool
                 yield TurnEvent(status="speaking", visitor=text, joulie=reply,
-                                tool=turn_tool, sources=turn_sources)
+                                tool=turn_tool, sources=turn_sources, lang=lang)
 
             # Block until audio playback completes so we don't cut off the tail.
             tts_thread.join()
@@ -382,6 +447,9 @@ class SessionCore:
                 f"ttft={tm.llm_ttft_seconds:.2f}s(llm {tm.llm_post_ttft_seconds:.2f}s) "
                 f"ttfa={tm.tts_ttfa_seconds:.2f}s "
                 f"max_rtf={tm.tts_rtf_max:.2f} prompt={tm.prompt_chars}chars "
+                f"lang={tm.response_language}(stt {tm.stt_detected_language} "
+                f"p={tm.stt_language_probability:.2f}"
+                f"{' retranscribed' if tm.stt_retranscribed else ''}) "
                 f"history={tm.history_turns}turns rag={tm.rag_chunk_count}chunks "
                 f"prefill={tm.prompt_eval_count}tok/{tm.prompt_eval_seconds:.2f}s"
                 f"({tm.prompt_eval_tokens_per_second:.0f}tok/s)"
@@ -396,12 +464,16 @@ class SessionCore:
             else:
                 print("[tool] no keyword match in reply — tool panel stays hidden")
             yield TurnEvent(status="listening", visitor=text, joulie=reply,
-                            tool=detected, sources=self.agent.last_sources)
+                            tool=detected, sources=self.agent.last_sources, lang=lang)
 
         except Exception as exc:
             print(f"[agent] error: {exc}")
             try:
-                self.speaker.say("Sorry, I had trouble thinking just then. Please try again.")
+                lang = getattr(self, "_session_lang", language.DEFAULT)
+                if self.speaker.can_speak(lang):
+                    self.speaker.say(language.get(lang).error_line, lang)
+                else:
+                    self.speaker.say(language.get(language.DEFAULT).error_line)
             except Exception:
                 pass
             yield TurnEvent(status="listening", error=str(exc))

@@ -5,15 +5,23 @@ _ABBREVS = frozenset({
     "mr", "mrs", "ms", "dr", "prof", "sr", "jr", "st",
     "nz", "eg", "ie", "etc", "approx", "dept", "govt",
     "inc", "ltd", "vs", "no",
+    # European abbreviations common in the answers Joulie gives in those
+    # languages. Single letters ("z. B.", "M.") are already caught below.
+    "bzw", "ca", "usw", "nr", "inkl", "ggf", "mme", "env", "sra",
+    "ecc", "sig", "ul", "tj", "np", "tzn", "vgl",
 })
 
 # Matches sentence-ending punctuation followed by whitespace or end-of-string.
-_END_RE = re.compile(r'([.?!]+["\']?)(\s+|$)')
+# Chinese full stops need neither: the next sentence starts on the very next
+# character. Hindi's danda (। and ॥) is unambiguous the same way — it never
+# marks an abbreviation or a decimal. Group 1 is the Latin form, group 2 these.
+_END_RE = re.compile(r'([.?!]+["\']?)(?:\s+|$)|([。！？।॥]+[”」』]?)\s*')
 
 # Points inside a sentence where a break still sounds natural: a comma, colon
 # or semicolon, or a spaced dash. Breaking anywhere else leaves XTTS with a
 # falling terminal contour mid-clause, which is heard as a cut-off word.
-_CLAUSE_RE = re.compile(r'[,;:](?=\s)|\s[—–]\s|\s-\s')
+# Full-width Chinese clause marks carry no trailing space.
+_CLAUSE_RE = re.compile(r'[,;:](?=\s)|\s[—–]\s|\s-\s|[，；：、]')
 
 # XTTS produces babble on very short inputs, so a chunk below this floor is
 # folded into its neighbour rather than synthesised alone.
@@ -31,6 +39,15 @@ MIN_FIRST_CHUNK_WORDS = 8
 # run to 12s of audio and starve the output stream mid-answer.
 _NUMBER_RE = re.compile(r'\d[\d,]*(?:\.\d+)?')
 _SPOKEN_UNIT_RE = re.compile(r'[$%]')
+
+# Chinese has no spaces, so it is budgeted by character: XTTS speaks roughly two
+# Han characters in the time of one English word. A starting estimate — calibrate
+# against scripts/isolate_xtts.py with Chinese text. XTTS also truncates any
+# single zh input past 82 characters; the budgets below keep chunks well under.
+_CJK_RE = re.compile(r'[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]')
+CJK_CHARS_PER_WORD = 2
+# One token per Han character, so a word-gap cut can land inside Chinese text.
+_TOKEN_RE = re.compile(r'[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff][。！？，；：、”」』]*|[^\s\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+')
 
 # XTTS speaks at ~2.45 spoken words per second, so a chunk's word count fixes
 # both how long it takes to synthesise and how much playback time it buys the
@@ -84,6 +101,13 @@ def split_sentences(text: str) -> tuple[list[str], str]:
     pos = 0
 
     for m in _END_RE.finditer(text):
+        if m.group(1) is None:
+            # CJK terminator — no abbreviation or numbering to second-guess.
+            sentence = text[pos:m.end()].strip()
+            if sentence:
+                sentences.append(sentence)
+            pos = m.end()
+            continue
         punc_start = m.start(1)
 
         # Get the word token immediately before the punctuation.
@@ -208,11 +232,20 @@ def spoken_words(text: str) -> int:
         for m in _NUMBER_RE.finditer(text)
     )
     extra += len(_SPOKEN_UNIT_RE.findall(text))
-    return len(text.split()) + extra
+    cjk = len(_CJK_RE.findall(text))
+    if not cjk:
+        return len(text.split()) + extra
+    return len(_CJK_RE.sub(" ", text).split()) + extra + cjk / CJK_CHARS_PER_WORD
+
+
+def _under_char_floor(text: str) -> bool:
+    # The character floor guards against XTTS babbling on short English input;
+    # eight Han characters are four spoken words and already clear the word floor.
+    return len(text) < _MIN_CHUNK_CHARS and not _CJK_RE.search(text)
 
 
 def _too_short(text: str) -> bool:
-    return spoken_words(text) < _MIN_CHUNK_WORDS or len(text) < _MIN_CHUNK_CHARS
+    return spoken_words(text) < _MIN_CHUNK_WORDS or _under_char_floor(text)
 
 
 def _clause_split_pos(text: str, max_words: int, min_words: int) -> int:
@@ -220,7 +253,7 @@ def _clause_split_pos(text: str, max_words: int, min_words: int) -> int:
     isn't one yet and the text is still short enough to wait for more."""
     for m in _CLAUSE_RE.finditer(text):
         head = text[:m.end()]
-        if spoken_words(head) < min_words or len(head.strip()) < _MIN_CHUNK_CHARS:
+        if spoken_words(head) < min_words or _under_char_floor(head.strip()):
             continue
         if spoken_words(head) <= max_words:
             return m.end()
@@ -228,7 +261,7 @@ def _clause_split_pos(text: str, max_words: int, min_words: int) -> int:
 
     # Over budget with no clause break in reach — cut on a word gap rather than
     # stall. Prosody suffers slightly; waiting suffers more.
-    matches = list(re.finditer(r'\S+', text))
+    matches = list(_TOKEN_RE.finditer(text))
     count = 0
     for i, m in enumerate(matches):
         count += spoken_words(m.group())

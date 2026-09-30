@@ -107,7 +107,7 @@ class TestChangeDetection:
         from dataclasses import fields
         assert [f.name for f in fields(UiState)] == [
             "status", "visitor", "joulie", "button", "tool_id", "mic_live",
-            "end_button", "sources", "stage"]
+            "end_button", "sources", "stage", "lang"]
 
 
 class TestMicIndicator:
@@ -321,3 +321,42 @@ class TestSourcesHtml:
         html = _sources_html((Source("EECA", "authoritative"),))
         assert "Sources consulted" in html
         assert "Citation" not in html
+
+
+class TestLanguage:
+    def test_the_screen_follows_the_session_language(self):
+        core = FakeCore(in_session=True, last_event=TurnEvent(status="transcribing"))
+        core.session_lang = "zh"
+        # The turn's first event carries no language; the badge must not flicker.
+        assert ui_state(core).lang == "zh"
+
+    def test_the_idle_screen_is_english(self):
+        core = FakeCore()
+        core.session_lang = "zh"
+        assert ui_state(core).lang == "en"
+
+    def test_the_chinese_screen_keeps_the_english_disclaimer_too(self):
+        from joulie.ui import _titles_html
+        html = _titles_html("zh")
+        assert "中文" in html and config.DISCLAIMER in html and "仅供参考" in html
+        assert "joulie-lang" not in _titles_html("en")
+
+
+class TestPollOutputsCannotJump:
+    """Gradio gives every output of an in-flight event a 96px min-height, and
+    the poll timer fires every 0.4s — so any gr.HTML it writes to that is
+    shorter than 96px grows and shrinks on every tick unless the stylesheet
+    zeroes it. The titles block shook the whole screen once it became an output."""
+
+    POLLED_HTML = ("status-wrapper", "mic-wrapper", "stage-panel",
+                   "joulie-titles", "tool-panel", "sources-panel")
+
+    def test_every_polled_html_block_has_its_min_height_zeroed(self):
+        import re
+        from joulie.ui import _CSS
+        zeroed = set()
+        for selectors, body in re.findall(r"([^{}]+)\{([^}]*)\}", _CSS):
+            if re.search(r"min-height:\s*0\s*!important", body):
+                zeroed.update(s.strip() for s in selectors.split(","))
+        for elem_id in self.POLLED_HTML:
+            assert f"#{elem_id} .prose" in zeroed, elem_id

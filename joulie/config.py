@@ -3,6 +3,11 @@ from pathlib import Path
 
 _repo_root = Path(__file__).parent.parent
 
+
+def _codes(value: str) -> tuple[str, ...]:
+    return tuple(c.strip() for c in value.split(",") if c.strip())
+
+
 OLLAMA_URL = os.environ.get("JOULIE_OLLAMA_URL", "http://localhost:11434")
 # 14B scores 58% on the question bank against the 3B's 38% (evals/report.html), and
 # roughly halves the fabricated-answer rate. 9GB leaves room for XTTS, Whisper and
@@ -10,6 +15,14 @@ OLLAMA_URL = os.environ.get("JOULIE_OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("JOULIE_OLLAMA_MODEL", "qwen2.5:14b-instruct-q4_K_M")
 
 WHISPER_MODEL = os.environ.get("JOULIE_WHISPER_MODEL", "base")
+# Languages whose transcription is redone with a larger Whisper, because base
+# cannot write them. Forced to Hindi, base romanised the question ("Garm Pani ke
+# Silendar"), and with a Devanagari prompt it hallucinated for 6.3s; small wrote
+# correct Devanagari in 1.6s. Base found the right material for every other
+# voiced language 0.6s faster than small, so only these pay for it — and English
+# never does. Language detection always runs on WHISPER_MODEL.
+WHISPER_STRONG_MODEL = os.environ.get("JOULIE_WHISPER_STRONG_MODEL", "small")
+WHISPER_STRONG_LANGUAGES = _codes(os.environ.get("JOULIE_WHISPER_STRONG_LANGUAGES", "hi"))
 
 TTS_MODEL = os.environ.get("JOULIE_TTS_MODEL", "tts_models/en/vctk/vits")
 TTS_VOICE = os.environ.get("JOULIE_TTS_VOICE", "p306")
@@ -19,6 +32,11 @@ XTTS_MODEL = os.environ.get("JOULIE_XTTS_MODEL", "tts_models/multilingual/multi-
 XTTS_REF_WAV = os.environ.get("JOULIE_XTTS_REF_WAV", str(_repo_root / "specs" / "kiwi voice-30s.wav"))
 XTTS_LANGUAGE = os.environ.get("JOULIE_XTTS_LANGUAGE", "en")
 XTTS_SAMPLE_RATE = 24000
+# Languages XTTS runs a warm-up inference for at startup. Each first use of a
+# language loads its text-processing path (~1s, more for zh-cn's pypinyin);
+# warming all fourteen would add 10-15s to boot, so the rest pay it on their
+# first answer instead.
+XTTS_WARMUP_LANGUAGES = _codes(os.environ.get("JOULIE_XTTS_WARMUP_LANGUAGES", "en,zh"))
 # TTS.api's get_conditioning_latents() signature defaults to 6s of GPT conditioning,
 # which is NOT what the shipped XTTS-v2 config asks for (gpt_cond_len 30,
 # gpt_cond_chunk_len 4, max_ref_len 30) and would throw away all but the first six
@@ -33,6 +51,23 @@ XTTS_SOUND_NORM_REFS = os.environ.get("JOULIE_XTTS_SOUND_NORM_REFS", "1") not in
 # nothing to synthesise but shortens every answer. TTS_SPEED above only reaches
 # the VITS fallback.
 XTTS_SPEED = float(os.environ.get("JOULIE_XTTS_SPEED", "1.2"))
+
+# Languages Joulie answers in (JTBD-03), as Whisper codes — joulie/language.py
+# holds what each one needs. LANGUAGES are answered aloud in the cloned voice;
+# TEXT_ONLY_LANGUAGES are answered on screen with a short spoken English note,
+# for languages Joulie can understand but XTTS-v2 cannot voice (te reo Māori
+# is "mi"). Anything Whisper detects outside both lists is treated as English.
+# The default is every language XTTS-v2 can voice that joulie/language.py has an
+# entry for. Hindi's answers are the weakest of these from Qwen2.5-14B — check
+# them with a speaker before relying on it.
+LANGUAGES = _codes(os.environ.get(
+    "JOULIE_LANGUAGES", "en,zh,hi,es,fr,de,it,pt,nl,pl,ru,cs,hu,tr"))
+TEXT_ONLY_LANGUAGES = _codes(os.environ.get("JOULIE_TEXT_ONLY_LANGUAGES", ""))
+# A session switches language only on a confident detection of an utterance long
+# enough to trust — Whisper's language ID on a one-word reply is close to a coin
+# toss, and a false switch answers an English visitor in Mandarin.
+LANG_SWITCH_MIN_PROB = float(os.environ.get("JOULIE_LANG_SWITCH_MIN_PROB", "0.7"))
+LANG_SWITCH_MIN_SECONDS = float(os.environ.get("JOULIE_LANG_SWITCH_MIN_SECONDS", "1.5"))
 
 GREETING_WAV = os.environ.get("JOULIE_GREETING_WAV", str(_repo_root / "assets" / "greeting.wav"))
 
@@ -92,6 +127,30 @@ EMBED_MODEL = os.environ.get("JOULIE_EMBED_MODEL", "sentence-transformers/all-Mi
 # logs/latency-analysis.md, "Third pass" and "Accuracy check, 2026-09-18".
 RAG_TOP_K = int(os.environ.get("JOULIE_RAG_TOP_K", "3"))
 RAG_DISTANCE_THRESHOLD = float(os.environ.get("JOULIE_RAG_DISTANCE_THRESHOLD", "0.7"))
+# Non-English questions (JTBD-03) are searched in a second collection: the same
+# chunks, IDs and metadata as CHROMA_COLLECTION, re-embedded by a multilingual
+# model — ingest.py keeps it mirrored. EMBED_MODEL is English-only and finds
+# 0.21 of the English results from a translated question; this model finds 0.64
+# across Mandarin, Hindi and eleven European languages, against 0.67 for its own
+# English, so the gap is the model and not the language. multilingual-e5-small
+# and -base scored 0.55 and 0.64, but their on-topic and off-topic distances
+# overlap, so no threshold can keep small talk out of the prompt.
+# evals/multilingual_retrieval.py; English turns never touch any of this.
+MULTILINGUAL_EMBED_MODEL = os.environ.get(
+    "JOULIE_MULTILINGUAL_EMBED_MODEL", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+MULTILINGUAL_CHROMA_COLLECTION = os.environ.get("JOULIE_MULTILINGUAL_CHROMA_COLLECTION", "joulie_kb_multilingual")
+# This model's distances run on a different scale from EMBED_MODEL's. On-topic
+# top-1 distance measured 0.37 at p90 and off-topic small talk no closer than
+# 0.69, in every language tested; 0.55 splits the gap.
+RAG_MULTILINGUAL_DISTANCE_THRESHOLD = float(os.environ.get("JOULIE_RAG_MULTILINGUAL_DISTANCE_THRESHOLD", "0.55"))
+# Whisper codes the multilingual model was trained on. A session language
+# outside this list (te reo Māori is not in it) retrieves on Whisper's English
+# translation instead — slower and looser, but better than nothing.
+RAG_MULTILINGUAL_LANGUAGES = _codes(os.environ.get(
+    "JOULIE_RAG_MULTILINGUAL_LANGUAGES",
+    "ar,bg,ca,cs,da,de,el,es,et,fa,fi,fr,gl,gu,he,hi,hr,hu,hy,id,it,ja,ka,ko,lt,lv,"
+    "mk,mn,mr,ms,my,nl,no,pl,pt,ro,ru,sk,sl,sq,sr,sv,th,tr,uk,ur,vi,zh",
+))
 RAG_ENABLED = os.environ.get("JOULIE_RAG_ENABLED", "1") not in ("0", "false", "no")
 
 # Where each turn's retrieved context is placed in the request.
