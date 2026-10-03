@@ -38,7 +38,54 @@ class TestMarkdownAndUrls:
 class TestPronunciation:
     def test_acronyms_are_spelled_out(self):
         out = sanitize_for_speech("EECA and MBIE both publish this.")
-        assert out == "E E C A and M B I E both publish this."
+        assert out == "Eeka and M-B-I-E both publish this."
+
+    def test_acronym_letters_never_leave_a_lone_a(self):
+        # A spaced "A" is read as the article: "EEC. A", "a sea power".
+        assert sanitize_for_speech("EECA says AC, not DC.") == "Eeka says Ay-C, not D-C."
+        assert sanitize_for_speech("The EA tool.") == "The E-Ay tool."
+
+    def test_ruc_is_said_as_a_word(self):
+        assert sanitize_for_speech("EVs pay RUCs; one RUC licence.") == "E-V's pay rucks; one ruck licence."
+
+    def test_acronyms_inside_words_are_untouched(self):
+        assert sanitize_for_speech("ACC and HVAC and EVSE.") == "ACC and HVAC and EVSE."
+
+    def test_energy_and_power_units(self):
+        out = sanitize_for_speech("500 Wh, 2 MW, 3 MWh, 4 GWh and 5 kW.")
+        assert out == "500 watt hours, 2 megawatts, 3 megawatt hours, 4 gigawatt hours and 5 kilowatts."
+
+    def test_area_and_volume_units(self):
+        assert sanitize_for_speech("120 m2 and 3 m³.") == "120 square metres and 3 cubic metres."
+
+    def test_units_touching_their_number(self):
+        assert sanitize_for_speech("300kWh over 10m2.") == "300 kilowatt hours over 10 square metres."
+
+    def test_co2_equivalent(self):
+        for written in ("CO2eq", "CO2-e", "CO2e", "CO₂-eq"):
+            assert sanitize_for_speech(f"2 tonnes of {written}.") == "2 tonnes of C-O-2 equivalent."
+        assert sanitize_for_speech("Less CO2.") == "Less C-O-2."
+
+
+class TestCurrency:
+    def test_magnitude_word_comes_before_dollars(self):
+        assert sanitize_for_speech("About $1 Million.") == "About 1 million dollars."
+        assert sanitize_for_speech("About $1.5 billion.") == "About 1.5 billion dollars."
+
+    def test_abbreviated_magnitudes(self):
+        assert sanitize_for_speech("$20k or $1.5m or $2bn.") == (
+            "20 thousand dollars or 1.5 million dollars or 2 billion dollars.")
+
+    def test_plain_amounts_are_left_for_the_xtts_cleaner(self):
+        # It already reads "$1,000,000" as "one million dollars".
+        assert sanitize_for_speech("It cost $1,000,000.") == "It cost $1,000,000."
+        assert sanitize_for_speech("$5 more each month.") == "$5 more each month."
+
+    def test_nz_dollar_prefix_is_dropped(self):
+        assert sanitize_for_speech("About NZ$500.") == "About $500."
+
+    def test_other_languages_keep_their_own_currency_path(self):
+        assert sanitize_for_speech("$1 million", "de") == "$1 million"
 
     def test_units_are_spoken_as_words(self):
         assert sanitize_for_speech("A 6.5 kW unit.") == "A 6.5 kilowatts unit."
@@ -56,7 +103,7 @@ class TestPronunciation:
 
     def test_qr_prompt_is_readable(self):
         out = sanitize_for_speech("Scan the QR code on screen.")
-        assert out == "Scan the Q R code on screen."
+        assert out == "Scan the Q-R code on screen."
 
 
 class TestPassthrough:

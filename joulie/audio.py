@@ -46,30 +46,93 @@ _ALNUM_RE = re.compile(r"\w")
 #
 # Bounded on ASCII rather than \b: Python counts Han characters as word
 # characters, so \b never fires between "用" and "kWh" in a Chinese reply.
+#
+# The English respellings are the ones XTTS said most reliably when synthesised
+# and transcribed back through Whisper. Letters are joined with hyphens because
+# spaced letters leave a lone "a", which XTTS reads as the article: "A C" came
+# out as "a sea" every time, "Ay-C" as "AC". EECA is the exception — no letter
+# spelling survived ("E E C A", "E-E-C-A" and "ee-ee-see-ay" each broke into
+# "EEC. A" in a third to a half of samples), so it is said as the word New
+# Zealanders use for it, as RUC is. Other languages keep spaced capitals, which
+# their voices read as letter names.
 _ACRONYMS = (
-    ("EECA", "E E C A"),
-    ("MBIE", "M B I E"),
-    ("ICP", "I C P"),
-    ("QR", "Q R"),
-    ("EV", "E V"),
-    ("PV", "P V"),
-    ("LED", "L E D"),
-    ("EA", "E A"),
+    ("EECA", "Eeka"),
+    ("MBIE", "M-B-I-E"),
+    ("ICP", "I-C-P"),
+    ("LPG", "L-P-G"),
+    ("LED", "L-E-D"),
+    ("RUC", "ruck"),
+    ("QR", "Q-R"),
+    ("EV", "E-V"),
+    ("PV", "P-V"),
+    ("EA", "E-Ay"),
+    ("AC", "Ay-C"),
+    ("DC", "D-C"),
 )
+
+# Units only the English voice has words for so far; in every other language
+# they still reach XTTS as letters. Equivalent forms come before bare CO2.
+_ENGLISH_UNITS = (
+    ("GWh", "gigawatt hours"),
+    ("Wh", "watt hours"),
+    ("MW", "megawatts"),
+    ("GW", "gigawatts"),
+    ("m[2²]", "square metres"),
+    ("m[3³]", "cubic metres"),
+    ("CO[2₂]-?eq?", "C-O-2 equivalent"),
+    ("CO[2₂]", "C-O-2"),
+)
+# "300kWh" and "10m2" are as common as the spaced forms.
+_UNIT_GAP_RE = re.compile(
+    r"(?<=\d)(?=(?:[kMG]?Wh|[kMG]W|m[2²3³])(?![A-Za-z0-9_]))")
+
+# XTTS's cleaner turns "$1" into "one dollar" before it reads the next word, so
+# "$1 million" is spoken "one dollar million" and "$1.5 million" "one dollar,
+# fifty cents million". Moving the currency behind the magnitude leaves it a
+# plain number to expand. "$1,000,000" is already read correctly.
+_DOLLAR_MAGNITUDE_RE = re.compile(
+    r"\$\s?(\d[\d,]*(?:\.\d+)?)"
+    r"(?:\s?(thousand|million|billion|trillion)|(k|m|bn))(?![A-Za-z0-9])",
+    re.IGNORECASE,
+)
+_MAGNITUDES = {"k": "thousand", "m": "million", "bn": "billion"}
+# "NZ$500" would otherwise become "New Zealand$500".
+_NZ_DOLLAR_RE = re.compile(r"NZ(?=\$)")
 
 
 def _compile(pairs):
     return tuple(
-        (re.compile(rf"(?<![A-Za-z0-9_]){pattern}(?![A-Za-z0-9_])"), replacement)
+        (re.compile(rf"(?<![A-Za-z0-9_])(?:{pattern})(?![A-Za-z0-9_])"), replacement)
         for pattern, replacement in pairs
     )
 
 
+def _plural(spoken: str, suffix: str):
+    return lambda m: spoken + (suffix if m.group(1) else "")
+
+
+def _acronyms(english: bool):
+    # The optional plural rides along: "RUCs" → "rucks", "EVs" → "E-V's". A
+    # bare "s" on a spelled-out acronym opening a sentence ("E-Vs pay…") was
+    # slurred into the letters two times in three; the apostrophe never was.
+    return tuple(
+        (f"{name}(s?)", _plural(spoken, "'s" if "-" in spoken else "s") if english
+         else _plural(" ".join(name), "s"))
+        for name, spoken in _ACRONYMS
+    )
+
+
 _SPOKEN_FORMS = {
-    code: _compile(tuple(zip(("kWh", "MWh", "kW"), entry.units)) + _ACRONYMS
-                   + (("NZ", entry.country),))
+    code: _compile(tuple(zip(("kWh", "MWh", "kW"), entry.units))
+                   + (_ENGLISH_UNITS if code == "en" else ())
+                   + _acronyms(code == "en") + (("NZ", entry.country),))
     for code, entry in language.LANGUAGES.items()
 }
+
+
+def _dollar_magnitude(m: re.Match) -> str:
+    magnitude = (m.group(2) or _MAGNITUDES[m.group(3).lower()]).lower()
+    return f"{m.group(1)} {magnitude} dollars"
 
 
 def sanitize_for_speech(text: str, lang: str = "en") -> str:
@@ -82,6 +145,10 @@ def sanitize_for_speech(text: str, lang: str = "en") -> str:
     """
     text = _URL_RE.sub("", text)
     text = text.translate(_MARKDOWN_CHARS)
+    text = _NZ_DOLLAR_RE.sub("", text)
+    if lang not in _SPOKEN_FORMS or lang == "en":
+        text = _DOLLAR_MAGNITUDE_RE.sub(_dollar_magnitude, text)
+    text = _UNIT_GAP_RE.sub(" ", text)
     for pattern, replacement in _SPOKEN_FORMS.get(lang, _SPOKEN_FORMS["en"]):
         text = pattern.sub(replacement, text)
     if lang == "hi":
