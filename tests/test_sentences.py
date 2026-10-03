@@ -306,3 +306,71 @@ class TestStreaming:
         assert first is not None
         # ~0.65s + 0.10s/word on M4 Pro, so this is the time-to-first-speech dial.
         assert len(first.text.split()) <= FIRST_CHUNK_MAX_WORDS
+
+
+class TestMandarin:
+    """Chinese has no spaces, so word budgets are applied to characters — about
+    two Han characters to a spoken English word."""
+
+    REPLY = ("热泵热水器是替换燃气热水器的好选择，它的效率大约是传统电热水器的三倍。"
+             "根据EECA的数据，2024年一个典型家庭每年可以节省大约五百新西兰元。"
+             "您可以使用EECA家庭节能计算器来估算，请扫描屏幕上的二维码。")
+
+    def test_full_width_stops_end_sentences_without_a_space(self):
+        sentences, rest = split_sentences("热泵很高效。它很便宜！真的吗？还有")
+        assert sentences == ["热泵很高效。", "它很便宜！", "真的吗？"]
+        assert rest == "还有"
+
+    def test_han_characters_count_as_half_words(self):
+        assert spoken_words("热泵很高效") == 2.5
+
+    def test_english_word_counts_are_unchanged(self):
+        assert spoken_words("heat pumps are efficient") == 4
+
+    def test_a_streamed_reply_splits_within_xtts_zh_limit(self):
+        chunks, buf, n = [], "", 0
+        for i in range(0, len(self.REPLY), 3):
+            buf += self.REPLY[i:i + 3]
+            got, buf = split_speakable(buf, spoken=n)
+            n += len(got)
+            chunks += got
+        chunks += split_to_budget(buf, spoken=n)
+        assert "".join(c.text for c in chunks) == self.REPLY
+        assert len(chunks) >= 3
+        # XTTS truncates a zh input past 82 characters.
+        assert all(len(c.text) <= 82 for c in chunks)
+
+    def test_the_first_chunk_cuts_at_a_full_width_comma(self):
+        chunks, _ = split_speakable(self.REPLY[:30])
+        assert chunks and chunks[0].text.endswith("，")
+        assert chunks[0].boundary == "clause"
+
+    def test_a_long_run_without_punctuation_still_gets_cut(self):
+        text = "热" * 120 + "。"
+        assert all(len(c.text) <= 82 for c in split_to_budget(text))
+
+
+class TestHindiAndEuropean:
+    def test_the_danda_ends_a_sentence(self):
+        sentences, rest = split_sentences("हीट पंप बहुत कुशल है। यह सस्ता भी है। और")
+        assert sentences == ["हीट पंप बहुत कुशल है।", "यह सस्ता भी है।"]
+        assert rest == "और"
+
+    def test_european_abbreviations_do_not_end_sentences(self):
+        sentences, _ = split_sentences("Das spart ca. 30 %, z. B. bei Warmwasser. Gut. ")
+        assert sentences[0] == "Das spart ca. 30 %, z. B. bei Warmwasser."
+
+    def test_long_sentences_stay_inside_xtts_input_limits(self):
+        # XTTS truncates past these (its tokenizer's char_limits; hi defaults to 250).
+        limits = {"es": 239, "pt": 203, "cs": 186, "ru": 182, "hi": 250}
+        long = {
+            "es": "Una bomba de calor para agua caliente consume aproximadamente entre un sesenta y un setenta y cinco por ciento menos de electricidad que un calentador eléctrico convencional porque traslada el calor del aire al agua en lugar de generarlo directamente y según EECA un hogar típico ahorra unos doscientos ochenta y cuatro dólares al año.",
+            "pt": "Uma bomba de calor para água quente consome aproximadamente entre sessenta e setenta e cinco por cento menos eletricidade do que um cilindro elétrico convencional porque transfere o calor do ar para a água em vez de o gerar diretamente e segundo a EECA uma casa típica poupa cerca de duzentos e oitenta e quatro dólares por ano.",
+            "cs": "Tepelné čerpadlo pro ohřev vody spotřebuje přibližně o šedesát až sedmdesát pět procent méně elektřiny než běžný elektrický bojler protože přenáší teplo ze vzduchu do vody místo toho aby ho přímo vyrábělo a podle EECA typická domácnost ušetří asi dvě stě osmdesát čtyři dolarů ročně.",
+            "ru": "Тепловой насос для горячей воды потребляет примерно на шестьдесят-семьдесят пять процентов меньше электроэнергии чем обычный электрический водонагреватель потому что он переносит тепло из воздуха в воду вместо того чтобы вырабатывать его напрямую и по данным EECA типичная семья экономит около двухсот восьмидесяти четырёх долларов в год.",
+            "hi": "गर्म पानी का हीट पंप एक सामान्य बिजली वाले गीज़र की तुलना में लगभग साठ से पचहत्तर प्रतिशत कम बिजली इस्तेमाल करता है क्योंकि यह गर्मी को सीधे पैदा करने के बजाय हवा से पानी में ले जाता है और EECA के अनुसार एक सामान्य परिवार हर साल लगभग दो सौ चौरासी डॉलर बचाता है।",
+        }
+        for lang, text in long.items():
+            chunks = split_to_budget(text)
+            assert "".join(c.text for c in chunks).replace(" ", "") == text.replace(" ", ""), lang
+            assert all(len(c.text) <= limits[lang] for c in chunks), (lang, [len(c.text) for c in chunks])

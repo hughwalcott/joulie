@@ -7,6 +7,7 @@ import time
 from types import SimpleNamespace
 
 from joulie import config
+from joulie.audio import Transcript
 from joulie.rag import Source
 from joulie.session_core import SessionCore, TurnEvent
 from joulie.tools import REGISTRY, detect_tool
@@ -66,8 +67,11 @@ class FakeAgent:
         self.last_prompt_stats: dict = {}
         self.last_eval_stats: dict = {}
         self.last_post_ttft_seconds = 0.0
+        self.retriever = None
+        self.stream_calls = []
 
-    def stream(self, text):
+    def stream(self, text, lang="en", retrieval_query=None):
+        self.stream_calls.append((text, lang, retrieval_query))
         if self._stall:
             time.sleep(self._stall)
         for index, token in enumerate(self._tokens):
@@ -80,25 +84,54 @@ class TurnStub:
     """Only what _run_turn touches. The real SessionCore constructor opens the
     mic and loads XTTS, so the turn loop is driven against this instead."""
 
-    def __init__(self, agent, transcript="how do I compare power plans?"):
+    def __init__(self, agent, transcript="how do I compare power plans?",
+                 detected=None, session_lang="en", voiced=("en", "zh"),
+                 translation="how do I compare power plans?"):
         import numpy as np
         self.agent = agent
         self._lock = threading.Lock()
         self._recording = True
         self._processing = False
         self._in_session = True
+        self._session_lang = session_lang
+        self._fallback_noticed = False
         self.last_event = None
         self.stopped_at = None
         self.events = []
+        self.transcribe_calls = []
+        self.spoken = []
+        self.streamed_langs = []
         audio = np.zeros(32000, dtype="float32")
 
         def _stop():
             self.stopped_at = len(self.events)
             return audio
 
+        # `detected` is Whisper's (language, probability); the default is a
+        # confident English detection.
+        detected = detected or ("en", 0.99)
+
+        def _transcribe(a, lang=None):
+            self.transcribe_calls.append(lang)
+            if lang is None:
+                return Transcript(transcript, detected[0], detected[1],
+                                  ((detected[0], detected[1]),))
+            return Transcript(transcript, lang)
+
+        def _say_stream(it, lang="en"):
+            self.streamed_langs.append(lang)
+            for _ in it:
+                pass
+            return {}
+
         self.recorder = SimpleNamespace(stop=_stop)
-        self.transcriber = SimpleNamespace(transcribe=lambda a: (transcript, "en"))
-        self.speaker = SimpleNamespace(say_stream=lambda it: [None for _ in it] and {})
+        self.transcriber = SimpleNamespace(transcribe=_transcribe,
+                                           translate=lambda a, lang: translation)
+        self.speaker = SimpleNamespace(
+            say_stream=_say_stream,
+            say=lambda text, lang="en": self.spoken.append((text, lang)),
+            can_speak=lambda lang: lang in voiced,
+        )
         self.power = SimpleNamespace(window_stats=lambda a, b: {})
         self._turn_metrics = []
         self._turn_index = 0
@@ -172,7 +205,7 @@ class TestHeartbeat:
         monkeypatch.setattr(config, "UI_HEARTBEAT_SECONDS", 0.05)
 
         class Stalling(FakeAgent):
-            def stream(self, text):
+            def stream(self, text, **kw):
                 yield "Heat pumps "
                 time.sleep(0.3)
                 yield "are efficient."
@@ -194,7 +227,7 @@ class TestHeartbeat:
         stub = TurnStub(FakeAgent(["a."], sources=sources, stall=0.3))
         stub.agent.last_sources = ()
 
-        def stream(text):
+        def stream(text, **kw):
             stub.agent.last_sources = sources
             time.sleep(0.3)
             yield "a."
@@ -270,3 +303,53 @@ def _best_score(text: str) -> int:
     """Length of the keyword detect_tool would match — its own ranking metric."""
     return max((len(kw) for tool in REGISTRY.values() for kw in tool.keywords
                 if kw in text.lower()), default=0)
+
+
+class TestSessionLanguage:
+    """JTBD-03: answer in the language the visitor spoke, and keep to it."""
+
+    def _run(self, monkeypatch, **kw):
+        monkeypatch.setattr(config, "LANGUAGES", ("en", "zh"))
+        monkeypatch.setattr(config, "TEXT_ONLY_LANGUAGES", ("mi",))
+        agent = FakeAgent(["好的。"])
+        covered = kw.pop("covered", ())
+        agent.retriever = SimpleNamespace(handles=lambda lang: lang in covered)
+        stub = TurnStub(agent, **kw)
+        _run(stub, monkeypatch)
+        return stub
+
+    def test_a_mandarin_question_is_answered_in_mandarin(self, monkeypatch):
+        stub = self._run(monkeypatch, transcript="热泵怎么样？", detected=("zh", 0.95),
+                         translation="What about heat pumps?")
+        assert stub._session_lang == "zh"
+        assert stub.agent.stream_calls == [("热泵怎么样？", "zh", "What about heat pumps?")]
+        assert stub.transcribe_calls == [None, "zh"], "Mandarin skipped the prompted pass"
+        assert stub.streamed_langs == ["zh"]
+        assert all(e.lang == "zh" for e in stub.events[1:])
+
+    def test_a_language_the_index_covers_skips_the_translation_pass(self, monkeypatch):
+        stub = self._run(monkeypatch, transcript="热泵怎么样？", detected=("zh", 0.95),
+                         translation="SHOULD NOT BE USED", covered=("zh",))
+        assert stub.agent.stream_calls == [("热泵怎么样？", "zh", None)]
+
+    def test_an_english_turn_retrieves_on_the_question_itself(self, monkeypatch):
+        stub = self._run(monkeypatch)
+        assert stub.agent.stream_calls[0][1:] == ("en", None)
+        assert stub.transcribe_calls == [None], "English paid a second STT pass"
+
+    def test_a_rejected_detection_is_retranscribed_in_the_session_language(self, monkeypatch):
+        stub = self._run(monkeypatch, session_lang="zh", detected=("en", 0.55))
+        assert stub.transcribe_calls == [None, "zh"]
+        assert stub.streamed_langs == ["zh"]
+
+    def test_a_text_only_language_goes_to_screen_with_one_spoken_notice(self, monkeypatch):
+        stub = self._run(monkeypatch, transcript="He aha te utu?", detected=("mi", 0.9))
+        assert stub.streamed_langs == [], "Joulie tried to voice te reo"
+        assert len(stub.spoken) == 1 and "te reo Māori" in stub.spoken[0][0]
+        assert stub.events[-1].joulie == "好的。"
+
+    def test_the_next_visitor_starts_in_english(self):
+        stub = CoreStub()
+        stub._session_lang = "zh"
+        SessionCore.end_session(stub)
+        assert stub._session_lang == "en"

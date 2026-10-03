@@ -9,6 +9,9 @@ Usage:
     source .venv/bin/activate
     python ingest.py            # incremental (skip unchanged files)
     python ingest.py --rebuild  # wipe collection and re-ingest everything
+
+Every run then mirrors the English collection into the multilingual one that
+non-English questions are searched in (JTBD-03; see config.MULTILINGUAL_*).
 """
 import argparse
 import hashlib
@@ -269,6 +272,39 @@ def ingest_file(path: Path, rel: str, file_hash: str, collection, embed_model) -
     return len(all_chunks)
 
 
+def sync_multilingual(client, collection) -> None:
+    """Mirror `collection` into the multilingual collection by chunk ID: the
+    same documents and metadata, embedded by the multilingual model. Chunk IDs
+    carry the file hash, so an edited file arrives as new IDs and its old ones
+    disappear — a diff on IDs alone keeps the two in step, and the existing KB
+    backfills without re-chunking."""
+    ml = client.get_or_create_collection(
+        config.MULTILINGUAL_CHROMA_COLLECTION,
+        metadata={"hnsw:space": "cosine"},
+    )
+    source_ids = set(collection.get(include=[])["ids"])
+    mirrored_ids = set(ml.get(include=[])["ids"])
+    stale = sorted(mirrored_ids - source_ids)
+    missing = sorted(source_ids - mirrored_ids)
+    if stale:
+        ml.delete(ids=stale)
+    if missing:
+        print(f"[ingest] loading multilingual embedding model '{config.MULTILINGUAL_EMBED_MODEL}'...")
+        # CPU for the same reason as the retriever: MPS can return corrupt
+        # embeddings silently when Ollama holds the GPU's memory.
+        model = SentenceTransformer(config.MULTILINGUAL_EMBED_MODEL, device="cpu")
+        batch = 256
+        for start in range(0, len(missing), batch):
+            ids = missing[start:start + batch]
+            got = collection.get(ids=ids, include=["documents", "metadatas"])
+            embeddings = model.encode(got["documents"], show_progress_bar=False,
+                                      convert_to_numpy=True).tolist()
+            ml.upsert(ids=got["ids"], documents=got["documents"],
+                      metadatas=got["metadatas"], embeddings=embeddings)
+    print(f"[ingest] multilingual '{config.MULTILINGUAL_CHROMA_COLLECTION}': "
+          f"+{len(missing)} -{len(stale)}, size {ml.count()} (English {collection.count()})")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Ingest knowledge_base/ into ChromaDB.")
     parser.add_argument("--rebuild", action="store_true", help="Wipe collection and re-ingest everything.")
@@ -284,11 +320,12 @@ def main():
     client = chromadb.PersistentClient(path=config.CHROMA_PATH)
 
     if args.rebuild:
-        try:
-            client.delete_collection(config.CHROMA_COLLECTION)
-            print(f"[ingest] wiped collection '{config.CHROMA_COLLECTION}'")
-        except Exception:
-            pass
+        for name in (config.CHROMA_COLLECTION, config.MULTILINGUAL_CHROMA_COLLECTION):
+            try:
+                client.delete_collection(name)
+                print(f"[ingest] wiped collection '{name}'")
+            except Exception:
+                pass
         if MANIFEST_PATH.exists():
             MANIFEST_PATH.unlink()
 
@@ -306,6 +343,7 @@ def main():
     )
     if not files:
         print(f"[ingest] no .md files found under {KB_DIR}")
+        sync_multilingual(client, collection)
         return
 
     total_chunks = 0
@@ -323,6 +361,7 @@ def main():
 
     save_hashes(MANIFEST_PATH, new_hashes)
     print(f"\n[ingest] done. {total_chunks} chunks added/updated. Collection size: {collection.count()}")
+    sync_multilingual(client, collection)
 
 
 if __name__ == "__main__":

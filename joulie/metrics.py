@@ -4,6 +4,7 @@ end of each session — this covers the timing/power half)."""
 
 import json
 import time
+from collections import Counter
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
@@ -15,6 +16,16 @@ class TurnMetrics:
     turn_index: int
     started_at: float
     stt_seconds: float = 0.0
+    # JTBD-03. What Whisper heard and what Joulie answered in; they differ when
+    # the switching policy overruled a detection, which then cost a second STT
+    # pass (stt_retranscribed, inside stt_seconds). stt_translate_seconds is the
+    # English translation non-English turns retrieve with — outside stt_seconds
+    # but inside llm_ttft_seconds, since the visitor waits for it.
+    stt_detected_language: str = ""
+    stt_language_probability: float = 0.0
+    stt_retranscribed: bool = False
+    stt_translate_seconds: float = 0.0
+    response_language: str = "en"
     # Time to first token measured from END OF UTTERANCE. It therefore folds in
     # STT, retrieval, prompt assembly and HTTP as well as prefill — it is the
     # number the visitor actually waits, and the series every session in
@@ -75,6 +86,8 @@ class SessionSummary:
     max_tts_rtf: float
     total_duration_seconds: float
     throttled: bool
+    # The language most of the session's answers were in (specs/design.md §7).
+    dominant_language: str = "en"
 
 
 def _sessions_dir() -> Path:
@@ -109,6 +122,8 @@ def build_summary(session_id: str, started_at: float, turns: list[TurnMetrics]) 
         max_tts_rtf=max(rtfs, default=0.0),
         total_duration_seconds=ended_at - started_at,
         throttled=throttled,
+        dominant_language=Counter(t.response_language for t in turns).most_common(1)[0][0]
+        if turns else "en",
     )
 
 

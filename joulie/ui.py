@@ -5,7 +5,7 @@ from typing import Optional
 
 import gradio as gr
 
-from joulie import config
+from joulie import config, language
 from joulie.handset import attach
 from joulie.session_core import SessionCore
 from joulie.tools import REGISTRY, qr_path
@@ -170,6 +170,16 @@ footer { display: none !important; }
   color: var(--joulie-accent);
   padding: 0 2px 2px 2px;
 }
+#joulie-lang {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  vertical-align: middle;
+  margin-left: 8px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--joulie-accent);
+}
+.joulie-disclaimer-translated { margin-bottom: 2px; }
 #joulie-disclaimer {
   font-size: var(--fs-sm);
   font-weight: var(--fw-body);
@@ -332,10 +342,25 @@ label span, .gr-checkbox-group label {
 /* While an event is in flight Gradio adds `pending`/`min` to a component's
  * children, and that styling carries a 96px min-height — which made this block
  * jump 40px -> 98px on every poll tick. The pill inside is a fixed 34px, so
- * nothing in here should ever reserve height. */
+ * nothing in here should ever reserve height.
+ *
+ * The same applies to EVERY gr.HTML the poll timer writes to, whether or not
+ * the tick changes it: Gradio marks all of an event's outputs in flight. The
+ * titles block (~50px) became one when it started carrying the language badge,
+ * and grew to 96px and back on every tick, shaking the whole screen. Any new
+ * poll output needs adding here. */
 #status-wrapper,
 #status-wrapper > div,
-#status-wrapper .prose {
+#status-wrapper .prose,
+#joulie-titles,
+#joulie-titles > div,
+#joulie-titles .prose,
+#tool-panel,
+#tool-panel > div,
+#tool-panel .prose,
+#sources-panel,
+#sources-panel > div,
+#sources-panel .prose {
   min-height: 0 !important;
 }
 #joulie-status {
@@ -962,20 +987,30 @@ class UiState:
     # time-derived: the poller diffs this field, so a value carrying an elapsed
     # count would repaint the panel on every tick.
     stage: str
+    # The language Joulie is answering in (JTBD-03), which picks the badge and
+    # the translated disclaimer. Read off the session, not the event: a turn's
+    # first event is emitted before detection and carries no language.
+    lang: str = "en"
 
 
-def _mic_live(core) -> bool:
+def _mic_live(core, handset=None) -> bool:
+    # The button's own HID report when it is attached: that is the state the
+    # session runs on. Recorder.mic_live only infers mute from exact-zero audio,
+    # and a quiet room on a low input gain produces runs of exact zeros too —
+    # polled every tick, that flickered the pill between Live and Muted.
+    if handset is not None:
+        return handset.mic_live
     recorder = getattr(core, "recorder", None)
     return bool(recorder.mic_live) if recorder is not None else False
 
 
-def ui_state(core) -> UiState:
+def ui_state(core, handset=None) -> UiState:
     if not core.in_session:
         # Keyword arguments deliberately: this branch runs on the very first poll
         # tick, so a positional list that fell out of step with the dataclass
         # would raise inside the Timer callback rather than in a test.
         return UiState(status="idle", visitor="", joulie="", button="disabled",
-                       tool_id=None, mic_live=_mic_live(core),
+                       tool_id=None, mic_live=_mic_live(core, handset),
                        end_button="disabled", sources=(), stage="attract")
 
     event = core.last_event
@@ -994,15 +1029,27 @@ def ui_state(core) -> UiState:
 
     tool = event.tool if event else None
     return UiState(
+        lang=getattr(core, "session_lang", language.DEFAULT),
         status=status,
         visitor=event.visitor if event and event.visitor else "",
         joulie=event.joulie if event and event.joulie else "",
         button=button,
         tool_id=tool.id if tool is not None else None,
-        mic_live=_mic_live(core),
+        mic_live=_mic_live(core, handset),
         end_button="stop" if core.processing else "end",
         sources=event.sources if event else (),
         stage=stage,
+    )
+
+
+def _titles_html(lang: str) -> str:
+    entry = language.get(lang)
+    badge = f' <span id="joulie-lang">{entry.badge}</span>' if entry.badge else ""
+    translated = (f'<div class="joulie-disclaimer-translated">{entry.disclaimer}</div>'
+                  if entry.disclaimer else "")
+    return (
+        f'<div id="joulie-title">⚡ Joulie — NZ Electrification Advisor{badge}</div>'
+        f'<div id="joulie-disclaimer">{translated}{config.DISCLAIMER}</div>'
     )
 
 
@@ -1039,13 +1086,7 @@ def build_app() -> gr.Blocks:
     # Prepend @font-face rules so Montserrat is available before the rest of the CSS applies.
     full_css = _font_face_css() + "\n" + _CSS
     with gr.Blocks(css=full_css, theme=gr.themes.Base(), title="Joulie") as app:
-        gr.HTML(
-            f"""
-            <div id="joulie-title">⚡ Joulie — NZ Electrification Advisor</div>
-            <div id="joulie-disclaimer">{config.DISCLAIMER}</div>
-            """,
-            elem_id="joulie-titles",
-        )
+        titles = gr.HTML(_titles_html(language.DEFAULT), elem_id="joulie-titles")
 
         with gr.Row(elem_id="joulie-header"):
             status = gr.HTML(_status_html("idle"), elem_id="status-wrapper")
@@ -1232,6 +1273,7 @@ def build_app() -> gr.Blocks:
             "end_button": end_btn,
             "sources": sources_panel,
             "stage": stage_panel,
+            "lang": titles,
         }
         _poll_outputs = [_poll_components[f.name] for f in fields(UiState)]
 
@@ -1282,13 +1324,14 @@ def build_app() -> gr.Blocks:
                 "sources": lambda src: gr.update(
                     value=_sources_html(src) if src else "", visible=bool(src)),
                 "stage": lambda s: _stage_html(s, kiosk_mode),
+                "lang": _titles_html,
             }
 
             def poll_handset(request: gr.Request):
                 if len(_painted) > 8:
                     _painted.clear()
                 painted = _painted.setdefault(request.session_hash, {})
-                state = ui_state(core)
+                state = ui_state(core, handset)
                 out = []
                 for f in fields(UiState):
                     value = getattr(state, f.name)

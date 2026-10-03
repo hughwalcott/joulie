@@ -4,7 +4,7 @@ from collections.abc import Iterator
 
 import requests
 
-from joulie import config
+from joulie import config, language
 
 
 def _eval_stats(done: dict) -> dict:
@@ -89,10 +89,26 @@ class Agent:
         self.last_eval_stats = {}
         self.last_post_ttft_seconds = 0.0
 
-    def _options(self, **extra) -> dict:
+    def _num_predict(self, lang: str) -> int:
+        if self.num_predict <= 0:
+            return self.num_predict
+        return round(self.num_predict * language.get(lang).token_factor)
+
+    def _near_ctx(self, lang: str) -> bool:
+        """Whether the last prompt plus this turn's answer budget would cross the
+        warning line. prompt_eval_count still includes the previous turn's
+        retrieved context, which history no longer carries, so this errs early."""
+        if self.num_ctx <= 0:
+            return False
+        used = (self.last_eval_stats.get("prompt_eval_count", 0)
+                + self.last_eval_stats.get("eval_count", 0))
+        return bool(used) and (used + self._num_predict(lang)
+                               >= config.LLM_CTX_WARN_FRACTION * self.num_ctx)
+
+    def _options(self, lang: str = "en", **extra) -> dict:
         opts = {"num_ctx": self.num_ctx} if self.num_ctx > 0 else {}
         if self.num_predict > 0:
-            opts["num_predict"] = self.num_predict
+            opts["num_predict"] = self._num_predict(lang)
         opts.update(extra)
         return opts
 
@@ -115,9 +131,16 @@ class Agent:
         resp.raise_for_status()
         return time.monotonic() - start
 
-    def _build_messages(self, user_text: str) -> tuple[list[dict], list[dict]]:
+    def _build_messages(
+        self, user_text: str, lang: str = "en", retrieval_query: str | None = None,
+    ) -> tuple[list[dict], list[dict]]:
         """Returns (messages to send, this turn's message list) — the caller
-        appends the assistant reply to the latter once the response is complete."""
+        appends the assistant reply to the latter once the response is complete.
+
+        A non-English question is searched as asked when the retriever's
+        multilingual collection covers its language. Otherwise it is searched
+        with `retrieval_query`, its English translation, since the main
+        collection and embedder are English-only."""
         context_text = ""
         rag_chunk_count = 0
         rag_context_chars = 0
@@ -127,7 +150,10 @@ class Agent:
         retrieval_seconds = 0.0
         if self.retriever is not None:
             _retrieval_start = time.monotonic()
-            chunks = self.retriever.retrieve(user_text)
+            if lang != "en" and self.retriever.handles(lang):
+                chunks = self.retriever.retrieve(user_text, lang=lang)
+            else:
+                chunks = self.retriever.retrieve(retrieval_query or user_text)
             retrieval_seconds = time.monotonic() - _retrieval_start
             if chunks:
                 rag_chunk_count = len(chunks)
@@ -172,6 +198,15 @@ class Agent:
         if self.max_history_turns > 0 and len(self.turns) > self.max_history_turns:
             self.turns = self.turns[-self.trim_to:]
             trimmed = True
+        elif self._near_ctx(lang) and len(self.turns) > 1:
+            # The turn cap is sized for English, where a completed turn costs
+            # ~140-260 tokens. A Hindi turn costs ~5x that, and a session would
+            # overrun num_ctx around turn 5 — which Ollama handles by silently
+            # dropping the front of the prompt, the 36-40s turn. Halving the
+            # history pays one ~10s re-prefill instead. English sessions never
+            # get near enough to trigger this, so their prefix is untouched.
+            self.turns = self.turns[-(len(self.turns) // 2):]
+            trimmed = True
 
         current_turn: list[dict] = []
         if context_text and self.rag_placement == "system":
@@ -181,12 +216,22 @@ class Agent:
 
         history = [msg for turn in self.turns for msg in turn]
         messages = [{"role": "system", "content": self.system_prompt}] + history
+        # Rides along with this turn's question but is never stored: history
+        # keeps the bare question, so the next turn's prompt extends this one
+        # instead of inserting a fresh block ahead of it. Replaced rather than
+        # mutated — the message object in self.turns must stay context-free.
+        # The language directive travels the same way, under either placement:
+        # as a system message Ollama would hoist it to the top of the prompt and
+        # break the KV prefix, and in history it would re-bill every turn. An
+        # English turn has no directive, so its prompt is unchanged.
+        prefix = []
         if context_text and self.rag_placement != "system":
-            # Rides along with this turn's question but is never stored: history
-            # keeps the bare question, so the next turn's prompt extends this one
-            # instead of inserting a fresh block ahead of it. Replaced rather than
-            # mutated — the message object in self.turns must stay context-free.
-            messages[-1] = {"role": "user", "content": f"{context_text}\n\n{user_text}"}
+            prefix.append(context_text)
+        directive = language.reply_directive(lang)
+        if directive:
+            prefix.append(directive)
+        if prefix:
+            messages[-1] = {"role": "user", "content": "\n\n".join(prefix + [user_text])}
         self.last_prompt_stats = {
             "prompt_chars": sum(len(m["content"]) for m in messages),
             "rag_chunk_count": rag_chunk_count,
@@ -201,12 +246,15 @@ class Agent:
             # metric that hides another component is how the first two passes of
             # logs/latency-analysis.md went wrong.
             "retrieval_seconds": retrieval_seconds,
+            "language": lang,
         }
         return messages, current_turn
 
-    def stream(self, user_text: str) -> Iterator[str]:
+    def stream(
+        self, user_text: str, lang: str = "en", retrieval_query: str | None = None,
+    ) -> Iterator[str]:
         """Yield text tokens from Ollama as they arrive. Updates history when exhausted."""
-        messages, current_turn = self._build_messages(user_text)
+        messages, current_turn = self._build_messages(user_text, lang, retrieval_query)
         stats = self.last_prompt_stats
         self.last_eval_stats = {}
         print(
@@ -222,7 +270,7 @@ class Agent:
                 "model": self.model,
                 "messages": messages,
                 "stream": True,
-                "options": self._options(),
+                "options": self._options(lang),
             },
             timeout=120,
             stream=True,
@@ -281,15 +329,17 @@ class Agent:
                 f"Raise JOULIE_LLM_NUM_CTX or lower JOULIE_LLM_MAX_HISTORY_TURNS."
             )
 
-    def reply(self, user_text: str) -> str:
-        messages, current_turn = self._build_messages(user_text)
+    def reply(
+        self, user_text: str, lang: str = "en", retrieval_query: str | None = None,
+    ) -> str:
+        messages, current_turn = self._build_messages(user_text, lang, retrieval_query)
         resp = requests.post(
             f"{self.url}/api/chat",
             json={
                 "model": self.model,
                 "messages": messages,
                 "stream": False,
-                "options": self._options(),
+                "options": self._options(lang),
             },
             timeout=120,
         )
