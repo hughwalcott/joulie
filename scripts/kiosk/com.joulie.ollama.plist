@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Ollama as a system LaunchDaemon, so it runs from boot for whichever account
+  logs in. Replaces `brew services start ollama`, which is a LaunchAgent of the
+  developer account and stops when that account logs out.
+
+  Runs as the developer account (__OWNER__ is filled in by install-services.sh)
+  so it keeps using the models already pulled into that account's ~/.ollama —
+  the kiosk account only ever talks to it over HTTP.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.joulie.ollama</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/opt/ollama/bin/ollama</string>
+    <string>serve</string>
+  </array>
+  <key>UserName</key>
+  <string>__OWNER__</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/__OWNER__</string>
+    <key>OLLAMA_FLASH_ATTENTION</key>
+    <string>1</string>
+    <!-- Halves the KV cache; see LLM_NUM_CTX in joulie/config.py. -->
+    <key>OLLAMA_KV_CACHE_TYPE</key>
+    <string>q8_0</string>
+  </dict>
+  <key>WorkingDirectory</key>
+  <string>/opt/homebrew/var</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/opt/homebrew/var/log/ollama.log</string>
+  <key>StandardErrorPath</key>
+  <string>/opt/homebrew/var/log/ollama.log</string>
+</dict>
+</plist>

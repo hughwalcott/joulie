@@ -52,6 +52,35 @@ Rerender the greeting / welcome message with defined speed.
  ````
  afplay assets/greeting.wav 
  ````
+## Kiosk account
+Joulie can run under a separate macOS account (`kioskuser`) while the developer account keeps
+editing the same checkout — a change made as the developer reaches the kiosk the next time it
+starts, with nothing copied. Accounts are chosen at the login window as usual; automatic login
+isn't used (macOS disables it while FileVault is on).
+
+| | Location |
+|---|---|
+| Checkout | `/Users/Shared/joulie` (`~/Workspaces/joulie` is a symlink to it) |
+| Python venv | `/Users/Shared/joulie-venv` |
+| Whisper/embedding and XTTS models | `/Users/Shared/joulie-models/{hf,tts}` (symlinked from `~/.cache/huggingface` and `~/Library/Application Support/tts`) |
+| Ollama | system LaunchDaemon `com.joulie.ollama`, running as the developer account; models stay in its `~/.ollama`, log in `/opt/homebrew/var/log/ollama.log` |
+| Developer metrics | `logs/sessions/` |
+| Kiosk metrics and console log | `logs/kiosk/sessions/`, `logs/kiosk/joulie.log` |
+
+One-off setup, from the developer account:
+````
+scripts/kiosk/relocate.sh                               # moves checkout + model caches, sets write access
+sudo /Users/Shared/joulie/scripts/kiosk/install-services.sh   # Ollama daemon, powermetrics for kioskuser
+````
+Then log in as `kioskuser` once to:
+- add `/Users/Shared/joulie/scripts/kiosk/Joulie Kiosk.command` under System Settings → General → Login Items;
+- run it, and allow Terminal microphone access when asked (and Input Monitoring, for the USB handset);
+- pick the sound output (e.g. the Bluetooth speaker) — the output choice is per account.
+
+Only one account can run Joulie at a time: both need port 7860, the mic and ~10GB of memory. With fast
+user switching the kiosk's Joulie keeps running in the background, so log `kioskuser` out (or close its
+Terminal window) before running Joulie as the developer. `run.sh` refuses to start if the port is taken.
+
  Manually rebuild the knowledge base, specify chunk sizes?
  ````
  ingest.py --rebuild
