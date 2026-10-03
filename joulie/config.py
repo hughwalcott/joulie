@@ -73,6 +73,16 @@ GREETING_WAV = os.environ.get("JOULIE_GREETING_WAV", str(_repo_root / "assets" /
 
 SAMPLE_RATE = 16000
 
+# The mic Joulie records from, matched case-insensitively against the start of
+# each input device's name. Pinned rather than left to the system default
+# because macOS hands the default input to any Bluetooth speaker that connects
+# with a mic: the SRS-XB30's hands-free mic took it, and its 16kHz narrowband
+# audio reached Whisper as "hope or the income cost" for "heat pump hot water
+# cylinder cost". Set empty to use the system default. If no device matches,
+# the system default is used and the startup log says so. Changing mic usually
+# means changing JOULIE_HANDSET_VID/PID below as well.
+INPUT_DEVICE = os.environ.get("JOULIE_INPUT_DEVICE", "JBL Quantum Stream Talk").strip()
+
 # The JBL Quantum Stream Talk's mute button drives the whole kiosk: unmuted means
 # Joulie is listening. It reports state (not edges) as report 0x06 with a single
 # payload byte — 0x01 live, 0x00 muted — measured against the audio stream, which

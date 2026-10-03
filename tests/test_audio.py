@@ -1,7 +1,7 @@
 """sanitize_for_speech is a pure function, but importing joulie.audio pulls in
 XTTS and faster-whisper. Nothing here loads a model — only the module."""
 
-from joulie.audio import sanitize_for_speech
+from joulie.audio import resolve_input_device, sanitize_for_speech
 
 
 class TestDegenerateInput:
@@ -122,3 +122,23 @@ class TestWhisperRouting:
         t = self._transcriber(monkeypatch)
         assert t._model_for(None) == "base" and t._model_for("en") == "base"
         assert t._model_for("de") == "base"
+
+
+class TestInputDevice:
+    DEVICES = [
+        {"name": "JBL Quantum Stream Talk", "max_input_channels": 0},
+        {"name": "SRS-XB30", "max_input_channels": 1},
+        {"name": "JBL Quantum Stream Talk", "max_input_channels": 1},
+    ]
+
+    def test_matches_an_input_device_by_name_prefix_ignoring_case(self):
+        assert resolve_input_device("jbl quantum", self.DEVICES) == 2
+
+    def test_output_only_devices_are_skipped(self):
+        assert resolve_input_device("JBL", self.DEVICES[:1]) is None
+
+    def test_empty_name_means_the_system_default(self):
+        assert resolve_input_device("", self.DEVICES) is None
+
+    def test_no_match_falls_back_to_the_system_default(self):
+        assert resolve_input_device("Shure MV7", self.DEVICES) is None

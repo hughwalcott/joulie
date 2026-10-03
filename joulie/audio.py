@@ -109,6 +109,19 @@ def _trailing_silence(boundary: str) -> np.ndarray:
     return np.zeros(int(_DEVICE_RATE * (_TAIL_PAD_S + gap)), dtype=np.float32)
 
 
+def resolve_input_device(name: str, devices) -> int | None:
+    """Index of the first input device whose name starts with `name`, ignoring
+    case, or None for the system default. A prefix so "JBL" is enough, and an
+    output-only device of the same name is skipped."""
+    if not name:
+        return None
+    want = name.casefold()
+    for index, device in enumerate(devices):
+        if device["max_input_channels"] > 0 and device["name"].casefold().startswith(want):
+            return index
+    return None
+
+
 class Recorder:
     """Long-lived microphone recorder.
 
@@ -132,8 +145,17 @@ class Recorder:
         self._frames: list[np.ndarray] = []
         self._last_signal = 0.0
         self._lock = threading.Lock()
-        print(f"[mic] opening persistent InputStream @ {sample_rate}Hz")
+        device = resolve_input_device(config.INPUT_DEVICE, sd.query_devices())
+        if device is None:
+            if config.INPUT_DEVICE:
+                print(f"[mic] WARNING: no input device matching {config.INPUT_DEVICE!r} "
+                      f"— falling back to the system default (JOULIE_INPUT_DEVICE)")
+            device_name = sd.query_devices(kind="input")["name"]
+        else:
+            device_name = sd.query_devices(device)["name"]
+        print(f"[mic] opening persistent InputStream on {device_name!r} @ {sample_rate}Hz")
         self._stream = sd.InputStream(
+            device=device,
             samplerate=self.sample_rate,
             channels=1,
             dtype="float32",
