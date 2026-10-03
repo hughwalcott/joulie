@@ -128,6 +128,17 @@ class TestMicIndicator:
         del core.recorder
         assert ui_state(core).mic_live is False
 
+    def test_an_attached_handset_overrides_the_audio_heuristic(self):
+        # Silence in a quiet room reads as exact zeros, which the recorder takes
+        # for a hardware mute; the button's own report must win.
+        class FakeHandset:
+            mic_live = True
+        assert ui_state(FakeCore(mic_live=False), FakeHandset()).mic_live is True
+        assert ui_state(FakeCore(in_session=True, mic_live=False),
+                        FakeHandset()).mic_live is True
+        FakeHandset.mic_live = False
+        assert ui_state(FakeCore(mic_live=True), FakeHandset()).mic_live is False
+
 
 class TestEndButton:
     """Kiosk mode hides Start/Stop/Tap-to-speak — the mute button does those

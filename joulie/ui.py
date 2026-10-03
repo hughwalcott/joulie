@@ -993,18 +993,24 @@ class UiState:
     lang: str = "en"
 
 
-def _mic_live(core) -> bool:
+def _mic_live(core, handset=None) -> bool:
+    # The button's own HID report when it is attached: that is the state the
+    # session runs on. Recorder.mic_live only infers mute from exact-zero audio,
+    # and a quiet room on a low input gain produces runs of exact zeros too —
+    # polled every tick, that flickered the pill between Live and Muted.
+    if handset is not None:
+        return handset.mic_live
     recorder = getattr(core, "recorder", None)
     return bool(recorder.mic_live) if recorder is not None else False
 
 
-def ui_state(core) -> UiState:
+def ui_state(core, handset=None) -> UiState:
     if not core.in_session:
         # Keyword arguments deliberately: this branch runs on the very first poll
         # tick, so a positional list that fell out of step with the dataclass
         # would raise inside the Timer callback rather than in a test.
         return UiState(status="idle", visitor="", joulie="", button="disabled",
-                       tool_id=None, mic_live=_mic_live(core),
+                       tool_id=None, mic_live=_mic_live(core, handset),
                        end_button="disabled", sources=(), stage="attract")
 
     event = core.last_event
@@ -1029,7 +1035,7 @@ def ui_state(core) -> UiState:
         joulie=event.joulie if event and event.joulie else "",
         button=button,
         tool_id=tool.id if tool is not None else None,
-        mic_live=_mic_live(core),
+        mic_live=_mic_live(core, handset),
         end_button="stop" if core.processing else "end",
         sources=event.sources if event else (),
         stage=stage,
@@ -1325,7 +1331,7 @@ def build_app() -> gr.Blocks:
                 if len(_painted) > 8:
                     _painted.clear()
                 painted = _painted.setdefault(request.session_hash, {})
-                state = ui_state(core)
+                state = ui_state(core, handset)
                 out = []
                 for f in fields(UiState):
                     value = getattr(state, f.name)
